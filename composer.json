@@ -1,0 +1,22 @@
+{
+    "name"       : "mattlab/dumper",
+    "description": "A pretty variable dumper",
+    "require-dev": {
+        "atoum/atoum": "dev-master"
+    },
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "marmotz",
+            "email": "rlittolff@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Mattlab\\Dumper": "src"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

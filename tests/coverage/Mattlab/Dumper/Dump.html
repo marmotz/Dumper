@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Language" content="en" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Dumper : code coverage of Mattlab\Dumper\Dump</title>
+		<link rel="stylesheet" media="screen" type="text/css" href="../../screen.css" title="Screen" />
+	</head>
+	<body>
+		<div id="header">
+			<h1>Code coverage of <a href="../../">Dumper</a>: Mattlab\Dumper\Dump</h1>
+			<h2>Class code coverage <span>86.36%</span></h2>
+		</div>
+		<div id="page">
+			<div id="content">
+				<h3>Methods</h3>
+				<ul class="summary">
+					
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 66.67%"></div>
+										<div class="label"><a href="#factory">factory</a> <span>66.67%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#getDump">getDump</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#getDumps">getDumps</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#__construct">__construct</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#__toString">__toString</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 80%"></div>
+										<div class="label"><a href="#dump">dump</a> <span>80%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#dumpInteger">dumpInteger</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 87.5%"></div>
+										<div class="label"><a href="#dumpString">dumpString</a> <span>87.5%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#getVariable">getVariable</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+							<li>
+								
+								
+									<div class="bar">
+										<div class="background"></div>
+										<div class="graph" style="width: 100%"></div>
+										<div class="label"><a href="#setVariable">setVariable</a> <span>100%</span></div>
+									</div>
+								
+							</li>
+						
+					
+				</ul>
+				<h3>Source</h3>
+				<table cellpadding="0" cellspacing="0" class="source">
+					<tr><th class="number">Line</th><th>Code</th></tr>
+					<tr><td class="number">1</td><td><pre>&lt;?php
+</pre></td></tr><tr><td class="number">2</td><td><pre>
+</pre></td></tr><tr><td class="number">3</td><td><pre>namespace Mattlab\Dumper;
+</pre></td></tr><tr><td class="number">4</td><td><pre>
+</pre></td></tr><tr><td class="number">5</td><td><pre>abstract class Dump
+</pre></td></tr><tr><td class="number">6</td><td><pre>{
+</pre></td></tr><tr><td class="number">7</td><td><pre>
+</pre></td></tr><tr><td class="number">8</td><td><pre>    protected $variable;
+</pre></td></tr><tr><td class="number">9</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="factory"></a>10</td><td><pre>    static public function factory($variable, $decorator = null)
+</pre></td></tr><tr><td class="number"><a name="factory"></a>11</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">12</td><td><pre>        if ($decorator === null) {
+</pre></td></tr><tr class="notCovered"><td class="number">13</td><td><pre>            $decorator = php_sapi_name();
+</pre></td></tr><tr class="notCovered"><td class="number">14</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="factory"></a>15</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">16</td><td><pre>        if ($decorator === &#039;cli&#039;) {
+</pre></td></tr><tr class="covered"><td class="number">17</td><td><pre>            return new CliDump($variable);
+</pre></td></tr><tr><td class="number"><a name="factory"></a>18</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="factory"></a>19</td><td><pre>        else {
+</pre></td></tr><tr class="covered"><td class="number">20</td><td><pre>            return new HtmlDump($variable);
+</pre></td></tr><tr><td class="number"><a name="factory"></a>21</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="factory"></a>22</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="factory"></a>23</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="getDump"></a>24</td><td><pre>    static public function getDump($variable, $decorator = null)
+</pre></td></tr><tr><td class="number"><a name="getDump"></a>25</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">26</td><td><pre>        return (string) static::factory($variable, $decorator);
+</pre></td></tr><tr><td class="number"><a name="getDump"></a>27</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="getDump"></a>28</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>29</td><td><pre>    static public function getDumps(array $variables, $decorator = null)
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>30</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">31</td><td><pre>        $dumps = &#039;&#039;;
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>32</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">33</td><td><pre>        foreach ($variables as $variable) {
+</pre></td></tr><tr class="covered"><td class="number">34</td><td><pre>            $dumps .= static::getDump($variable, $decorator);
+</pre></td></tr><tr class="covered"><td class="number">35</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>36</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">37</td><td><pre>        return $dumps;
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>38</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="getDumps"></a>39</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="__construct"></a>40</td><td><pre>    public function __construct($variable = null)
+</pre></td></tr><tr><td class="number"><a name="__construct"></a>41</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">42</td><td><pre>        $this-&gt;setVariable($variable);
+</pre></td></tr><tr class="covered"><td class="number">43</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="__construct"></a>44</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="__toString"></a>45</td><td><pre>    public function __toString()
+</pre></td></tr><tr><td class="number"><a name="__toString"></a>46</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">47</td><td><pre>        return $this-&gt;dump($this-&gt;getVariable());
+</pre></td></tr><tr><td class="number"><a name="__toString"></a>48</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="__toString"></a>49</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="dump"></a>50</td><td><pre>    public function dump($variable)
+</pre></td></tr><tr><td class="number"><a name="dump"></a>51</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">52</td><td><pre>        switch (gettype($variable)) {
+</pre></td></tr><tr class="covered"><td class="number">53</td><td><pre>            case &#039;boolean&#039;:
+</pre></td></tr><tr class="covered"><td class="number">54</td><td><pre>            case &#039;integer&#039;:
+</pre></td></tr><tr class="covered"><td class="number">55</td><td><pre>            case &#039;double&#039;:
+</pre></td></tr><tr class="covered"><td class="number">56</td><td><pre>            case &#039;float&#039;:
+</pre></td></tr><tr class="covered"><td class="number">57</td><td><pre>            case &#039;string&#039;:
+</pre></td></tr><tr class="covered"><td class="number">58</td><td><pre>            case &#039;array&#039;:
+</pre></td></tr><tr class="covered"><td class="number">59</td><td><pre>            case &#039;object&#039;:
+</pre></td></tr><tr class="covered"><td class="number">60</td><td><pre>            case &#039;resource&#039;:
+</pre></td></tr><tr class="covered"><td class="number">61</td><td><pre>            case &#039;NULL&#039;:
+</pre></td></tr><tr class="covered"><td class="number">62</td><td><pre>                $method = &#039;dump&#039; . ucfirst(strtolower(gettype($variable)));
+</pre></td></tr><tr><td class="number"><a name="dump"></a>63</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">64</td><td><pre>                return $this-&gt;$method($variable);
+</pre></td></tr><tr><td class="number"><a name="dump"></a>65</td><td><pre>            break;
+</pre></td></tr><tr><td class="number"><a name="dump"></a>66</td><td><pre>
+</pre></td></tr><tr class="notCovered"><td class="number">67</td><td><pre>            default:
+</pre></td></tr><tr class="notCovered"><td class="number">68</td><td><pre>                return &#039;Unknown type &quot;&#039; . gettype($variable) . &#039;&quot;&#039;;
+</pre></td></tr><tr><td class="number"><a name="dump"></a>69</td><td><pre>            break;
+</pre></td></tr><tr><td class="number"><a name="dump"></a>70</td><td><pre>
+</pre></td></tr><tr class="notCovered"><td class="number">71</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="dump"></a>72</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="dump"></a>73</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="dumpInteger"></a>74</td><td><pre>    public function dumpInteger($variable)
+</pre></td></tr><tr><td class="number"><a name="dumpInteger"></a>75</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">76</td><td><pre>        return sprintf(
+</pre></td></tr><tr class="covered"><td class="number">77</td><td><pre>            &#039;integer(%d)&#039;,
+</pre></td></tr><tr><td class="number"><a name="dumpInteger"></a>78</td><td><pre>            $variable
+</pre></td></tr><tr class="covered"><td class="number">79</td><td><pre>        );
+</pre></td></tr><tr><td class="number"><a name="dumpInteger"></a>80</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="dumpInteger"></a>81</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>82</td><td><pre>    public function dumpString($variable)
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>83</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">84</td><td><pre>        if (function_exists(&#039;mb_strlen&#039;)) {
+</pre></td></tr><tr class="covered"><td class="number">85</td><td><pre>            $len = mb_strlen($variable, &#039;UTF-8&#039;);
+</pre></td></tr><tr class="covered"><td class="number">86</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>87</td><td><pre>        else {
+</pre></td></tr><tr class="notCovered"><td class="number">88</td><td><pre>            $len = strlen($variable);
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>89</td><td><pre>        }
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>90</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">91</td><td><pre>        return sprintf(
+</pre></td></tr><tr class="covered"><td class="number">92</td><td><pre>            &#039;string(%d) &quot;%s&quot;&#039;,
+</pre></td></tr><tr class="covered"><td class="number">93</td><td><pre>            $len,
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>94</td><td><pre>            $variable
+</pre></td></tr><tr class="covered"><td class="number">95</td><td><pre>        );
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>96</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="dumpString"></a>97</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="getVariable"></a>98</td><td><pre>    public function getVariable()
+</pre></td></tr><tr><td class="number"><a name="getVariable"></a>99</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">100</td><td><pre>        return $this-&gt;variable;
+</pre></td></tr><tr><td class="number"><a name="getVariable"></a>101</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="getVariable"></a>102</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>103</td><td><pre>    public function setVariable($variable)
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>104</td><td><pre>    {
+</pre></td></tr><tr class="covered"><td class="number">105</td><td><pre>        $this-&gt;variable = $variable;
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>106</td><td><pre>
+</pre></td></tr><tr class="covered"><td class="number">107</td><td><pre>        return $this;
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>108</td><td><pre>    }
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>109</td><td><pre>
+</pre></td></tr><tr><td class="number"><a name="setVariable"></a>110</td><td><pre>}</pre></td></tr>
+				</table>
+			</div>
+		</div>
+		<div id="footer">
+			<p>Code coverage report powered by <a href="http://atoum.org">atoum</a></p>
+		</div>
+	</body>
+</html>
