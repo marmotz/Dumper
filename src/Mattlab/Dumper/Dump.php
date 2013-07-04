@@ -15,7 +15,19 @@ namespace Mattlab\Dumper;
  */
 abstract class Dump
 {
+    const FORMAT_KEY   = 'key';
+    const FORMAT_VALUE = 'value';
+
     protected $variable;
+
+    /**
+     * Dump array variable
+     *
+     * @param array $variable
+     *
+     * @return string
+     */
+    abstract public function dumpArray(array $variable);
 
     /**
      * Create a dump instance by decorator
@@ -61,13 +73,13 @@ abstract class Dump
      */
     static public function getDumps(array $variables, $decorator = null)
     {
-        $dumps = '';
+        $output = '';
 
         foreach ($variables as $variable) {
-            $dumps .= static::getDump($variable, $decorator);
+            $output .= static::getDump($variable, $decorator);
         }
 
-        return $dumps;
+        return $output;
     }
 
     /**
@@ -77,7 +89,10 @@ abstract class Dump
      */
     public function __construct($variable = null)
     {
-        $this->setVariable($variable);
+        $this
+            ->reset()
+            ->setVariable($variable)
+        ;
     }
 
     /**
@@ -87,7 +102,11 @@ abstract class Dump
      */
     public function __toString()
     {
-        return $this->dump($this->getVariable());
+        return $this
+            ->dump(
+                $this->getVariable()
+            )
+        ;
     }
 
     /**
@@ -95,13 +114,16 @@ abstract class Dump
      *
      * Dispatch to all dump methods
      *
-     * @param mixed $variable
+     * @param mixed  $variable
+     * @param string $format
      *
      * @return string
      */
-    public function dump($variable)
+    public function dump($variable, $format = self::FORMAT_VALUE)
     {
-        switch (gettype($variable)) {
+        $type = gettype($variable);
+
+        switch ($type) {
             case 'boolean':
             case 'integer':
             case 'double':
@@ -111,15 +133,17 @@ abstract class Dump
             case 'object':
             case 'resource':
             case 'NULL':
-                $method = 'dump' . ucfirst(strtolower(gettype($variable)));
+                $method = 'dump' . ucfirst(strtolower($type));
 
-                return $this->$method($variable);
+                return $this->$method($variable, $format);
             break;
 
             default:
-                return 'Unknown type "' . gettype($variable) . '"';
+                return sprintf(
+                    'Unknown type "%s"',
+                    $type
+                );
             break;
-
         }
     }
 
@@ -127,37 +151,50 @@ abstract class Dump
      * Dump integer variable
      *
      * @param integer $variable
+     * @param string  $format
      *
      * @return string
      */
-    public function dumpInteger($variable)
+    public function dumpInteger($variable, $format)
     {
-        return sprintf(
-            'integer(%d)',
-            $variable
-        );
+        if ($format === self::FORMAT_VALUE) {
+            return sprintf(
+                'integer(%d)',
+                $variable
+            );
+        } else {
+            return (string) $variable;
+        }
     }
 
     /**
      * Dump string variable
      *
      * @param string $variable
+     * @param string $format
      *
      * @return string
      */
-    public function dumpString($variable)
+    public function dumpString($variable, $format)
     {
-        if (function_exists('mb_strlen')) {
-            $len = mb_strlen($variable, 'UTF-8');
-        } else {
-            $len = strlen($variable);
-        }
+        if ($format === self::FORMAT_VALUE) {
+            if (function_exists('mb_strlen')) {
+                $len = mb_strlen($variable, 'UTF-8');
+            } else {
+                $len = strlen($variable);
+            }
 
-        return sprintf(
-            'string(%d) "%s"',
-            $len,
-            $variable
-        );
+            return sprintf(
+                'string(%d) "%s"',
+                $len,
+                $variable
+            );
+        } else {
+            return sprintf(
+                '"%s"',
+                $variable
+            );
+        }
     }
 
     /**
@@ -171,17 +208,46 @@ abstract class Dump
     }
 
     /**
+     * Prepare array variables and pre dump keys and values
+     *
+     * @param array $variable
+     *
+     * @return array
+     */
+    public function prepareArray(array $variable)
+    {
+        $array = array();
+
+        foreach ($variable as $key => $value) {
+            $array[$this->dump($key, self::FORMAT_KEY)] = $this->dump($value);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Reset current dumper
+     *
+     * @return self
+     */
+    public function reset()
+    {
+        return $this
+            ->setVariable()
+        ;
+    }
+
+    /**
      * Set current variable
      *
      * @param mixed $variable
      *
      * @return self
      */
-    public function setVariable($variable)
+    public function setVariable($variable = null)
     {
         $this->variable = $variable;
 
         return $this;
     }
-
 }

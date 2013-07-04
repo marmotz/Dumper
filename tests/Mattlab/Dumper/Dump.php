@@ -27,7 +27,9 @@ class Dump extends atoum
     {
         $this
             ->if($dump = new mockTestedClass())
-                ->string($dump->dumpInteger(42))
+                ->string($dump->dumpInteger(42, TestedClass::FORMAT_KEY))
+                    ->isEqualTo('42')
+                ->string($dump->dumpInteger(42, TestedClass::FORMAT_VALUE))
                     ->isEqualTo('integer(42)')
         ;
     }
@@ -36,7 +38,9 @@ class Dump extends atoum
     {
         $this
             ->if($dump = new mockTestedClass())
-                ->string($dump->dumpString('azerty'))
+                ->string($dump->dumpString('azerty', TestedClass::FORMAT_KEY))
+                    ->isEqualTo('"azerty"')
+                ->string($dump->dumpString('azerty', TestedClass::FORMAT_VALUE))
                     ->isEqualTo('string(6) "azerty"')
         ;
     }
@@ -48,7 +52,9 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass())
             ->and($variable = 'àâäéèêëîïôöùüŷÿ')
             ->and($variable = mb_convert_encoding($variable, 'UTF-8', mb_detect_encoding($variable)))
-                ->string($dump->dumpString($variable))
+                ->string($dump->dumpString($variable, TestedClass::FORMAT_KEY))
+                    ->isEqualTo('"àâäéèêëîïôöùüŷÿ"')
+                ->string($dump->dumpString($variable, TestedClass::FORMAT_VALUE))
                     ->isEqualTo('string(15) "àâäéèêëîïôöùüŷÿ"')
         ;
     }
