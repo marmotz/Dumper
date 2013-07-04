@@ -15,7 +15,28 @@ namespace Mattlab\Dumper;
  */
 abstract class Dump
 {
+    const FORMAT_KEY   = 'key';
+    const FORMAT_VALUE = 'value';
+
     protected $variable;
+
+    /**
+     * Dump array variable
+     *
+     * @param array $array
+     *
+     * @return string
+     */
+    abstract public function dumpArray(array $array);
+
+    /**
+     * Dump object variable
+     *
+     * @param object $object
+     *
+     * @return string
+     */
+    abstract public function dumpObject($object);
 
     /**
      * Create a dump instance by decorator
@@ -61,13 +82,13 @@ abstract class Dump
      */
     static public function getDumps(array $variables, $decorator = null)
     {
-        $dumps = '';
+        $output = '';
 
         foreach ($variables as $variable) {
-            $dumps .= static::getDump($variable, $decorator);
+            $output .= static::getDump($variable, $decorator);
         }
 
-        return $dumps;
+        return $output;
     }
 
     /**
@@ -77,7 +98,10 @@ abstract class Dump
      */
     public function __construct($variable = null)
     {
-        $this->setVariable($variable);
+        $this
+            ->reset()
+            ->setVariable($variable)
+        ;
     }
 
     /**
@@ -87,7 +111,11 @@ abstract class Dump
      */
     public function __toString()
     {
-        return $this->dump($this->getVariable());
+        return $this
+            ->dump(
+                $this->getVariable()
+            )
+        ;
     }
 
     /**
@@ -95,13 +123,16 @@ abstract class Dump
      *
      * Dispatch to all dump methods
      *
-     * @param mixed $variable
+     * @param mixed  $variable
+     * @param string $format
      *
      * @return string
      */
-    public function dump($variable)
+    public function dump($variable, $format = self::FORMAT_VALUE)
     {
-        switch (gettype($variable)) {
+        $type = gettype($variable);
+
+        switch ($type) {
             case 'boolean':
             case 'integer':
             case 'double':
@@ -111,53 +142,68 @@ abstract class Dump
             case 'object':
             case 'resource':
             case 'NULL':
-                $method = 'dump' . ucfirst(strtolower(gettype($variable)));
+                $method = 'dump' . ucfirst(strtolower($type));
 
-                return $this->$method($variable);
+                return $this->$method($variable, $format);
             break;
 
             default:
-                return 'Unknown type "' . gettype($variable) . '"';
+                return sprintf(
+                    'Unknown type "%s"',
+                    $type
+                );
             break;
-
         }
     }
 
     /**
      * Dump integer variable
      *
-     * @param integer $variable
+     * @param integer $integer
+     * @param string  $format
      *
      * @return string
      */
-    public function dumpInteger($variable)
+    public function dumpInteger($integer, $format)
     {
-        return sprintf(
-            'integer(%d)',
-            $variable
-        );
+        if ($format === self::FORMAT_VALUE) {
+            return sprintf(
+                'integer(%d)',
+                $integer
+            );
+        } else {
+            return (string) $integer;
+        }
     }
 
     /**
      * Dump string variable
      *
-     * @param string $variable
+     * @param string $string
+     * @param string $format
      *
      * @return string
      */
-    public function dumpString($variable)
+    public function dumpString($string, $format)
     {
-        if (function_exists('mb_strlen')) {
-            $len = mb_strlen($variable, 'UTF-8');
-        } else {
-            $len = strlen($variable);
-        }
+        if ($format === self::FORMAT_VALUE) {
+            if (function_exists('mb_strlen')) {
+                $len = mb_strlen($string, 'UTF-8');
+            } else {
+                $len = strlen($string);
+            }
 
-        return sprintf(
-            'string(%d) "%s"',
-            $len,
-            $variable
-        );
+            return sprintf(
+                'string(%d) "%s"',
+                $len,
+                $string
+            );
+        } else {
+            return sprintf(
+                '"%s"',
+                $string
+            );
+        }
     }
 
     /**
@@ -171,17 +217,95 @@ abstract class Dump
     }
 
     /**
+     * Prepare array variable (pre dump keys and values)
+     *
+     * @param array $array
+     *
+     * @return array
+     */
+    public function prepareArray(array $array)
+    {
+        $preparedArray = array();
+
+        foreach ($array as $key => $value) {
+            $preparedArray[$this->dump($key, self::FORMAT_KEY)] = $this->dump($value);
+        }
+
+        return $preparedArray;
+    }
+
+    static public $foo = 4;
+    static private $bar = 42;
+
+    /**
+     * Prepare object variable (pre dump properties, methods, etc..)
+     *
+     * @param array $object
+     *
+     * @return array
+     */
+    public function prepareObject($object)
+    {
+        self::$foo = 13;
+        $preparedObject = array();
+
+        $class = new \ReflectionClass(get_class($object));
+
+        $preparedObject['class'] = $class;
+
+        // extends
+        $preparedObject['extends'] = array();
+
+        $parentClass = $class;
+
+        while ($parentClass = $parentClass->getParentClass()) {
+            $preparedObject['extends'][] = $parentClass->getName();
+        }
+
+        // properties
+        $preparedObject['properties'] = array();
+
+        $filter = \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_STATIC;
+        foreach ($class->getProperties($filter) as $propertie) {
+            if (!$propertie->isPublic()) {
+                $propertie->setAccessible(true);
+            }
+
+            $preparedObject['properties'][$propertie->getName()] = array(
+                'propertie'    => $propertie,
+                'defaultValue' => $propertie->getValue(),
+                'value'        => $propertie->getValue($object),
+            );
+        }
+
+        var_dump($preparedObject);
+
+        return $preparedObject;
+    }
+
+    /**
+     * Reset current dumper
+     *
+     * @return self
+     */
+    public function reset()
+    {
+        return $this
+            ->setVariable()
+        ;
+    }
+
+    /**
      * Set current variable
      *
      * @param mixed $variable
      *
      * @return self
      */
-    public function setVariable($variable)
+    public function setVariable($variable = null)
     {
         $this->variable = $variable;
 
         return $this;
     }
-
 }
