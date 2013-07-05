@@ -16,16 +16,14 @@ namespace Mattlab\Dumper;
 class HtmlDump extends Dump
 {
     /**
-     * Dump array variable
+     * Do dump array variable
      *
-     * @param array $array
+     * @param \Mattlab\Dumper\Proxy\ArrayProxy $array
      *
      * @return string
      */
-    public function dumpArray(array $array)
+    public function doDumpArray(Proxy\ArrayProxy $array)
     {
-        $array = $this->prepareArray($array);
-
         $output = '';
 
         $output .= '<table class="dumper array">' . PHP_EOL;
@@ -34,13 +32,13 @@ class HtmlDump extends Dump
         $output .= '            <th>';
         $output .= sprintf(
             'array(%d)',
-            count($array)
+            $array->size()
         );
         $output .=             '</th>' . PHP_EOL;
         $output .= '        </tr>' . PHP_EOL;
         $output .= '    </thead>' . PHP_EOL;
 
-        if ($array) {
+        if ($array->size()) {
             $output .= '    <tbody>' . PHP_EOL;
 
             foreach ($array as $key => $value) {
@@ -58,7 +56,14 @@ class HtmlDump extends Dump
         return $output;
     }
 
-    public function dumpObject($object)
+    /**
+     * Do dump object variable
+     *
+     * @param \Mattlab\Dumper\Proxy\ObjectProxy $object
+     *
+     * @return string
+     */
+    public function doDumpObject(Proxy\ObjectProxy $object)
     {
 
     }

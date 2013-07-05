@@ -15,28 +15,29 @@ namespace Mattlab\Dumper;
  */
 abstract class Dump
 {
+
     const FORMAT_KEY   = 'key';
     const FORMAT_VALUE = 'value';
 
     protected $variable;
 
     /**
-     * Dump array variable
+     * Do dump array variable
      *
-     * @param array $array
+     * @param \Mattlab\Dumper\Proxy\ArrayProxy $array
      *
      * @return string
      */
-    abstract public function dumpArray(array $array);
+    abstract public function doDumpArray(Proxy\ArrayProxy $array);
 
     /**
-     * Dump object variable
+     * Do dump object variable
      *
-     * @param object $object
+     * @param \Mattlab\Dumper\Proxy\ObjectProxy $object
      *
      * @return string
      */
-    abstract public function dumpObject($object);
+    abstract public function doDumpObject(Proxy\ObjectProxy $object);
 
     /**
      * Create a dump instance by decorator
@@ -157,6 +158,35 @@ abstract class Dump
     }
 
     /**
+     * Dump array variable
+     *
+     * @param array $array
+     *
+     * @return string
+     */
+    public function dumpArray(array $array)
+    {
+        return $this->doDumpArray(
+            new Proxy\ArrayProxy($this, $array)
+        );
+    }
+
+    /**
+     * Dump boolean
+     *
+     * @param boolean $boolean
+     *
+     * @return string
+     */
+    public function dumpBoolean($boolean)
+    {
+        return sprintf(
+            'boolean(%s)',
+            $boolean ? 'true' : 'false'
+        );
+    }
+
+    /**
      * Dump integer variable
      *
      * @param integer $integer
@@ -174,6 +204,30 @@ abstract class Dump
         } else {
             return (string) $integer;
         }
+    }
+
+    /**
+     * Dump null
+     *
+     * @return string
+     */
+    public function dumpNull()
+    {
+        return 'NULL';
+    }
+
+    /**
+     * Dump object variable
+     *
+     * @param object $object
+     *
+     * @return string
+     */
+    public function dumpObject($object)
+    {
+        return $this->doDumpObject(
+            new Proxy\ObjectProxy($object)
+        );
     }
 
     /**
@@ -217,73 +271,6 @@ abstract class Dump
     }
 
     /**
-     * Prepare array variable (pre dump keys and values)
-     *
-     * @param array $array
-     *
-     * @return array
-     */
-    public function prepareArray(array $array)
-    {
-        $preparedArray = array();
-
-        foreach ($array as $key => $value) {
-            $preparedArray[$this->dump($key, self::FORMAT_KEY)] = $this->dump($value);
-        }
-
-        return $preparedArray;
-    }
-
-    static public $foo = 4;
-    static private $bar = 42;
-
-    /**
-     * Prepare object variable (pre dump properties, methods, etc..)
-     *
-     * @param array $object
-     *
-     * @return array
-     */
-    public function prepareObject($object)
-    {
-        self::$foo = 13;
-        $preparedObject = array();
-
-        $class = new \ReflectionClass(get_class($object));
-
-        $preparedObject['class'] = $class;
-
-        // extends
-        $preparedObject['extends'] = array();
-
-        $parentClass = $class;
-
-        while ($parentClass = $parentClass->getParentClass()) {
-            $preparedObject['extends'][] = $parentClass->getName();
-        }
-
-        // properties
-        $preparedObject['properties'] = array();
-
-        $filter = \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_STATIC;
-        foreach ($class->getProperties($filter) as $propertie) {
-            if (!$propertie->isPublic()) {
-                $propertie->setAccessible(true);
-            }
-
-            $preparedObject['properties'][$propertie->getName()] = array(
-                'propertie'    => $propertie,
-                'defaultValue' => $propertie->getValue(),
-                'value'        => $propertie->getValue($object),
-            );
-        }
-
-        var_dump($preparedObject);
-
-        return $preparedObject;
-    }
-
-    /**
      * Reset current dumper
      *
      * @return self
@@ -308,4 +295,5 @@ abstract class Dump
 
         return $this;
     }
+
 }

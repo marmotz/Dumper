@@ -99,27 +99,4 @@ class HtmlDump extends atoum
         ;
     }
 
-    public function testPrepareArray()
-    {
-        $this
-            ->if($dump = new TestedClass())
-                ->array(
-                    $dump->prepareArray(
-                        array(
-                            1,
-                            'key' => 42,
-                            array('dump')
-                        )
-                    )
-                )
-                    ->isIdenticalTo(
-                        array(
-                            $dump->dump(0,     TestedClass::FORMAT_KEY) => $dump->dump(1),
-                            $dump->dump('key', TestedClass::FORMAT_KEY) => $dump->dump(42),
-                            $dump->dump(1,     TestedClass::FORMAT_KEY) => $dump->dump(array('dump')),
-                        )
-                    )
-        ;
-    }
-
 }

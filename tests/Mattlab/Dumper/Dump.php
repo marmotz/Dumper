@@ -7,6 +7,8 @@ use Mattlab\Dumper\Dump      as TestedClass;
 use mock\Mattlab\Dumper\Dump as mockTestedClass;
 use stdClass;
 
+require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
+
 
 class Dump extends atoum
 {
@@ -24,6 +26,17 @@ class Dump extends atoum
         ;
     }
 
+    public function testDumpBoolean()
+    {
+        $this
+            ->if($dump = new mockTestedClass)
+                ->string($dump->dumpBoolean(true))
+                    ->isEqualTo('boolean(true)')
+                ->string($dump->dumpBoolean(false))
+                    ->isEqualTo('boolean(false)')
+        ;
+    }
+
     public function testDumpInteger()
     {
         $this
@@ -32,6 +45,15 @@ class Dump extends atoum
                     ->isEqualTo('42')
                 ->string($dump->dumpInteger(42, TestedClass::FORMAT_VALUE))
                     ->isEqualTo('integer(42)')
+        ;
+    }
+
+    public function testDumpNull()
+    {
+        $this
+            ->if($dump = new mockTestedClass)
+                ->string($dump->dumpNull())
+                    ->isEqualTo('NULL')
         ;
     }
 
@@ -84,85 +106,6 @@ class Dump extends atoum
             ->string(TestedClass::getDumps(array(42, 'dump'), 'cli'))
                 ->contains('42')
                 ->contains('dump')
-        ;
-    }
-
-    public function testPrepareArray()
-    {
-        $this
-            ->if($dump = new mockTestedClass)
-                ->array(
-                    $dump->prepareArray(
-                        array()
-                    )
-                )
-                    ->isIdenticalTo(
-                        array()
-                    )
-                ->array(
-                    $dump->prepareArray(
-                        array(1)
-                    )
-                )
-                    ->isIdenticalTo(
-                        array(
-                            $dump->dump(0, TestedClass::FORMAT_KEY) => $dump->dump(1)
-                        )
-                    )
-                ->array(
-                    $dump->prepareArray(
-                        array(
-                            1,
-                            'key' => 42
-                        )
-                    )
-                )
-                    ->isIdenticalTo(
-                        array(
-                            $dump->dump(0,     TestedClass::FORMAT_KEY) => $dump->dump(1),
-                            $dump->dump('key', TestedClass::FORMAT_KEY) => $dump->dump(42),
-                        )
-                    )
-        ;
-    }
-
-    public function testPrepareObject()
-    {
-        $this
-            ->if($dump = new mockTestedClass(4))
-                ->array($preparedObject = $dump->prepareObject(new stdClass))
-                    // ->keys
-                    ->array(array_keys($preparedObject))
-                        // ->isIdenticalTo(
-                        //     array(
-                        //         'class',
-                        //         'extends',
-                        //         'properties',
-                        //         'staticProperties',
-                        //     )
-                        // )
-                ->object($preparedObject['class'])
-                    // ->isInstanceOf('ReflectionObject')
-                ->array($preparedObject['extends'])
-                    ->foreach(
-                        $preparedObject['extends'],
-                        function($assert, $extend) {
-                            $assert->string($extend);
-                        }
-                    )
-                ->array($preparedObject['properties'])
-                    ->foreach(
-                        $preparedObject['properties'],
-                        function($assert, $propertie) {
-                            $assert
-                                ->object($propertie)
-                                    ->isInstanceOf('ReflectionPropertie')
-                            ;
-                        }
-                    )
-
-            ->if($dump = new mockTestedClass)
-                ->array($preparedObject = $dump->prepareObject($dump))
         ;
     }
 
