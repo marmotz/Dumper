@@ -131,18 +131,18 @@ abstract class Dump
      */
     public function dump($variable, $format = self::FORMAT_VALUE)
     {
-        $type = gettype($variable);
+        $type = strtolower(gettype($variable));
 
         switch ($type) {
+            case 'array':
             case 'boolean':
-            case 'integer':
             case 'double':
             case 'float':
-            case 'string':
-            case 'array':
+            case 'integer':
+            case 'null':
             case 'object':
             case 'resource':
-            case 'NULL':
+            case 'string':
                 $method = 'dump' . ucfirst(strtolower($type));
 
                 return $this->$method($variable, $format);
@@ -187,6 +187,33 @@ abstract class Dump
     }
 
     /**
+     * Dump double
+     *
+     * @param float $float
+     *
+     * @return string
+     */
+    public function dumpDouble($float)
+    {
+        return $this->dumpFloat($float);
+    }
+
+    /**
+     * Dump float
+     *
+     * @param float $float
+     *
+     * @return string
+     */
+    public function dumpFloat($float)
+    {
+        return sprintf(
+            'float(%s)',
+            $float
+        );
+    }
+
+    /**
      * Dump integer variable
      *
      * @param integer $integer
@@ -227,6 +254,22 @@ abstract class Dump
     {
         return $this->doDumpObject(
             new Proxy\ObjectProxy($object)
+        );
+    }
+
+    /**
+     * Dump resource
+     *
+     * @param $resource
+     *
+     * @return string
+     */
+    public function dumpResource($resource)
+    {
+        return sprintf(
+            'resource %s "%s"',
+            get_resource_type($resource),
+            (string) $resource
         );
     }
 

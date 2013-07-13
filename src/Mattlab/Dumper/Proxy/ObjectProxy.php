@@ -295,6 +295,36 @@ class ObjectProxy
     }
 
     /**
+     * Return if proxy has parents
+     *
+     * @return boolean
+     */
+    public function hasParents()
+    {
+        return (boolean) count($this->getParents());
+    }
+
+    /**
+     * Return if proxy has interfaces
+     *
+     * @return boolean
+     */
+    public function hasInterfaces()
+    {
+        return (boolean) count($this->getInterfaces());
+    }
+
+    /**
+     * Return if proxy has traits
+     *
+     * @return boolean
+     */
+    public function hasTraits()
+    {
+        return (boolean) count($this->getTraits());
+    }
+
+    /**
      * Return if proxy has properties
      *
      * @return boolean
