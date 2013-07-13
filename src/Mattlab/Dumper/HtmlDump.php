@@ -222,6 +222,14 @@ class HtmlDump extends Dump
         return $output;
     }
 
+    /**
+     * Indent given dump
+     *
+     * @param integer $indent
+     * @param string  $dump
+     *
+     * @return string
+     */
     public function indentDump($indent, $dump)
     {
         $dump = explode(PHP_EOL, trim($dump));

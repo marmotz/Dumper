@@ -260,7 +260,7 @@ abstract class Dump
     /**
      * Dump resource
      *
-     * @param $resource
+     * @param resource $resource
      *
      * @return string
      */
