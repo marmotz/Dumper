@@ -53,7 +53,7 @@ class CliDump extends Dump
      */
     public function indentDump($value, $space)
     {
-        $value = explode(PHP_EOL, rtrim($value, PHP_EOL));
+        $value = explode(PHP_EOL, trim($value));
 
         foreach ($value as $k => $line) {
             if ($k !== 0) {
@@ -211,18 +211,36 @@ class CliDump extends Dump
             foreach ($object->getMethods() as $method) {
                 $output .= $this->indent(
                     sprintf(
-                        '%s %s()' . PHP_EOL,
+                        '%s %s(%s)' . PHP_EOL,
                         str_pad(
                             ($method['method']->isStatic() ? 'static ' : '') . $method['visibility'],
                             $object->getMaxLengthMethodVisibilities()
                         ),
-                        $method['method']->getName()
+                        $method['method']->getName(),
+                        implode(
+                            ', ',
+                            array_map(
+                                function($argument) {
+                                    return sprintf(
+                                        '%s%s%s%s',
+                                        $argument['type'] ? $argument['type'] . ' ' : '',
+                                        $argument['reference'],
+                                        $argument['name'],
+                                        isset($argument['default']) ? sprintf(
+                                            ' = %s',
+                                            $argument['default']
+                                        ) : ''
+                                    );
+                                },
+                                $method['arguments']
+                            )
+                        )
                     )
                 );
             }
         }
 
-        // print_r($output);
+        $output .= PHP_EOL;
 
         return $output;
     }

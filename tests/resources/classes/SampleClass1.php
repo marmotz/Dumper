@@ -49,7 +49,7 @@ class SampleClass1 extends SampleClass2
         self::$staticPublicPropertyWithDefaultValue    = 'construct';
     }
 
-    private   function privateMethod($arg1, array $arg2) {}
+    private   function privateMethod($arg1, array &$arg2) {}
     protected function protectedMethod($arg1, \stdClass $arg2) {}
     public    function publicMethod() {}
 }

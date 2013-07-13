@@ -55,6 +55,54 @@ class CliDump extends atoum
         $this
             ->if($dump = new TestedClass())
                 ->string($dump->dumpObject(new \SampleClass1))
+                    ->isEqualTo(
+                        'object SampleClass1' . PHP_EOL . 
+                        '| extends SampleClass2' . PHP_EOL . 
+                        '| extends abstract SampleAbstract1' . PHP_EOL . 
+                        '| implements SampleInterface1' . PHP_EOL . 
+                        '| use trait SampleTrait1' . PHP_EOL . 
+                        '| Constants :' . PHP_EOL . 
+                        '|   CONST1   : string(6) "const1"' . PHP_EOL . 
+                        '|   CONSTANT2: string(9) "constant2"' . PHP_EOL . 
+                        '| Properties:' . PHP_EOL . 
+                        '|   private          $privatePropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   protected        $protectedPropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   public           $publicPropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   private          $privatePropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Default : string(7) "default"' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   protected        $protectedPropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Default : string(7) "default"' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   public           $publicPropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Default : string(7) "default"' . PHP_EOL . 
+                        '|     Current : object SampleClass2' . PHP_EOL . 
+                        '|               | extends abstract SampleAbstract1' . PHP_EOL . 
+                        '|               | implements SampleInterface1' . PHP_EOL . 
+                        '|   protected        $traitProperty' . PHP_EOL . 
+                        '|     Current : NULL' . PHP_EOL . 
+                        '|   static private   $staticPrivatePropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   static protected $staticProtectedPropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   static public    $staticPublicPropertyWithoutDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   static private   $staticPrivatePropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   static protected $staticProtectedPropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '|   static public    $staticPublicPropertyWithDefaultValue' . PHP_EOL . 
+                        '|     Current : string(9) "construct"' . PHP_EOL . 
+                        '| Methods :' . PHP_EOL . 
+                        '| public    __construct()' . PHP_EOL . 
+                        '| private   privateMethod($arg1, array &$arg2)' . PHP_EOL . 
+                        '| protected protectedMethod($arg1, stdClass $arg2)' . PHP_EOL . 
+                        '| public    publicMethod()' . PHP_EOL . 
+                        '| public    traitMethod()' . PHP_EOL . PHP_EOL
+                    )
         ;
     }
 }

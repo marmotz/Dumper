@@ -96,7 +96,30 @@ class ObjectProxy
         foreach ($this->getClass()->getMethods() as $methodName => $method) {
             $this->methods[] = array(
                 'method'     => $method,
-                'visibility' => $this->getVisibility($method)
+                'visibility' => $this->getVisibility($method),
+                'arguments'  => array_map(
+                    function($parameter) {
+                        $return = array(
+                            'name'      => '$' . $parameter->getName(),
+                            'reference' => $parameter->isPassedByReference() ? '&' : '',
+                            'type'      => $parameter->isArray() ? 'array' : (
+                                $parameter->isCallable() ? 'callable' : (
+                                    $parameter->getClass() ? $parameter->getClass()->getName() : ''
+                                )
+                            ),
+                        );
+
+                        if ($parameter->isDefaultValueAvailable()) {
+                            $return['default'] = $parameter->isDefaultValueConstant()
+                                ? $parameter->getDefaultValueConstantName()
+                                : $parameter->getDefaultValue()
+                            ;
+                        }
+
+                        return $return;
+                    },
+                    $method->getParameters()
+                )
             );
         }
     }
