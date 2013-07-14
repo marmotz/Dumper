@@ -84,17 +84,17 @@ class CliDump extends atoum
                         '|               | implements SampleInterface1' . PHP_EOL .
                         '|   protected        $traitProperty' . PHP_EOL .
                         '|     Current : NULL' . PHP_EOL .
-                        '|   static private   $staticPrivatePropertyWithoutDefaultValue' . PHP_EOL .
+                        '|   private static   $staticPrivatePropertyWithoutDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   static protected $staticProtectedPropertyWithoutDefaultValue' . PHP_EOL .
+                        '|   protected static $staticProtectedPropertyWithoutDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   static public    $staticPublicPropertyWithoutDefaultValue' . PHP_EOL .
+                        '|   public static    $staticPublicPropertyWithoutDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   static private   $staticPrivatePropertyWithDefaultValue' . PHP_EOL .
+                        '|   private static   $staticPrivatePropertyWithDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   static protected $staticProtectedPropertyWithDefaultValue' . PHP_EOL .
+                        '|   protected static $staticProtectedPropertyWithDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   static public    $staticPublicPropertyWithDefaultValue' . PHP_EOL .
+                        '|   public static    $staticPublicPropertyWithDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
                         '| Methods :' . PHP_EOL .
                         '|   public    __construct()' . PHP_EOL .

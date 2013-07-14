@@ -181,7 +181,7 @@ class CliDump extends Dump
                     sprintf(
                         '%s $%s' . PHP_EOL,
                         str_pad(
-                            ($property['property']->isStatic() ? 'static ' : '') . $property['visibility'],
+                            $property['visibility'] . ($property['property']->isStatic() ? ' static' : ''),
                             $object->getMaxLengthPropertyVisibilities()
                         ),
                         $property['property']->getName()
@@ -213,7 +213,7 @@ class CliDump extends Dump
                     sprintf(
                         '%s %s(%s)' . PHP_EOL,
                         str_pad(
-                            ($method['method']->isStatic() ? 'static ' : '') . $method['visibility'],
+                            $method['visibility'] . ($method['method']->isStatic() ? ' static' : ''),
                             $object->getMaxLengthMethodVisibilities()
                         ),
                         $method['method']->getName(),
