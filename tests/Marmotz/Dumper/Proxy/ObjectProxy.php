@@ -1,9 +1,9 @@
 <?php
 
-namespace tests\units\Mattlab\Dumper\Proxy;
+namespace tests\units\Marmotz\Dumper\Proxy;
 
 use atoum;
-use Mattlab\Dumper\Proxy\ObjectProxy as TestedClass;
+use Marmotz\Dumper\Proxy\ObjectProxy as TestedClass;
 
 require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
 

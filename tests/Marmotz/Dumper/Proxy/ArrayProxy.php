@@ -1,14 +1,14 @@
 <?php
 
-namespace tests\units\Mattlab\Dumper\Proxy;
+namespace tests\units\Marmotz\Dumper\Proxy;
 
 use atoum;
-use Mattlab\Dumper\Proxy\ArrayProxy as TestedClass;
+use Marmotz\Dumper\Proxy\ArrayProxy as TestedClass;
 
-use Mattlab\Dumper\CliDump;
-use Mattlab\Dumper\HtmlDump;
-use Mattlab\Dumper\Dump;
-use mock\Mattlab\Dumper\Dump as mockDump;
+use Marmotz\Dumper\CliDump;
+use Marmotz\Dumper\HtmlDump;
+use Marmotz\Dumper\Dump;
+use mock\Marmotz\Dumper\Dump as mockDump;
 
 
 class ArrayProxy extends atoum
@@ -39,9 +39,9 @@ class ArrayProxy extends atoum
                         function($assert, $value, $key) use($dumper, &$maxLength, &$array, &$count) {
                             $assert
                                 ->variable($key)
-                                    ->isEqualTo($dumper->dump(key($array), Dump::FORMAT_KEY))
-                                ->string($value)
-                                    ->isEqualTo($dumper->dump(current($array)))
+                                    ->isEqualTo($dumper->getDump(key($array), null, Dump::FORMAT_KEY))
+                                ->variable($value)
+                                    ->isEqualTo(current($array))
                             ;
 
                             $maxLength = max($maxLength, strlen($key));

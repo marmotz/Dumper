@@ -1,8 +1,8 @@
 <?php
 
-namespace Mattlab\Dumper\Proxy;
+namespace Marmotz\Dumper\Proxy;
 
-use Mattlab\Dumper\Dump;
+use Marmotz\Dumper\Dump;
 
 
 /**
