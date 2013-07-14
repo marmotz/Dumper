@@ -19,7 +19,7 @@ class HtmlDump extends atoum
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
-                        '            <th>array(0)</th>' . PHP_EOL .
+                        '            <th colspan="2">array(0)</th>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </thead>' . PHP_EOL .
                         '</table>' . PHP_EOL . PHP_EOL
@@ -29,7 +29,7 @@ class HtmlDump extends atoum
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
-                        '            <th>array(1)</th>' . PHP_EOL .
+                        '            <th colspan="2">array(1)</th>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </thead>' . PHP_EOL .
                         '    <tbody>' . PHP_EOL .
@@ -45,7 +45,7 @@ class HtmlDump extends atoum
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
-                        '            <th>array(2)</th>' . PHP_EOL .
+                        '            <th colspan="2">array(2)</th>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </thead>' . PHP_EOL .
                         '    <tbody>' . PHP_EOL .
@@ -65,7 +65,7 @@ class HtmlDump extends atoum
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
-                        '            <th>array(3)</th>' . PHP_EOL .
+                        '            <th colspan="2">array(3)</th>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </thead>' . PHP_EOL .
                         '    <tbody>' . PHP_EOL .
@@ -83,7 +83,7 @@ class HtmlDump extends atoum
                         '                <table class="dumper array">' . PHP_EOL .
                         '                    <thead>' . PHP_EOL .
                         '                        <tr>' . PHP_EOL .
-                        '                            <th>array(1)</th>' . PHP_EOL .
+                        '                            <th colspan="2">array(1)</th>' . PHP_EOL .
                         '                        </tr>' . PHP_EOL .
                         '                    </thead>' . PHP_EOL .
                         '                    <tbody>' . PHP_EOL .

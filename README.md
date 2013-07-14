@@ -104,7 +104,7 @@ Here is an example of HTML output:
 <table class="dumper array">
     <thead>
         <tr>
-            <th>array(27)</th>
+            <th colspan="2">array(27)</th>
         </tr>
     </thead>
     <tbody>
@@ -226,7 +226,7 @@ Here is an example of HTML output:
 <table class="dumper array">
     <thead>
         <tr>
-            <th>array(27)</th>
+            <th colspan="2">array(27)</th>
         </tr>
     </thead>
     <tbody>

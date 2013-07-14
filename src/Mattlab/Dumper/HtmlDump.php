@@ -29,7 +29,7 @@ class HtmlDump extends Dump
         $output .= '<table class="dumper array">' . PHP_EOL;
         $output .= '    <thead>' . PHP_EOL;
         $output .= '        <tr>' . PHP_EOL;
-        $output .= '            <th>';
+        $output .= '            <th colspan="2">';
         $output .= sprintf(
             'array(%d)',
             $array->size()
