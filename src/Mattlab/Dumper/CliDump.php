@@ -235,7 +235,8 @@ class CliDump extends Dump
                                 $method['arguments']
                             )
                         )
-                    )
+                    ),
+                    2
                 );
             }
         }
