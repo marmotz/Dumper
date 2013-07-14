@@ -1,6 +1,6 @@
 <?php
 
-namespace Mattlab\Dumper;
+namespace Marmotz\Dumper;
 
 
 /**
@@ -17,111 +17,58 @@ class CliDump extends Dump
 {
     const INDENT = 2;
 
-    /**
-     * Indent given text with given level and optionnaly add given dump
-     *
-     * @param string  $text
-     * @param integer $level
-     * @param string  $dump
-     *
-     * @return string
-     */
-    public function indent($text, $level = 1, $dump = null)
-    {
-        $text = $this->indentLine(
-            $text,
-            $level * self::INDENT
-        );
-
-        if ($dump !== null) {
-            $text .= $this->indentDump(
-                $dump,
-                strlen($text)
-            );
-        }
-
-        return $text;
-    }
 
     /**
-     * Indent a dump
+     * Init current output object
      *
-     * @param string  $value
-     * @param integer $space
-     *
-     * @return string
+     * @return Output
      */
-    public function indentDump($value, $space)
+    public function initOutput(Output $output)
     {
-        $value = explode(PHP_EOL, trim($value));
-
-        foreach ($value as $k => $line) {
-            if ($k !== 0) {
-                $value[$k] = $this->indentLine(
-                    $line,
-                    $space
-                );
-            }
-        }
-
-        return implode(PHP_EOL, $value) . PHP_EOL;
-    }
-
-    /**
-     * Indent a line
-     *
-     * @param string  $text
-     * @param integer $space
-     *
-     * @return string
-     */
-    public function indentLine($text, $space)
-    {
-        return sprintf(
-            '| %s%s',
-            str_repeat(' ', $space - self::INDENT),
-            $text
-        );
+        $output
+            ->setIndent(2)
+            ->setPrefix('|')
+        ;
     }
 
     /**
      * Do dump array variable
      *
-     * @param \Mattlab\Dumper\Proxy\ArrayProxy $array
+     * @param \Marmotz\Dumper\Proxy\ArrayProxy $array
      *
      * @return string
      */
-    public function doDumpArray(Proxy\ArrayProxy $array)
+    public function doDumpArray(Proxy\ArrayProxy $array, Output $output)
     {
-        $output = '';
-
-        $output .= sprintf(
-            'array(%d)' . PHP_EOL,
-            $array->size()
-        );
+        $output
+            ->addLn(
+                'array(%d)',
+                $array->size()
+            )
+            ->inc()
+        ;
 
         foreach ($array as $key => $value) {
-            $output .= $this->indent(
-                sprintf(
+            $output
+                ->add(
                     '%s: ',
                     str_pad($key, $array->getMaxLengthKey(), ' ', STR_PAD_LEFT)
-                ),
-                1,
-                $value
-            );
+                )
+                ->dump($value)
+            ;
         }
 
-        return $output;
+        $output->dec();
     }
 
     /**
      * Do dump object variable
      *
-     * @param \Mattlab\Dumper\Proxy\ObjectProxy $object
+     * @param \Marmotz\Dumper\Proxy\ObjectProxy $object
      *
      * @return string
      */
-    public function doDumpObject(Proxy\ObjectProxy $object)
+    public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
         $output = '';
 

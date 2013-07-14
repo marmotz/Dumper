@@ -1,8 +1,8 @@
 <?php
 
-namespace Mattlab\Dumper\Proxy;
+namespace Marmotz\Dumper\Proxy;
 
-use Mattlab\Dumper\Dump;
+use Marmotz\Dumper\Dump;
 
 
 /**
@@ -34,8 +34,7 @@ class ArrayProxy implements \Iterator
         $this->array = array();
 
         foreach ($array as $key => $value) {
-            $key   = $dumper->dump($key, Dump::FORMAT_KEY);
-            $value = $dumper->dump($value);
+            $key = $dumper->getDump($key, null, Dump::FORMAT_KEY);
 
             $this->array[$key] = $value;
 

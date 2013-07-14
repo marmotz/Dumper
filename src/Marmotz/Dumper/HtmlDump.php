@@ -1,6 +1,6 @@
 <?php
 
-namespace Mattlab\Dumper;
+namespace Marmotz\Dumper;
 
 
 /**
@@ -16,13 +16,24 @@ namespace Mattlab\Dumper;
 class HtmlDump extends Dump
 {
     /**
+     * Init current output object
+     *
+     * @return Output
+     */
+    public function initOutput(Output $output)
+    {
+        $output->setIndent(4);
+    }
+
+
+    /**
      * Do dump array variable
      *
-     * @param \Mattlab\Dumper\Proxy\ArrayProxy $array
+     * @param \Marmotz\Dumper\Proxy\ArrayProxy $array
      *
      * @return string
      */
-    public function doDumpArray(Proxy\ArrayProxy $array)
+    public function doDumpArray(Proxy\ArrayProxy $array, Output $output)
     {
         $output = '';
 
@@ -59,11 +70,11 @@ class HtmlDump extends Dump
     /**
      * Do dump object variable
      *
-     * @param \Mattlab\Dumper\Proxy\ObjectProxy $object
+     * @param \Marmotz\Dumper\Proxy\ObjectProxy $object
      *
      * @return string
      */
-    public function doDumpObject(Proxy\ObjectProxy $object)
+    public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
         $output = '';
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace tests\units\Mattlab\Dumper;
+namespace tests\units\Marmotz\Dumper;
 
 use atoum;
-use Mattlab\Dumper\HtmlDump as TestedClass;
+use Marmotz\Dumper\HtmlDump as TestedClass;
 
 require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
 
@@ -14,7 +14,11 @@ class HtmlDump extends atoum
     {
         $this
             ->if($dump = new TestedClass())
-                ->string($dump->dumpArray(array()))
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpArray(array());
+                    }
+                )
                     ->isEqualTo(
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
@@ -24,7 +28,11 @@ class HtmlDump extends atoum
                         '    </thead>' . PHP_EOL .
                         '</table>' . PHP_EOL
                     )
-                ->string($dump->dumpArray(array(1)))
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpArray(array(1));
+                    }
+                )
                     ->isEqualTo(
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
@@ -40,7 +48,11 @@ class HtmlDump extends atoum
                         '    </tbody>' . PHP_EOL .
                         '</table>' . PHP_EOL
                     )
-                ->string($dump->dumpArray(array(1, 'key' => 42)))
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpArray(array(1, 'key' => 42));
+                    }
+                )
                     ->isEqualTo(
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
@@ -60,7 +72,11 @@ class HtmlDump extends atoum
                         '    </tbody>' . PHP_EOL .
                         '</table>' . PHP_EOL
                     )
-                ->string($d = $dump->dumpArray(array(1, 'key' => 42, array('dump'))))
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpArray(array(1, 'key' => 42, array('dump')));
+                    }
+                )
                     ->isEqualTo(
                         '<table class="dumper array">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .
@@ -105,7 +121,11 @@ class HtmlDump extends atoum
     {
         $this
             ->if($dump = new TestedClass())
-                ->string($dump->dumpObject(new \SampleClass1))
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpObject(new \SampleClass1);
+                    }
+                )
                     ->isEqualTo(
                         '<table class="dumper object">' . PHP_EOL .
                         '    <thead>' . PHP_EOL .

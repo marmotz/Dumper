@@ -8,7 +8,7 @@ A pretty variable dumper for HTML & cli.
 ```json
 {
     "require": {
-        "mattlab/dumper": "dev-master"
+        "marmotz/dumper": "dev-master"
     }
 }
 ```
@@ -18,7 +18,7 @@ In most of the cases you don't need AtoumBundle in your production environment.
 ```json
 {
     "require-dev": {
-        "mattlab/dumper": "dev-master"
+        "marmotz/dumper": "dev-master"
     }
 }
 ```

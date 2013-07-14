@@ -1,5 +1,5 @@
  {
-    "name"       : "mattlab/dumper",
+    "name"       : "marmotz/dumper",
     "description": "A pretty variable dumper for HTML & cli",
     "require-dev": {
         "atoum/atoum": "dev-master"
@@ -13,10 +13,10 @@
     ],
     "autoload": {
         "files": [
-            "src/Mattlab/Dumper/functions.php"
+            "src/Marmotz/Dumper/functions.php"
         ],
         "psr-0": {
-            "Mattlab\\Dumper": "src"
+            "Marmotz\\Dumper": "src"
         }
     },
     "config": {

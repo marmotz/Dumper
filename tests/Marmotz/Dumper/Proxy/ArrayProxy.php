@@ -1,14 +1,14 @@
 <?php
 
-namespace tests\units\Mattlab\Dumper\Proxy;
+namespace tests\units\Marmotz\Dumper\Proxy;
 
 use atoum;
-use Mattlab\Dumper\Proxy\ArrayProxy as TestedClass;
+use Marmotz\Dumper\Proxy\ArrayProxy as TestedClass;
 
-use Mattlab\Dumper\CliDump;
-use Mattlab\Dumper\HtmlDump;
-use Mattlab\Dumper\Dump;
-use mock\Mattlab\Dumper\Dump as mockDump;
+use Marmotz\Dumper\CliDump;
+use Marmotz\Dumper\HtmlDump;
+use Marmotz\Dumper\Dump;
+use mock\Marmotz\Dumper\Dump as mockDump;
 
 
 class ArrayProxy extends atoum
