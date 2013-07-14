@@ -48,7 +48,7 @@ Here is an example of cli output:
 <?php
     require_once __DIR__ . '/vendor/autoload.php';
 
-    dump($_SERVER);
+    dump($_SERVER, new DateTime);
 ```
 
 ```
@@ -86,6 +86,39 @@ array(31)
 |                       "argv": array(1)
 |                               | 0: string(9) "index.php"
 |                       "argc": integer(1)
+
+object DateTime
+| Constants :
+|   ATOM   : string(13) "Y-m-d\TH:i:sP"
+|   COOKIE : string(16) "l, d-M-y H:i:s T"
+|   ISO8601: string(13) "Y-m-d\TH:i:sO"
+|   RFC822 : string(16) "D, d M y H:i:s O"
+|   RFC850 : string(16) "l, d-M-y H:i:s T"
+|   RFC1036: string(16) "D, d M y H:i:s O"
+|   RFC1123: string(16) "D, d M Y H:i:s O"
+|   RFC2822: string(16) "D, d M Y H:i:s O"
+|   RFC3339: string(13) "Y-m-d\TH:i:sP"
+|   RSS    : string(16) "D, d M Y H:i:s O"
+|   W3C    : string(13) "Y-m-d\TH:i:sP"
+| Methods :
+|   public        __construct($time, $object)
+|   public        __wakeup()
+|   public static __set_state()
+|   public static createFromFormat($format, $time, $object)
+|   public static getLastErrors()
+|   public        format($format)
+|   public        modify($modify)
+|   public        add($interval)
+|   public        sub($interval)
+|   public        getTimezone()
+|   public        setTimezone($timezone)
+|   public        getOffset()
+|   public        setTime($hour, $minute, $second)
+|   public        setDate($year, $month, $day)
+|   public        setISODate($year, $week, $day)
+|   public        setTimestamp($unixtimestamp)
+|   public        getTimestamp()
+|   public        diff($object, $absolute)
 ```
 
 
@@ -221,6 +254,122 @@ Here is an example of HTML output:
         </tr>
     </tbody>
 </table>
+
+<table class="dumper object">
+    <thead>
+        <tr>
+            <th colspan="3">object DateTime</th><th>
+        </th></tr>
+    </thead>
+    <tbody class="constants">
+        <tr>
+            <th colspan="3">Constants :</th>
+        </tr>
+        <tr>
+            <td class="name">ATOM</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+        <tr>
+            <td class="name">COOKIE</td>
+            <td class="value">string(16) "l, d-M-y H:i:s T"</td>
+        </tr>
+        <tr>
+            <td class="name">ISO8601</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sO"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC822</td>
+            <td class="value">string(16) "D, d M y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC850</td>
+            <td class="value">string(16) "l, d-M-y H:i:s T"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC1036</td>
+            <td class="value">string(16) "D, d M y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC1123</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC2822</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC3339</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+        <tr>
+            <td class="name">RSS</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">W3C</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+    </tbody>
+    <tbody class="methods">
+        <tr>
+            <th colspan="3">Methods :</th>
+        </tr>
+        <tr>
+            <td colspan="3">public __construct($time, $object)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public __wakeup()</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public __set_state()</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public createFromFormat($format, $time, $object)</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public getLastErrors()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public format($format)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public modify($modify)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public add($interval)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public sub($interval)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getTimezone()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTimezone($timezone)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getOffset()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTime($hour, $minute, $second)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setDate($year, $month, $day)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setISODate($year, $week, $day)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTimestamp($unixtimestamp)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getTimestamp()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public diff($object, $absolute)</td>
+        </tr>
+    </tbody>
+</table>
 ```
 
 <table class="dumper array">
@@ -340,6 +489,122 @@ Here is an example of HTML output:
         <tr>
             <th>"REQUEST_TIME"</th>
             <td>integer(1373785455)</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="dumper object">
+    <thead>
+        <tr>
+            <th colspan="3">object DateTime</th><th>
+        </th></tr>
+    </thead>
+    <tbody class="constants">
+        <tr>
+            <th colspan="3">Constants :</th>
+        </tr>
+        <tr>
+            <td class="name">ATOM</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+        <tr>
+            <td class="name">COOKIE</td>
+            <td class="value">string(16) "l, d-M-y H:i:s T"</td>
+        </tr>
+        <tr>
+            <td class="name">ISO8601</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sO"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC822</td>
+            <td class="value">string(16) "D, d M y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC850</td>
+            <td class="value">string(16) "l, d-M-y H:i:s T"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC1036</td>
+            <td class="value">string(16) "D, d M y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC1123</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC2822</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">RFC3339</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+        <tr>
+            <td class="name">RSS</td>
+            <td class="value">string(16) "D, d M Y H:i:s O"</td>
+        </tr>
+        <tr>
+            <td class="name">W3C</td>
+            <td class="value">string(13) "Y-m-d\TH:i:sP"</td>
+        </tr>
+    </tbody>
+    <tbody class="methods">
+        <tr>
+            <th colspan="3">Methods :</th>
+        </tr>
+        <tr>
+            <td colspan="3">public __construct($time, $object)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public __wakeup()</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public __set_state()</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public createFromFormat($format, $time, $object)</td>
+        </tr>
+        <tr>
+            <td colspan="3">static public getLastErrors()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public format($format)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public modify($modify)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public add($interval)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public sub($interval)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getTimezone()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTimezone($timezone)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getOffset()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTime($hour, $minute, $second)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setDate($year, $month, $day)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setISODate($year, $week, $day)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public setTimestamp($unixtimestamp)</td>
+        </tr>
+        <tr>
+            <td colspan="3">public getTimestamp()</td>
+        </tr>
+        <tr>
+            <td colspan="3">public diff($object, $absolute)</td>
         </tr>
     </tbody>
 </table>
