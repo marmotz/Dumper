@@ -86,7 +86,7 @@ abstract class Dump
         $output = '';
 
         foreach ($variables as $variable) {
-            $output .= static::getDump($variable, $decorator);
+            $output .= static::getDump($variable, $decorator) . PHP_EOL;
         }
 
         return $output;
