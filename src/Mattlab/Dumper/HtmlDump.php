@@ -51,7 +51,7 @@ class HtmlDump extends Dump
             $output .= '    </tbody>' . PHP_EOL;
         }
 
-        $output .= '</table>' . PHP_EOL . PHP_EOL;
+        $output .= '</table>' . PHP_EOL;
 
         return $output;
     }
@@ -134,7 +134,7 @@ class HtmlDump extends Dump
         if ($object->hasConstants()) {
             $output .= '    <tbody class="constants">' . PHP_EOL;
             $output .= '        <tr>' . PHP_EOL;
-            $output .- '            <th colspan="3">Constants :</th>' . PHP_EOL;
+            $output .= '            <th colspan="3">Constants :</th>' . PHP_EOL;
             $output .= '        </tr>' . PHP_EOL;
 
             foreach ($object->getConstants() as $name => $value) {
@@ -150,7 +150,7 @@ class HtmlDump extends Dump
         if ($object->hasProperties()) {
             $output .= '    <tbody class="properties">' . PHP_EOL;
             $output .= '        <tr>' . PHP_EOL;
-            $output .- '            <th colspan="3">Properties :</th>' . PHP_EOL;
+            $output .= '            <th colspan="3">Properties :</th>' . PHP_EOL;
             $output .= '        </tr>' . PHP_EOL;
 
             foreach ($object->getProperties() as $property) {
@@ -181,7 +181,7 @@ class HtmlDump extends Dump
         if ($object->hasMethods()) {
             $output .= '    <tbody class="methods">' . PHP_EOL;
             $output .= '        <tr>' . PHP_EOL;
-            $output .- '            <th colspan="3">Methods :</th>' . PHP_EOL;
+            $output .= '            <th colspan="3">Methods :</th>' . PHP_EOL;
             $output .= '        </tr>' . PHP_EOL;
 
             foreach ($object->getMethods() as $method) {
@@ -217,7 +217,7 @@ class HtmlDump extends Dump
             $output .= '    </tbody>' . PHP_EOL;
         }
 
-        $output .= '</table>' . PHP_EOL . PHP_EOL;
+        $output .= '</table>' . PHP_EOL;
 
         return $output;
     }

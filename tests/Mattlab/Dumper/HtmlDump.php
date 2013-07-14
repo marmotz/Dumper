@@ -22,7 +22,7 @@ class HtmlDump extends atoum
                         '            <th colspan="2">array(0)</th>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </thead>' . PHP_EOL .
-                        '</table>' . PHP_EOL . PHP_EOL
+                        '</table>' . PHP_EOL
                     )
                 ->string($dump->dumpArray(array(1)))
                     ->isEqualTo(
@@ -38,7 +38,7 @@ class HtmlDump extends atoum
                         '            <td>integer(1)</td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </tbody>' . PHP_EOL .
-                        '</table>' . PHP_EOL . PHP_EOL
+                        '</table>' . PHP_EOL
                     )
                 ->string($dump->dumpArray(array(1, 'key' => 42)))
                     ->isEqualTo(
@@ -58,7 +58,7 @@ class HtmlDump extends atoum
                         '            <td>integer(42)</td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </tbody>' . PHP_EOL .
-                        '</table>' . PHP_EOL . PHP_EOL
+                        '</table>' . PHP_EOL
                     )
                 ->string($d = $dump->dumpArray(array(1, 'key' => 42, array('dump'))))
                     ->isEqualTo(
@@ -96,7 +96,7 @@ class HtmlDump extends atoum
                         '            </td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </tbody>' . PHP_EOL .
-                        '</table>' . PHP_EOL . PHP_EOL
+                        '</table>' . PHP_EOL
                     )
         ;
     }
@@ -261,7 +261,7 @@ class HtmlDump extends atoum
                         '            <td colspan="3">public traitMethod()</td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '    </tbody>' . PHP_EOL .
-                        '</table>' . PHP_EOL . PHP_EOL
+                        '</table>' . PHP_EOL
                     )
         ;
     }
