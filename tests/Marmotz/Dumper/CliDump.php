@@ -55,7 +55,7 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42, array('dump', array('deep'))));
+                        $dump->dumpArray(array(1, 'key' => 42, array('dump', array('deep'))), $dump->createOutput());
                     }
                 )
                     ->isEqualTo(
@@ -72,7 +72,6 @@ class CliDump extends atoum
 
     public function testDumpObject()
     {
-        /*
         $this
             ->if($dump = new TestedClass())
                 ->output(
@@ -89,7 +88,7 @@ class CliDump extends atoum
                         '| Constants :' . PHP_EOL .
                         '|   CONST1   : string(6) "const1"' . PHP_EOL .
                         '|   CONSTANT2: string(9) "constant2"' . PHP_EOL .
-                        '| Properties:' . PHP_EOL .
+                        '| Properties :' . PHP_EOL .
                         '|   private          $privatePropertyWithoutDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
                         '|   protected        $protectedPropertyWithoutDefaultValue' . PHP_EOL .
@@ -126,9 +125,8 @@ class CliDump extends atoum
                         '|   private   privateMethod($arg1, array &$arg2)' . PHP_EOL .
                         '|   protected protectedMethod($arg1, stdClass $arg2)' . PHP_EOL .
                         '|   public    publicMethod()' . PHP_EOL .
-                        '|   public    traitMethod()' . PHP_EOL . PHP_EOL
+                        '|   public    traitMethod()' . PHP_EOL
                     )
         ;
-        */
     }
 }

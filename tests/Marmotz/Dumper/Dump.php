@@ -149,7 +149,7 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpNull(null, $dump->createOutput());
+                        $dump->dumpNull($dump->createOutput());
                     }
                 )
                     ->isEqualTo('NULL' . PHP_EOL)

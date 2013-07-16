@@ -39,9 +39,9 @@ class ArrayProxy extends atoum
                         function($assert, $value, $key) use($dumper, &$maxLength, &$array, &$count) {
                             $assert
                                 ->variable($key)
-                                    ->isEqualTo($dumper->dump(key($array), Dump::FORMAT_KEY))
-                                ->string($value)
-                                    ->isEqualTo($dumper->dump(current($array)))
+                                    ->isEqualTo($dumper->getDump(key($array), null, Dump::FORMAT_KEY))
+                                ->variable($value)
+                                    ->isEqualTo(current($array))
                             ;
 
                             $maxLength = max($maxLength, strlen($key));

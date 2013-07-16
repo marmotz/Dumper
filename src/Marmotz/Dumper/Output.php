@@ -14,39 +14,66 @@ namespace Marmotz\Dumper;
 class Output
 {
     protected $currentPosition;
-    protected $currentSpace;
     protected $dumper;
     protected $indent;
     protected $level;
-    protected $newLine;
+    protected $autoIndent;
     protected $parentOutput;
     protected $prefix;
 
+    /**
+     * Constructor
+     *
+     * @param Dump   $dumper
+     * @param Output $parentOutput
+     */
     public function __construct(Dump $dumper, Output $parentOutput = null)
     {
         $this
             ->setDumper($dumper)
             ->setIndent(2)
             ->setLevel(0)
-            ->setNewLine(true)
+            ->setAutoIndent(true)
             ->setPrefix('')
             ->setParentOutput($parentOutput)
         ;
     }
 
-    public function add()
+    /**
+     * Add given text to output
+     *
+     * @return Output
+     */
+    public function add(/*$format, $args1, ... */)
     {
         $args   = func_get_args();
         $format = array_shift($args);
 
-        $toAdd = vsprintf($this->getSpace() . $format, $args);
+        $toAdd = vsprintf($format, $args);
 
-        echo $toAdd;
+        echo $this->getSpace() . $toAdd;
+
+        if (substr($toAdd, -1) === PHP_EOL) {
+            $this
+                ->setAutoIndent(true)
+                ->setCurrentPosition(null)
+            ;
+        } else {
+            $this
+                ->setAutoIndent(false)
+                ->setCurrentPosition(strlen($toAdd) + $this->getIndent() * $this->getLevel())
+            ;
+        }
 
         return $this;
     }
 
-    public function addLn()
+    /**
+     * Add given text to output and add a PHP_EOL
+     *
+     * @return Output
+     */
+    public function addLn(/*$format, $args1, ... */)
     {
         $args = func_get_args();
         $args[0] .= PHP_EOL;
@@ -57,83 +84,164 @@ class Output
         );
     }
 
+    /**
+     * Decrements indentation
+     *
+     * @return Output
+     */
     public function dec()
     {
         return $this->setLevel($this->getLevel() - 1);
     }
 
-    public function dump($toDump)
+    /**
+     * Dump given variable
+     *
+     * @param mixed $variable
+     *
+     * @return Output
+     */
+    public function dump($variable)
     {
-        $this->getDumper()->dump($toDump);
+        $this->getDumper()->dump($variable, $this);
+
+        $this->setCurrentPosition(null);
 
         return $this;
     }
 
+    /**
+     * Returns whether auto indent is activated or not
+     *
+     * @return boolean
+     */
+    public function getAutoIndent()
+    {
+        return $this->autoIndent;
+    }
+
+    /**
+     * Returns current position
+     *
+     * @return integer
+     */
     public function getCurrentPosition()
     {
         return $this->currentPosition;
     }
 
-    public function getCurrentSpace()
-    {
-        return $this->currentSpace;
-    }
-
+    /**
+     * Returns current dumper
+     *
+     * @return Dumper
+     */
     public function getDumper()
     {
         return $this->dumper;
     }
 
+    /**
+     * Returns indent size
+     *
+     * @return size
+     */
     public function getIndent()
     {
         return $this->indent;
     }
 
+    /**
+     * Returns current level
+     *
+     * @return integer
+     */
     public function getLevel()
     {
         return $this->level;
     }
 
-    public function getNewLine()
-    {
-        return $this->newLine;
-    }
-
+    /**
+     * Returns parent output
+     *
+     * @return Output
+     */
     public function getParentOutput()
     {
         return $this->parentOutput;
     }
 
+    /**
+     * Return prefix
+     *
+     * @return string
+     */
     public function getPrefix()
     {
         return $this->prefix;
     }
 
-    public function getPrefixLength()
-    {
-        return strlen($this->getPrefix());
-    }
-
+    /**
+     * Return current indent space
+     *
+     * @return string
+     */
     public function getSpace()
     {
-        $spaceSize = $this->getIndent() * $this->getLevel();
+        $space = '';
 
-        if ($spaceSize === 0) {
-            return '';
+        if ($this->getAutoIndent() === true) {
+            $spaceSize = $this->getCurrentPosition() ?: $this->getIndent() * $this->getLevel();
+
+            if ($spaceSize > 0) {
+                $space =
+                    $this->getPrefix() .
+                    str_repeat(' ', $spaceSize - strlen($this->getPrefix()))
+                ;
+            }
         }
-        else {
-            return
-                $this->getPrefix() .
-                str_repeat(' ', $spaceSize - $this->getPrefixLength())
-            ;
+
+        if ($this->getParentOutput()) {
+            $space = $this->getParentOutput()->getSpace() . $space;
         }
+
+        return $space;
     }
 
+    /**
+     * Increments indentation
+     *
+     * @return Output
+     */
     public function inc()
     {
         return $this->setLevel($this->getLevel() + 1);
     }
 
+    /**
+     * Set whether auto indent is activated or not
+     *
+     * @param boolean $autoIndent
+     *
+     * @return Output
+     */
+    public function setAutoIndent($autoIndent)
+    {
+        $this->autoIndent = (boolean) $autoIndent;
+
+        if ($this->getParentOutput()) {
+            $this->getParentOutput()->setAutoIndent($this->autoIndent);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set current position
+     *
+     * @param integer $position
+     *
+     * @return Output
+     */
     public function setCurrentPosition($position)
     {
         $this->currentPosition = $position;
@@ -141,13 +249,13 @@ class Output
         return $this;
     }
 
-    public function setCurrentSpace($space)
-    {
-        $this->currentSpace = $space;
-
-        return $this;
-    }
-
+    /**
+     * Set current dumper
+     *
+     * @param Dump $dumper
+     *
+     * @return Output
+     */
     public function setDumper(Dump $dumper)
     {
         $this->dumper = $dumper;
@@ -155,6 +263,13 @@ class Output
         return $this;
     }
 
+    /**
+     * Set indent size
+     *
+     * @param integer $indent
+     *
+     * @return Output
+     */
     public function setIndent($indent)
     {
         $this->indent = $indent;
@@ -162,6 +277,13 @@ class Output
         return $this;
     }
 
+    /**
+     * Set current level
+     *
+     * @param integer $level
+     *
+     * @return Output
+     */
     public function setLevel($level)
     {
         $this->level = $level;
@@ -169,20 +291,27 @@ class Output
         return $this;
     }
 
-    public function setNewLine($newLine)
-    {
-        $this->newLine = $newLine;
-
-        return $this;
-    }
-
-    public function setParentOutput($parentOutput)
+    /**
+     * Set parent output
+     *
+     * @param Output $parentOutput
+     *
+     * @return Output
+     */
+    public function setParentOutput(Output $parentOutput = null)
     {
         $this->parentOutput = $parentOutput;
 
         return $this;
     }
 
+    /**
+     * Set prefix
+     *
+     * @param string $prefix
+     *
+     * @return Output
+     */
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;

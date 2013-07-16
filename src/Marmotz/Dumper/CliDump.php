@@ -21,6 +21,8 @@ class CliDump extends Dump
     /**
      * Init current output object
      *
+     * @param Output $output
+     *
      * @return Output
      */
     public function initOutput(Output $output)
@@ -34,9 +36,8 @@ class CliDump extends Dump
     /**
      * Do dump array variable
      *
-     * @param \Marmotz\Dumper\Proxy\ArrayProxy $array
-     *
-     * @return string
+     * @param Proxy\ArrayProxy $array
+     * @param Output           $output
      */
     public function doDumpArray(Proxy\ArrayProxy $array, Output $output)
     {
@@ -64,101 +65,116 @@ class CliDump extends Dump
     /**
      * Do dump object variable
      *
-     * @param \Marmotz\Dumper\Proxy\ObjectProxy $object
+     * @param Proxy\ObjectProxy $object
+     * @param Output            $output
      *
-     * @return string
+     * @return void
      */
     public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
-        $output = '';
-
-        $output .= sprintf(
-            'object %s' . PHP_EOL,
-            $object->getClass()->getName()
-        );
+        $output
+            ->addLn(
+                'object %s',
+                $object->getClass()->getName()
+            )
+            ->inc()
+        ;
 
         foreach ($object->getParents() as $parent) {
-            $output .= $this->indent(
-                sprintf(
-                    'extends %s%s' . PHP_EOL,
+            $output
+                ->addLn(
+                    'extends %s%s',
                     $parent->isAbstract() ? 'abstract ' : '',
                     $parent->getName()
                 )
-            );
+            ;
         }
 
         foreach ($object->getInterfaces() as $interface) {
-            $output .= $this->indent(
-                sprintf(
-                    'implements %s' . PHP_EOL,
+            $output
+                ->addLn(
+                    'implements %s',
                     $interface->getName()
                 )
-            );
+            ;
         }
 
         foreach ($object->getTraits() as $trait) {
-            $output .= $this->indent(
-                sprintf(
-                    'use trait %s' . PHP_EOL,
+            $output
+                ->addLn(
+                    'use trait %s',
                     $trait->getName()
                 )
-            );
+            ;
         }
 
         if ($object->hasConstants()) {
-            $output .= $this->indent('Constants :' . PHP_EOL);
+            $output
+                ->addLn('Constants :')
+                ->inc()
+            ;
 
             foreach ($object->getConstants() as $name => $value) {
-                $output .= $this->indent(
-                    sprintf(
+                $output
+                    ->add(
                         '%s: ',
                         str_pad($name, $object->getMaxLengthConstantNames())
-                    ),
-                    2,
-                    $this->dump($value)
-                );
+                    )
+                    ->dump($value)
+                ;
             }
+
+            $output->dec();
         }
 
         if ($object->hasProperties()) {
-            $output .= $this->indent('Properties:' . PHP_EOL);
+            $output
+                ->addLn('Properties :')
+                ->inc()
+            ;
 
             foreach ($object->getProperties() as $property) {
-                $output .= $this->indent(
-                    sprintf(
-                        '%s $%s' . PHP_EOL,
+                $output
+                    ->addLn(
+                        '%s $%s',
                         str_pad(
                             $property['visibility'] . ($property['property']->isStatic() ? ' static' : ''),
                             $object->getMaxLengthPropertyVisibilities()
                         ),
                         $property['property']->getName()
-                    ),
-                    2
-                );
+                    )
+                ;
 
                 if (isset($property['defaultValue'])) {
-                    $output .= $this->indent(
-                        'Default : ',
-                        3,
-                        $this->dump($property['defaultValue'])
-                    );
+                    $output
+                        ->inc()
+                            ->add('Default : ')
+                            ->dump($property['defaultValue'])
+                        ->dec()
+                    ;
                 }
 
-                $output .= $this->indent(
-                    'Current : ',
-                    3,
-                    $this->dump($property['value'])
-                );
+                $output
+                    ->inc()
+                        ->add('Current : ')
+                        ->dump($property['value'])
+                    ->dec()
+                ;
             }
+
+            $output->dec();
         }
 
         if ($object->hasMethods()) {
-            $output .= $this->indent('Methods :' . PHP_EOL);
+            $output
+                ->addLn('Methods :')
+                ->inc()
+            ;
 
             foreach ($object->getMethods() as $method) {
-                $output .= $this->indent(
-                    sprintf(
-                        '%s %s(%s)' . PHP_EOL,
+                $output
+                    ->addLn(
+                        '%s %s(%s)',
                         str_pad(
                             $method['visibility'] . ($method['method']->isStatic() ? ' static' : ''),
                             $object->getMaxLengthMethodVisibilities()
@@ -182,14 +198,13 @@ class CliDump extends Dump
                                 $method['arguments']
                             )
                         )
-                    ),
-                    2
-                );
+                    )
+                ;
             }
+
+            $output->dec();
         }
 
-        $output .= PHP_EOL;
-
-        return $output;
+        $output->dec();
     }
 }

@@ -39,6 +39,8 @@ abstract class Dump
     /**
      * Init current output object
      *
+     * @param Output $output
+     *
      * @return Output
      */
     abstract public function initOutput(Output $output);
@@ -71,6 +73,13 @@ abstract class Dump
         $this->reset();
     }
 
+    /**
+     * Create an Output object
+     *
+     * @param Output $parentOutput
+     *
+     * @return Output
+     */
     public function createOutput(Output $parentOutput = null)
     {
         $output = new Output($this, $parentOutput);
@@ -80,11 +89,22 @@ abstract class Dump
     }
 
     /**
+     * Decrements current level
+     *
+     * @return Dump
+     */
+    public function decLevel()
+    {
+        return $this->setLevel($this->getLevel() - 1);
+    }
+
+    /**
      * Central dump method
      *
      * Dispatch to all dump methods
      *
      * @param mixed  $variable
+     * @param Output $parentOutput
      * @param string $format
      */
     public function dump($variable, Output $parentOutput = null, $format = self::FORMAT_VALUE)
@@ -101,38 +121,31 @@ abstract class Dump
             case 'double':
             case 'float':
             case 'integer':
-            case 'null':
             case 'object':
             case 'resource':
             case 'string':
                 $method = 'dump' . ucfirst(strtolower($type));
 
                 $this->$method($variable, $output, $format);
-            break;
+                break;
+
+            case 'null':
+                $this->dumpNull($output);
+                break;
 
             default:
                 $this->dumpUnknown($type, $variable, $output);
-            break;
+                break;
         }
 
         $this->decLevel();
-
-        if ($this->getLevel() === 0) {
-            $this->reset();
-        }
-    }
-
-    public function getDump($variable, Output $output = null, $format = self::FORMAT_VALUE)
-    {
-        ob_start();
-        $this->dump($variable, $output, $format);
-        return ob_get_clean();
     }
 
     /**
      * Dump array variable
      *
-     * @param array $array
+     * @param array  $array
+     * @param Output $output
      */
     public function dumpArray(array $array, Output $output)
     {
@@ -146,6 +159,7 @@ abstract class Dump
      * Dump boolean
      *
      * @param boolean $boolean
+     * @param Output  $output
      */
     public function dumpBoolean($boolean, Output $output)
     {
@@ -160,7 +174,8 @@ abstract class Dump
     /**
      * Dump double
      *
-     * @param float $float
+     * @param float  $float
+     * @param Output $output
      */
     public function dumpDouble($float, Output $output)
     {
@@ -170,7 +185,8 @@ abstract class Dump
     /**
      * Dump float
      *
-     * @param float $float
+     * @param float  $float
+     * @param Output $output
      */
     public function dumpFloat($float, Output $output)
     {
@@ -186,6 +202,7 @@ abstract class Dump
      * Dump integer variable
      *
      * @param integer $integer
+     * @param Output  $output
      * @param string  $format
      */
     public function dumpInteger($integer, Output $output, $format)
@@ -206,8 +223,10 @@ abstract class Dump
 
     /**
      * Dump null
+     *
+     * @param Output $output
      */
-    public function dumpNull($null, Output $output)
+    public function dumpNull(Output $output)
     {
         $output
             ->addLn('NULL')
@@ -218,6 +237,7 @@ abstract class Dump
      * Dump object variable
      *
      * @param object $object
+     * @param Output $output
      */
     public function dumpObject($object, Output $output)
     {
@@ -231,6 +251,7 @@ abstract class Dump
      * Dump resource
      *
      * @param resource $resource
+     * @param Output   $output
      */
     public function dumpResource($resource, Output $output)
     {
@@ -247,6 +268,7 @@ abstract class Dump
      * Dump string variable
      *
      * @param string $string
+     * @param Output $output
      * @param string $format
      */
     public function dumpString($string, Output $output, $format)
@@ -278,7 +300,9 @@ abstract class Dump
     /**
      * Dump unknown variable
      *
-     * @param mixed $variable
+     * @param string $type
+     * @param mixed  $variable
+     * @param Output $output
      */
     public function dumpUnknown($type, $variable, Output $output)
     {
@@ -296,23 +320,21 @@ abstract class Dump
     }
 
     /**
-     * Reset current dumper
+     * Returns a dump
      *
-     * @return self
+     * @param mixed  $variable
+     * @param Output $output
+     * @param string $format
+     *
+     * @return string
      */
-    public function reset()
+    public function getDump($variable, Output $output = null, $format = self::FORMAT_VALUE)
     {
-        return $this->setLevel(0);
-    }
+        ob_start();
 
-    /**
-     * Decrements current level
-     *
-     * @return Dump
-     */
-    public function decLevel()
-    {
-        return $this->setLevel($this->getLevel() - 1);
+        $this->dump($variable, $output, $format);
+
+        return ob_get_clean();
     }
 
     /**
@@ -336,9 +358,21 @@ abstract class Dump
     }
 
     /**
+     * Reset current dumper
+     *
+     * @return self
+     */
+    public function reset()
+    {
+        return $this->setLevel(0);
+    }
+
+    /**
      * Set current level
      *
-     * @param Dump
+     * @param integer $level
+     *
+     * @return Dump
      */
     public function setLevel($level)
     {
