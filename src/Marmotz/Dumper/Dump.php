@@ -19,6 +19,7 @@ abstract class Dump
     const FORMAT_VALUE = 'value';
 
     protected $level;
+    protected $hashes = array();
 
     /**
      * Do dump array variable
@@ -71,6 +72,20 @@ abstract class Dump
     public function __construct()
     {
         $this->reset();
+    }
+
+    /**
+     * Add given hash to hash repository
+     *
+     * @param string $hash
+     *
+     * @return Dump
+     */
+    public function addHash($hash)
+    {
+        $this->hashes[] = $hash;
+
+        return $this;
     }
 
     /**
@@ -139,6 +154,10 @@ abstract class Dump
         }
 
         $this->decLevel();
+
+        if ($this->getLevel() === 0) {
+            $this->reset();
+        }
     }
 
     /**
@@ -320,6 +339,18 @@ abstract class Dump
     }
 
     /**
+     * Empty the hashes
+     *
+     * @return Dump
+     */
+    public function emptyHashes()
+    {
+        $this->hashes = array();
+
+        return $this;
+    }
+
+    /**
      * Returns a dump
      *
      * @param mixed  $variable
@@ -348,6 +379,18 @@ abstract class Dump
     }
 
     /**
+     * Tests if given hash was already dumped
+     *
+     * @param string $hash
+     *
+     * @return boolean
+     */
+    public function hasHash($hash)
+    {
+        return in_array($hash, $this->hashes);
+    }
+
+    /**
      * Increment current level
      *
      * @return Dump
@@ -364,7 +407,10 @@ abstract class Dump
      */
     public function reset()
     {
-        return $this->setLevel(0);
+        return $this
+            ->setLevel(0)
+            ->emptyHashes()
+        ;
     }
 
     /**

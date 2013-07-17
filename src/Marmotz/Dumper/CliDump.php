@@ -50,13 +50,16 @@ class CliDump extends Dump
         ;
 
         foreach ($array as $key => $value) {
-            $output
-                ->add(
-                    '%s: ',
-                    str_pad($key, $array->getMaxLengthKey(), ' ', STR_PAD_LEFT)
-                )
-                ->dump($value)
-            ;
+            $output->add(
+                '%s: ',
+                str_pad($key, $array->getMaxKeyLength(), ' ', STR_PAD_LEFT)
+            );
+
+            if ($array->isRecursion($key)) {
+                $output->addLn('*RECURSION*');
+            } else {
+                $output->dump($value);
+            }
         }
 
         $output->dec();

@@ -49,7 +49,7 @@ class ArrayProxy extends atoum
                             next($array);
                         }
                     )
-                ->integer($proxy->getMaxLengthKey())
+                ->integer($proxy->getMaxKeyLength())
                     ->isEqualTo($maxLength)
                 ->integer($proxy->size())
                     ->isEqualTo($count)
