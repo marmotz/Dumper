@@ -6,7 +6,7 @@ use Marmotz\Dumper\Dump;
 
 
 /**
- * Array proxy
+ * Object proxy
  *
  * @package Dumper
  * @author  Renaud Littolff <rlittolff@gmail.com>
@@ -15,7 +15,7 @@ use Marmotz\Dumper\Dump;
  */
 class ObjectProxy
 {
-
+    protected $dumper;
     protected $maxLengthConstantNames;
     protected $maxLengthMethodVisibilities;
     protected $maxLengthPropertyVisibilities;
@@ -28,10 +28,12 @@ class ObjectProxy
      * Constructor
      *
      * @param object $object
+     * @param Dump   $dumper
      */
-    public function __construct($object)
+    public function __construct($object, Dump $dumper)
     {
         $this->reflectionObject = new \ReflectionObject($object);
+        $this->setDumper($dumper);
 
         // extends
         $this->parents = array();
@@ -72,11 +74,14 @@ class ObjectProxy
                 $property = new \ReflectionProperty($propertyClass, $propertyName);
                 $property->setAccessible(true);
 
+                $value = $property->getValue($object);
+
                 $this->properties[] = array(
                     'property'     => $property,
                     'visibility'   => $this->getVisibility($property),
                     'defaultValue' => $defaultPropertiesValue[$propertyName],
-                    'value'        => $property->getValue($object),
+                    'value'        => $value,
+                    'isRecursion'  => $this->checkIfIsRecursion($value),
                 );
             } catch (\ReflectionException $e) {
             }
@@ -86,10 +91,13 @@ class ObjectProxy
             $property = new \ReflectionProperty($this->getClass()->getName(), $propertyName);
             $property->setAccessible(true);
 
+            $value = $property->getValue($object);
+
             $this->properties[] = array(
-                'property'     => $property,
-                'visibility'   => $this->getVisibility($property),
-                'value'        => $property->getValue($object),
+                'property'    => $property,
+                'visibility'  => $this->getVisibility($property),
+                'value'       => $value,
+                'isRecursion' => $this->checkIfIsRecursion($value),
             );
         }
 
@@ -125,6 +133,32 @@ class ObjectProxy
     }
 
     /**
+     * Check if given key of a given array is a recursion
+     *
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    public function checkIfIsRecursion($value)
+    {
+        if (is_object($value)) {
+            ob_start();
+            var_dump($value);
+            $hash = sha1(ob_get_clean());
+
+            if ($this->getDumper()->hasHash($hash)) {
+                return true;
+            } else {
+                $this->getDumper()->addHash($hash);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Return ReflectionClass object
      *
      * @return \ReflectionClass
@@ -142,6 +176,16 @@ class ObjectProxy
     public function getConstants()
     {
         return $this->getClass()->getConstants();
+    }
+
+    /**
+     * Returns dumper
+     *
+     * @return Dump
+     */
+    public function getDumper()
+    {
+        return $this->dumper;
     }
 
     /**
@@ -285,6 +329,16 @@ class ObjectProxy
     }
 
     /**
+     * Return if proxy has interfaces
+     *
+     * @return boolean
+     */
+    public function hasInterfaces()
+    {
+        return (boolean) count($this->getInterfaces());
+    }
+
+    /**
      * Return if proxy has methods
      *
      * @return boolean
@@ -305,13 +359,13 @@ class ObjectProxy
     }
 
     /**
-     * Return if proxy has interfaces
+     * Return if proxy has properties
      *
      * @return boolean
      */
-    public function hasInterfaces()
+    public function hasProperties()
     {
-        return (boolean) count($this->getInterfaces());
+        return (boolean) count($this->getProperties());
     }
 
     /**
@@ -325,13 +379,17 @@ class ObjectProxy
     }
 
     /**
-     * Return if proxy has properties
+     * Set dumper
      *
-     * @return boolean
+     * @param Dump $dumper
+     *
+     * @return ArrayProxy
      */
-    public function hasProperties()
+    public function setDumper(Dump $dumper)
     {
-        return (boolean) count($this->getProperties());
+        $this->dumper = $dumper;
+
+        return $this;
     }
 
     protected function calculateMaxLength(array $array)
@@ -344,5 +402,4 @@ class ObjectProxy
 
         return $maxLength;
     }
-
 }

@@ -169,7 +169,7 @@ abstract class Dump
     public function dumpArray(array $array, Output $output)
     {
         $this->doDumpArray(
-            new Proxy\ArrayProxy($this, $array),
+            new Proxy\ArrayProxy($array, $this),
             $output
         );
     }
@@ -261,7 +261,7 @@ abstract class Dump
     public function dumpObject($object, Output $output)
     {
         $this->doDumpObject(
-            new Proxy\ObjectProxy($object),
+            new Proxy\ObjectProxy($object, $this),
             $output
         );
     }

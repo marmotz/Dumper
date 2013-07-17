@@ -17,22 +17,6 @@ class CliDump extends Dump
 {
     const INDENT = 2;
 
-
-    /**
-     * Init current output object
-     *
-     * @param Output $output
-     *
-     * @return Output
-     */
-    public function initOutput(Output $output)
-    {
-        $output
-            ->setIndent(2)
-            ->setPrefix('|')
-        ;
-    }
-
     /**
      * Do dump array variable
      *
@@ -160,9 +144,15 @@ class CliDump extends Dump
                 $output
                     ->inc()
                         ->add('Current : ')
-                        ->dump($property['value'])
-                    ->dec()
                 ;
+
+                if ($property['isRecursion']) {
+                    $output->addLn('*RECURSION*');
+                } else {
+                    $output->dump($property['value']);
+                }
+
+                $output->dec();
             }
 
             $output->dec();
@@ -209,5 +199,20 @@ class CliDump extends Dump
         }
 
         $output->dec();
+    }
+
+    /**
+     * Init current output object
+     *
+     * @param Output $output
+     *
+     * @return Output
+     */
+    public function initOutput(Output $output)
+    {
+        $output
+            ->setIndent(2)
+            ->setPrefix('|')
+        ;
     }
 }

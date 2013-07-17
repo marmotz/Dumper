@@ -33,7 +33,7 @@ class ArrayProxy extends atoum
             reset($array);
 
             $this
-                ->object($proxy = new TestedClass($dumper, $array))
+                ->object($proxy = new TestedClass($array, $dumper))
                     ->foreach(
                         $proxy,
                         function($assert, $value, $key) use($dumper, &$maxLength, &$array, &$count) {

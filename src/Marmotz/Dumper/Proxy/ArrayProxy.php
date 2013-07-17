@@ -25,11 +25,10 @@ class ArrayProxy implements \Iterator
     /**
      * Constructor
      *
-     * @param Dump  $dumper
-     *
      * @param array $array
+     * @param Dump  $dumper
      */
-    public function __construct(Dump $dumper, array $array)
+    public function __construct(array $array, Dump $dumper)
     {
         $this
             ->setDumper($dumper)
@@ -88,6 +87,8 @@ class ArrayProxy implements \Iterator
             '',
             html_entity_decode(ob_get_clean())
         );
+
+        error_log($contents);
 
         if (preg_match("/\s+'" . $key . "' =>\s+&/", $contents) === 1) {
             $hash = sha1($contents);

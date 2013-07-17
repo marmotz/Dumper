@@ -4,6 +4,7 @@ namespace tests\units\Marmotz\Dumper\Proxy;
 
 use atoum;
 use Marmotz\Dumper\Proxy\ObjectProxy as TestedClass;
+use mock\Marmotz\Dumper\Dump         as mockDump;
 
 require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
 
@@ -13,7 +14,7 @@ class ObjectProxy extends atoum
     public function testProxy()
     {
         $this
-            ->if($proxy = new TestedClass($object = new \SampleClass1))
+            ->if($proxy = new TestedClass($object = new \SampleClass1, new mockDump))
                 ->object($class = $proxy->getClass())
                     ->isInstanceOf('ReflectionClass')
                 ->string($class->getName())
@@ -62,6 +63,7 @@ class ObjectProxy extends atoum
                                 'visibility',
                                 'defaultValue',
                                 'value',
+                                'isRecursion',
                             );
 
                             if ($property['property']->isStatic()) {

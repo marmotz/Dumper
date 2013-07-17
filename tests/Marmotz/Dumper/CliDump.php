@@ -67,6 +67,23 @@ class CliDump extends atoum
                         '|        | 1: array(1)' . PHP_EOL .
                         '|        |    | 0: string(4) "deep"' . PHP_EOL
                     )
+                ->output(
+                    function() use($dump) {
+                        $array = array(1, 2);
+                        $array[2] =& $array;
+
+                        $dump->dumpArray($array, $dump->createOutput());
+                    }
+                )
+                    ->isEqualTo(
+                        'array(3)' . PHP_EOL .
+                        '| 0: integer(1)' . PHP_EOL .
+                        '| 1: integer(2)' . PHP_EOL .
+                        '| 2: array(3)' . PHP_EOL .
+                        '|        | 0: integer(1)' . PHP_EOL .
+                        '|        | 1: integer(2)' . PHP_EOL .
+                        '|        | 2: *RECURSION*' . PHP_EOL
+                    )
         ;
     }
 
