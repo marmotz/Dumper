@@ -80,17 +80,16 @@ class ArrayProxy implements \Iterator
     public function checkIfIsRecursion(array $array, $key)
     {
         ob_start();
-        var_dump($array);
+        debug_zval_dump($array);
+        $contents = trim(ob_get_clean());
+        $contents = preg_replace('/ refcount\(\d+\)/', '', $contents);
 
-        $contents = preg_replace(
-            '/<[^>]+>/',
-            '',
-            html_entity_decode(ob_get_clean())
+        $searchString = sprintf(
+            '  [%s]=>' . PHP_EOL . '  &',
+            is_string($key) ? '"' . $key . '"' : $key
         );
 
-        error_log($contents);
-
-        if (preg_match("/\s+'" . $key . "' =>\s+&/", $contents) === 1) {
+        if (strpos($contents, $searchString) !== false) {
             $hash = sha1($contents);
 
             if ($this->getDumper()->hasHash($hash)) {
@@ -101,7 +100,36 @@ class ArrayProxy implements \Iterator
                 return false;
             }
         } else {
-            return false;
+            // generate hash from debug_zval_dump
+            $hash = sha1($contents);
+
+            ob_start();
+            var_dump($array);
+            $contents = trim(ob_get_clean());
+            $contents = preg_replace('/<[^>]+>/', '', $contents);
+            $contents = html_entity_decode($contents);
+
+            $searchString1 = sprintf(
+                "  '%s' =>" . PHP_EOL . '  &',
+                $key
+            );
+
+            $searchString2 = sprintf(
+                "  '%s' => " . PHP_EOL . '    &',
+                $key
+            );
+
+            if (strpos($contents, $searchString1) !== false || strpos($contents, $searchString2) !== false) {
+                if ($this->getDumper()->hasHash($hash)) {
+                    return true;
+                } else {
+                    $this->getDumper()->addHash($hash);
+
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
     }
 

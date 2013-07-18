@@ -131,12 +131,23 @@ abstract class Dump
         $type = strtolower(gettype($variable));
 
         switch ($type) {
+            case 'object':
+                ob_start();
+                var_dump($variable);
+                $hash = sha1(ob_get_clean());
+
+                if ($this->hasHash($hash)) {
+                    $output->addLn('*RECURSION*');
+                    break;
+                } else {
+                    $this->addHash($hash);
+                    // now, dump !
+                }
             case 'array':
             case 'boolean':
             case 'double':
             case 'float':
             case 'integer':
-            case 'object':
             case 'resource':
             case 'string':
                 $method = 'dump' . ucfirst(strtolower($type));

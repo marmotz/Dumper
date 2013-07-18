@@ -60,14 +60,14 @@ class ObjectProxy extends atoum
                         function($assert, $property) {
                             $keys = array(
                                 'property',
+                                'isStatic',
                                 'visibility',
                                 'defaultValue',
                                 'value',
-                                'isRecursion',
                             );
 
                             if ($property['property']->isStatic()) {
-                                unset($keys[2]);
+                                unset($keys[3]);
                                 $keys = array_values($keys);
                             }
 

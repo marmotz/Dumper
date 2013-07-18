@@ -78,10 +78,10 @@ class ObjectProxy
 
                 $this->properties[] = array(
                     'property'     => $property,
+                    'isStatic'     => false,
                     'visibility'   => $this->getVisibility($property),
                     'defaultValue' => $defaultPropertiesValue[$propertyName],
                     'value'        => $value,
-                    'isRecursion'  => $this->checkIfIsRecursion($value),
                 );
             } catch (\ReflectionException $e) {
             }
@@ -95,9 +95,9 @@ class ObjectProxy
 
             $this->properties[] = array(
                 'property'    => $property,
+                'isStatic'    => true,
                 'visibility'  => $this->getVisibility($property),
                 'value'       => $value,
-                'isRecursion' => $this->checkIfIsRecursion($value),
             );
         }
 
@@ -129,32 +129,6 @@ class ObjectProxy
                     $method->getParameters()
                 )
             );
-        }
-    }
-
-    /**
-     * Check if given key of a given array is a recursion
-     *
-     * @param mixed $value
-     *
-     * @return boolean
-     */
-    public function checkIfIsRecursion($value)
-    {
-        if (is_object($value)) {
-            ob_start();
-            var_dump($value);
-            $hash = sha1(ob_get_clean());
-
-            if ($this->getDumper()->hasHash($hash)) {
-                return true;
-            } else {
-                $this->getDumper()->addHash($hash);
-
-                return false;
-            }
-        } else {
-            return false;
         }
     }
 
@@ -250,10 +224,10 @@ class ObjectProxy
             $this->maxLengthPropertyVisibilities = $this->calculateMaxLength(
                 array_map(
                     function($property) {
-                        if (isset($property['defaultValue'])) {
-                            return $property['visibility'];
-                        } else {
+                        if ($property['isStatic']) {
                             return 'static ' . $property['visibility'];
+                        } else {
+                            return $property['visibility'];
                         }
                     },
                     $this->properties

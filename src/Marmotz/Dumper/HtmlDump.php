@@ -294,15 +294,7 @@ class HtmlDump extends Dump
                                     ->addLn('<td class="type">Current:</td>')
                                     ->addLn('<td class="value current">')
                                     ->inc()
-                ;
-
-                if ($property['isRecursion']) {
-                    $output->addLn('*RECURSION*');
-                } else {
-                    $output->dump($property['value']);
-                }
-
-                $output
+                                        ->dump($property['value'])
                                     ->dec()
                                     ->addLn('</td>')
                                 ->dec()

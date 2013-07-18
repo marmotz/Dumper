@@ -144,15 +144,9 @@ class CliDump extends Dump
                 $output
                     ->inc()
                         ->add('Current : ')
+                        ->dump($property['value'])
+                    ->dec()
                 ;
-
-                if ($property['isRecursion']) {
-                    $output->addLn('*RECURSION*');
-                } else {
-                    $output->dump($property['value']);
-                }
-
-                $output->dec();
             }
 
             $output->dec();

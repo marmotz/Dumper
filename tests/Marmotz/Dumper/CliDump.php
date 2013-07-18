@@ -6,6 +6,8 @@ use atoum;
 use Marmotz\Dumper\CliDump as TestedClass;
 
 require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
+require_once __DIR__ . '/../../resources/classes/SampleClass3.php';
+require_once __DIR__ . '/../../resources/classes/SampleClass4.php';
 
 
 class CliDump extends atoum
@@ -16,7 +18,7 @@ class CliDump extends atoum
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(), $dump->createOutput());
+                        $dump->dump(array());
                     }
                 )
                     ->isEqualTo(
@@ -24,7 +26,7 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1), $dump->createOutput());
+                        $dump->dump(array(1));
                     }
                 )
                     ->isEqualTo(
@@ -33,7 +35,7 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42), $dump->createOutput());
+                        $dump->dump(array(1, 'key' => 42));
                     }
                 )
                     ->isEqualTo(
@@ -43,7 +45,7 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42, array('dump')), $dump->createOutput());
+                        $dump->dump(array(1, 'key' => 42, array('dump')));
                     }
                 )
                     ->isEqualTo(
@@ -55,7 +57,7 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42, array('dump', array('deep'))), $dump->createOutput());
+                        $dump->dump(array(1, 'key' => 42, array('dump', array('deep'))));
                     }
                 )
                     ->isEqualTo(
@@ -70,9 +72,9 @@ class CliDump extends atoum
                 ->output(
                     function() use($dump) {
                         $array = array(1, 2);
-                        $array[2] =& $array;
+                        $array[] =& $array;
 
-                        $dump->dumpArray($array, $dump->createOutput());
+                        $dump->dump($array);
                     }
                 )
                     ->isEqualTo(
@@ -80,9 +82,9 @@ class CliDump extends atoum
                         '| 0: integer(1)' . PHP_EOL .
                         '| 1: integer(2)' . PHP_EOL .
                         '| 2: array(3)' . PHP_EOL .
-                        '|        | 0: integer(1)' . PHP_EOL .
-                        '|        | 1: integer(2)' . PHP_EOL .
-                        '|        | 2: *RECURSION*' . PHP_EOL
+                        '|    | 0: integer(1)' . PHP_EOL .
+                        '|    | 1: integer(2)' . PHP_EOL .
+                        '|    | 2: *RECURSION*' . PHP_EOL
                     )
         ;
     }
@@ -93,7 +95,7 @@ class CliDump extends atoum
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $dump->dumpObject(new \SampleClass1, $dump->createOutput());
+                        $dump->dump(new \SampleClass1);
                     }
                 )
                     ->isEqualTo(
@@ -143,6 +145,28 @@ class CliDump extends atoum
                         '|   protected protectedMethod($arg1, stdClass $arg2)' . PHP_EOL .
                         '|   public    publicMethod()' . PHP_EOL .
                         '|   public    traitMethod()' . PHP_EOL
+                    )
+
+                ->output(
+                    function() use($dump) {
+                        $object1 = new \SampleClass3;
+                        $object2 = new \SampleClass4;
+
+                        $object1->object = $object2;
+                        $object2->object = $object1;
+
+                        $dump->dump($object1);
+                    }
+                )
+                    ->isEqualTo(
+                        'object SampleClass3' . PHP_EOL .
+                        '| Properties :' . PHP_EOL .
+                        '|   public $object' . PHP_EOL .
+                        '|     Current : object SampleClass4' . PHP_EOL .
+                        '|               | Properties :' . PHP_EOL .
+                        '|               |   public $object' . PHP_EOL .
+                        '|               |     Current : *RECURSION*' . PHP_EOL
+
                     )
         ;
     }
