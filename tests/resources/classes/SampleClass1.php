@@ -50,6 +50,6 @@ class SampleClass1 extends SampleClass2
     }
 
     private   function privateMethod($arg1, array &$arg2) {}
-    protected function protectedMethod($arg1, \stdClass $arg2) {}
+    protected function protectedMethod($arg1, \stdClass $arg2, $arg3 = null, $arg4 = 42, $arg5 = 'foobar') {}
     public    function publicMethod() {}
 }

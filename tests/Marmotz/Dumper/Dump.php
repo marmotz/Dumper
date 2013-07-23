@@ -22,6 +22,45 @@ class Dump extends atoum
         ;
     }
 
+    public function testMaxLevelOfRecursion()
+    {
+        $this
+            ->variable(mockTestedClass::setMaxLevelofRecursion($level = rand(1,19)))
+                ->isNull()
+            ->integer(mockTestedClass::getMaxLevelofRecursion())
+                ->isEqualTo($level)
+
+            ->variable(mockTestedClass::setMaxLevelofRecursion($level = (string) rand(1,19)))
+                ->isNull()
+            ->integer(mockTestedClass::getMaxLevelofRecursion())
+                ->isEqualTo((int) $level)
+
+            ->variable(mockTestedClass::setMaxLevelofRecursion(false))
+                ->isNull()
+            ->boolean(mockTestedClass::getMaxLevelofRecursion())
+                ->isFalse()
+
+            ->variable(mockTestedClass::setMaxLevelofRecursion(-1))
+                ->isNull()
+            ->boolean(mockTestedClass::getMaxLevelofRecursion())
+                ->isFalse()
+        ;
+    }
+
+    public function testIsMaxLevelOfRecursion()
+    {
+        $this
+            ->variable(mockTestedClass::setMaxLevelofRecursion(5))
+                ->isNull()
+            ->boolean(mockTestedClass::isMaxLevelOfRecursion(4))
+                ->isFalse()
+            ->boolean(mockTestedClass::isMaxLevelOfRecursion(5))
+                ->isFalse()
+            ->boolean(mockTestedClass::isMaxLevelOfRecursion(6))
+                ->isTrue()
+        ;
+    }
+
     public function testIncDecSetGetLevel()
     {
         $this
@@ -131,13 +170,13 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpInteger(42, $dump->createOutput(), TestedClass::FORMAT_KEY);
+                        $dump->dumpInteger(42, $dump->createOutput(), TestedClass::FORMAT_SHORT);
                     }
                 )
                     ->isEqualTo('42')
                 ->output(
                     function() use($dump) {
-                        $dump->dumpInteger(42, $dump->createOutput(), TestedClass::FORMAT_VALUE);
+                        $dump->dumpInteger(42, $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
                     }
                 )
                     ->isEqualTo('integer(42)' . PHP_EOL)
@@ -150,7 +189,13 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpNull($dump->createOutput());
+                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_SHORT);
+                    }
+                )
+                    ->isEqualTo('NULL')
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_COMPLETE);
                     }
                 )
                     ->isEqualTo('NULL' . PHP_EOL)
@@ -191,13 +236,13 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_KEY);
+                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_SHORT);
                     }
                 )
                     ->isEqualTo('"azerty"')
                 ->output(
                     function() use($dump) {
-                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_VALUE);
+                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
                     }
                 )
                     ->isEqualTo('string(6) "azerty"' . PHP_EOL)
@@ -213,13 +258,13 @@ class Dump extends atoum
             ->and($variable = mb_convert_encoding($variable, 'UTF-8', mb_detect_encoding($variable)))
                 ->output(
                     function() use($dump, $variable) {
-                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_KEY);
+                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_SHORT);
                     }
                 )
                     ->isEqualTo('"àâäéèêëîïôöùüŷÿ"')
                 ->output(
                     function() use($dump, $variable) {
-                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_VALUE);
+                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
                     }
                 )
                     ->isEqualTo('string(15) "àâäéèêëîïôöùüŷÿ"' . PHP_EOL)

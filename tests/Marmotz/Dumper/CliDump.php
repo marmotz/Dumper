@@ -144,7 +144,7 @@ class CliDump extends atoum
                         '| Methods :' . PHP_EOL .
                         '|   public    __construct()' . PHP_EOL .
                         '|   private   privateMethod($arg1, array &$arg2)' . PHP_EOL .
-                        '|   protected protectedMethod($arg1, stdClass $arg2)' . PHP_EOL .
+                        '|   protected protectedMethod($arg1, stdClass $arg2, $arg3 = NULL, $arg4 = 42, $arg5 = "foobar")' . PHP_EOL .
                         '|   public    publicMethod()' . PHP_EOL .
                         '|   public    traitMethod()' . PHP_EOL
                     )

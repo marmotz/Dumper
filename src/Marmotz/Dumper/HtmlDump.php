@@ -320,31 +320,48 @@ class HtmlDump extends Dump
             foreach ($object->getMethods() as $method) {
                 $output
                     ->addLn('<tr>')
-                    ->inc()
-                        ->addLn(
-                            '<td>%s %s(%s)</td>',
-                            ($method['method']->isStatic() ? 'static ' : '') . $method['visibility'],
-                            $method['method']->getName(),
-                            implode(
-                                ', ',
-                                array_map(
-                                    function($argument) {
-                                        return sprintf(
-                                            '%s%s%s%s',
-                                            $argument['type'] ? $argument['type'] . ' ' : '',
-                                            $argument['reference'],
-                                            $argument['name'],
-                                            isset($argument['default']) ? sprintf(
-                                                ' = %s',
-                                                $argument['default']
-                                            ) : ''
-                                        );
-                                    },
-                                    $method['arguments']
-                                )
-                            )
-                        )
-                    ->dec()
+                        ->inc()
+                            ->add('<td>')
+                            // visibility
+                            ->add(($method['method']->isStatic() ? 'static ' : '') . $method['visibility'])
+                            // method name
+                            ->add(' ' . $method['method']->getName() . '(')
+                ;
+
+                // arguments
+                foreach ($method['arguments'] as $key => $argument) {
+                    // type
+                    if ($argument['type']) {
+                        $output
+                            ->add($argument['type'] . ' ')
+                        ;
+                    }
+
+                    $output
+                            // reference "&"
+                            ->add($argument['reference'])
+                            // name
+                            ->add($argument['name'])
+                    ;
+
+                    // default value
+                    if (array_key_exists('default', $argument)) {
+                        $output
+                            ->add(' = ')
+                            ->dump($argument['default'], self::FORMAT_SHORT)
+                        ;
+                    }
+
+                    if ($key != count($method['arguments']) - 1) {
+                        $output
+                            ->add(', ')
+                        ;
+                    }
+                }
+
+                $output
+                            ->addLn(')</td>')
+                        ->dec()
                     ->addLn('</tr>')
                 ;
             }

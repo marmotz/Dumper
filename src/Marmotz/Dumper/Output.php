@@ -97,13 +97,14 @@ class Output
     /**
      * Dump given variable
      *
-     * @param mixed $variable
+     * @param mixed   $variable
+     * @param integer $format
      *
      * @return Output
      */
-    public function dump($variable)
+    public function dump($variable, $format = null)
     {
-        $this->getDumper()->dump($variable, $this);
+        $this->getDumper()->dump($variable, $this, $format);
 
         $this->setCurrentPosition(null);
 

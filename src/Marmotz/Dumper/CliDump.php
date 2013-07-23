@@ -157,33 +157,45 @@ class CliDump extends Dump
 
             foreach ($object->getMethods() as $method) {
                 $output
-                    ->addLn(
-                        '%s %s(%s)',
+                    // visibility
+                    ->add(
                         str_pad(
                             $method['visibility'] . ($method['method']->isStatic() ? ' static' : ''),
                             $object->getMaxLengthMethodVisibilities()
-                        ),
-                        $method['method']->getName(),
-                        implode(
-                            ', ',
-                            array_map(
-                                function($argument) {
-                                    return sprintf(
-                                        '%s%s%s%s',
-                                        $argument['type'] ? $argument['type'] . ' ' : '',
-                                        $argument['reference'],
-                                        $argument['name'],
-                                        isset($argument['default']) ? sprintf(
-                                            ' = %s',
-                                            $argument['default']
-                                        ) : ''
-                                    );
-                                },
-                                $method['arguments']
-                            )
                         )
                     )
+                    // method name
+                    ->add(' ' . $method['method']->getName() . '(')
                 ;
+
+                // arguments
+                foreach ($method['arguments'] as $key => $argument) {
+                    // type
+                    if ($argument['type']) {
+                        $output->add($argument['type'] . ' ');
+                    }
+
+                    $output
+                        // reference "&"
+                        ->add($argument['reference'])
+                        // name
+                        ->add($argument['name'])
+                    ;
+
+                    // default value
+                    if (array_key_exists('default', $argument)) {
+                        $output
+                            ->add(' = ')
+                            ->dump($argument['default'], self::FORMAT_SHORT)
+                        ;
+                    }
+
+                    if ($key != count($method['arguments']) - 1) {
+                        $output->add(', ');
+                    }
+                }
+
+                $output->addLn(')');
             }
 
             $output->dec();

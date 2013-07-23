@@ -337,7 +337,7 @@ class HtmlDump extends atoum
                         '            <td>private privateMethod($arg1, array &$arg2)</td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
-                        '            <td>protected protectedMethod($arg1, stdClass $arg2)</td>' . PHP_EOL .
+                        '            <td>protected protectedMethod($arg1, stdClass $arg2, $arg3 = NULL, $arg4 = 42, $arg5 = "foobar")</td>' . PHP_EOL .
                         '        </tr>' . PHP_EOL .
                         '        <tr>' . PHP_EOL .
                         '            <td>public publicMethod()</td>' . PHP_EOL .

@@ -15,13 +15,15 @@ namespace Marmotz\Dumper;
  */
 abstract class Dump
 {
-    const FORMAT_KEY   = 'key';
-    const FORMAT_VALUE = 'value';
+    const FORMAT_SHORT    = 1;
+    const FORMAT_COMPLETE = 2;
 
     protected $level;
     protected $objectHashes = array();
     protected $dumpedArrayMarker;
     protected $dumpedArrays = array();
+
+    static protected $maxLevelOfRecursion = false;
 
     /**
      * Do dump array variable
@@ -69,6 +71,42 @@ abstract class Dump
     }
 
     /**
+     * Returns max level of recursion
+     *
+     * @return integer|boolean
+     */
+    static public function getMaxLevelOfRecursion()
+    {
+        return static::$maxLevelOfRecursion;
+    }
+
+    /**
+     * Checks if current level reach max level of recursion
+     *
+     * @param integer $currentLevel
+     *
+     * @return boolean
+     */
+    static public function isMaxLevelOfRecursion($currentLevel)
+    {
+        return static::getMaxLevelOfRecursion() !== false && static::getMaxLevelOfRecursion() < $currentLevel;
+    }
+
+    /**
+     * Set max level of recursion
+     *
+     * @param integer|boolean $maxLevel
+     */
+    static public function setMaxLevelOfRecursion($maxLevel)
+    {
+        if (is_numeric($maxLevel)) {
+            $maxLevel = (int) $maxLevel;
+        }
+
+        static::$maxLevelOfRecursion = is_integer($maxLevel) && $maxLevel > 0 ? $maxLevel : false;
+    }
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -88,7 +126,7 @@ abstract class Dump
     /**
      * Add a dumped array
      *
-     * @param array $array
+     * @param array &$array
      *
      * @return Dump
      */
@@ -145,39 +183,47 @@ abstract class Dump
      *
      * Dispatch to all dump methods
      *
-     * @param mixed  $variable
-     * @param Output $parentOutput
-     * @param string $format
+     * @param mixed   &$variable
+     * @param Output  $parentOutput
+     * @param integer $format
      */
-    public function dump(&$variable, Output $parentOutput = null, $format = self::FORMAT_VALUE)
+    public function dump(&$variable, Output $parentOutput = null, $format = null)
     {
+        if ($format === null) {
+            $format = self::FORMAT_COMPLETE;
+        }
+
         $output = $this->createOutput($parentOutput);
 
         $this->incLevel();
 
-        $type = strtolower(gettype($variable));
+        if (static::isMaxLevelOfRecursion($this->getLevel())) {
+            $this->dumpMaxLevelOfRecursion($output);
+        } else {
+            $type = strtolower(gettype($variable));
 
-        switch ($type) {
-            case 'array':
-            case 'boolean':
-            case 'double':
-            case 'float':
-            case 'integer':
-            case 'object':
-            case 'resource':
-            case 'string':
-                $method = 'dump' . ucfirst($type);
+            switch ($type) {
+                case 'array':
+                case 'boolean':
+                case 'double':
+                case 'float':
+                case 'integer':
+                case 'object':
+                case 'resource':
+                case 'string':
+                    $method = 'dump' . ucfirst($type);
 
-                $this->$method($variable, $output, $format);
-                break;
+                    $this->$method($variable, $output, $format);
+                    break;
 
-            case 'null':
-                $this->dumpNull($output);
-                break;
+                case 'null':
+                    $this->dumpNull($output, $format);
+                    break;
 
-            default:
-                $this->dumpUnknown($type, $variable, $output);
-                break;
+                default:
+                    $this->dumpUnknown($type, $variable, $output);
+                    break;
+            }
         }
 
         $this->decLevel();
@@ -190,7 +236,7 @@ abstract class Dump
     /**
      * Dump array variable
      *
-     * @param array  $array
+     * @param array  &$array
      * @param Output $output
      */
     public function dumpArray(array &$array, Output $output)
@@ -255,11 +301,11 @@ abstract class Dump
      *
      * @param integer $integer
      * @param Output  $output
-     * @param string  $format
+     * @param integer $format
      */
     public function dumpInteger($integer, Output $output, $format)
     {
-        if ($format === self::FORMAT_VALUE) {
+        if ($format === self::FORMAT_COMPLETE) {
             $output
                 ->addLn(
                     'integer(%d)',
@@ -274,15 +320,28 @@ abstract class Dump
     }
 
     /**
-     * Dump null
+     * Dump reach max level of recursion
      *
      * @param Output $output
      */
-    public function dumpNull(Output $output)
+    public function dumpMaxLevelOfRecursion(Output $output)
     {
-        $output
-            ->addLn('NULL')
-        ;
+        $output->addLn('*MAX LEVEL OF RECURSION*');
+    }
+
+    /**
+     * Dump null
+     *
+     * @param Output  $output
+     * @param integer $format
+     */
+    public function dumpNull(Output $output, $format)
+    {
+        if ($format === self::FORMAT_COMPLETE) {
+            $output->addLn('NULL');
+        } else {
+            $output->add('NULL');
+        }
     }
 
     /**
@@ -291,7 +350,7 @@ abstract class Dump
      * @param object $object
      * @param Output $output
      */
-    public function dumpObject(&$object, Output $output)
+    public function dumpObject($object, Output $output)
     {
         $hash = spl_object_hash($object);
 
@@ -327,13 +386,13 @@ abstract class Dump
     /**
      * Dump string variable
      *
-     * @param string $string
-     * @param Output $output
-     * @param string $format
+     * @param string  $string
+     * @param Output  $output
+     * @param integer $format
      */
     public function dumpString($string, Output $output, $format)
     {
-        if ($format === self::FORMAT_VALUE) {
+        if ($format === self::FORMAT_COMPLETE) {
             if (function_exists('mb_strlen')) {
                 $len = mb_strlen($string, 'UTF-8');
             } else {
@@ -410,13 +469,13 @@ abstract class Dump
     /**
      * Returns a dump
      *
-     * @param mixed  $variable
-     * @param Output $output
-     * @param string $format
+     * @param mixed   &$variable
+     * @param Output  $output
+     * @param integer $format
      *
      * @return string
      */
-    public function getDump(&$variable, Output $output = null, $format = self::FORMAT_VALUE)
+    public function getDump(&$variable, Output $output = null, $format = self::FORMAT_COMPLETE)
     {
         ob_start();
 

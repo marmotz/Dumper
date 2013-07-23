@@ -40,7 +40,7 @@ class ArrayProxy extends atoum
 
                             $assert
                                 ->variable($key)
-                                    ->isEqualTo($dumper->getDump($arrayKeys[$count], null, Dump::FORMAT_KEY))
+                                    ->isEqualTo($dumper->getDump($arrayKeys[$count], null, Dump::FORMAT_SHORT))
                                 ->variable($value)
                                     ->isEqualTo($arrayValues[$count])
                             ;

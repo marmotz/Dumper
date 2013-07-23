@@ -23,7 +23,7 @@ class ArrayProxy implements \Iterator
     /**
      * Constructor
      *
-     * @param array $array
+     * @param array &$array
      * @param Dump  $dumper
      */
     public function __construct(array &$array, Dump $dumper)
@@ -34,7 +34,7 @@ class ArrayProxy implements \Iterator
 
         foreach ($array as $key => $value) {
             if ($key !== $dumper->getDumpedArrayMarker()) {
-                $dumpedKey               = $dumper->getDump($key, null, Dump::FORMAT_KEY);
+                $dumpedKey               = $dumper->getDump($key, null, Dump::FORMAT_SHORT);
                 $this->array[$dumpedKey] = $value;
 
                 $this->setIfMaxKeyLength(strlen($dumpedKey));
