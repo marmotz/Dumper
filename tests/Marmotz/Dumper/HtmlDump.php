@@ -16,7 +16,8 @@ class HtmlDump extends atoum
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(), $dump->createOutput());
+                        $variable = array();
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -30,7 +31,8 @@ class HtmlDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1), $dump->createOutput());
+                        $variable = array(1);
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -52,7 +54,8 @@ class HtmlDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42), $dump->createOutput());
+                        $variable = array(1, 'key' => 42);
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -80,7 +83,8 @@ class HtmlDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpArray(array(1, 'key' => 42, array('dump')), $dump->createOutput());
+                        $variable = array(1, 'key' => 42, array('dump'));
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(

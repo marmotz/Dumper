@@ -65,7 +65,8 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array());
+                        $variable = array();
+                        $dump->dump($variable);
                     }
                 )
                 ->mock($dump)

@@ -5,12 +5,19 @@
  *
  * @return string
  */
-function dump()
+function dump(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
+              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
+              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
+              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
+              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null)
 {
     $dumper = Marmotz\Dumper\Dump::factory();
 
-    foreach (func_get_args() as $variable) {
-        $dumper->dump($variable);
+    $args = debug_backtrace();
+    $args = $args[0]['args'];
+
+    foreach (array_keys($args) as $key) {
+        $dumper->dump($args[$key]);
         echo PHP_EOL;
     }
 }

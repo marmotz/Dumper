@@ -18,7 +18,8 @@ class CliDump extends atoum
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array());
+                        $variable = array();
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -26,7 +27,8 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array(1));
+                        $variable = array(1);
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -35,7 +37,8 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array(1, 'key' => 42));
+                        $variable = array(1, 'key' => 42);
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -45,7 +48,8 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array(1, 'key' => 42, array('dump')));
+                        $variable = array(1, 'key' => 42, array('dump'));
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -57,7 +61,8 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $dump->dump(array(1, 'key' => 42, array('dump', array('deep'))));
+                        $variable = array(1, 'key' => 42, array('dump', array('deep')));
+                        $dump->dump($variable);
                     }
                 )
                     ->isEqualTo(
@@ -81,10 +86,7 @@ class CliDump extends atoum
                         'array(3)' . PHP_EOL .
                         '| 0: integer(1)' . PHP_EOL .
                         '| 1: integer(2)' . PHP_EOL .
-                        '| 2: array(3)' . PHP_EOL .
-                        '|    | 0: integer(1)' . PHP_EOL .
-                        '|    | 1: integer(2)' . PHP_EOL .
-                        '|    | 2: *RECURSION*' . PHP_EOL
+                        '| 2: *ARRAY ALREADY DUMPED*' . PHP_EOL
                     )
         ;
     }
@@ -165,8 +167,7 @@ class CliDump extends atoum
                         '|     Current : object SampleClass4' . PHP_EOL .
                         '|               | Properties :' . PHP_EOL .
                         '|               |   public $object' . PHP_EOL .
-                        '|               |     Current : *RECURSION*' . PHP_EOL
-
+                        '|               |     Current : *OBJECT ALREADY DUMPED*' . PHP_EOL
                     )
         ;
     }

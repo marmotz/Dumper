@@ -15,7 +15,6 @@ use Marmotz\Dumper\Dump;
  */
 class ObjectProxy
 {
-    protected $dumper;
     protected $maxLengthConstantNames;
     protected $maxLengthMethodVisibilities;
     protected $maxLengthPropertyVisibilities;
@@ -33,7 +32,6 @@ class ObjectProxy
     public function __construct($object, Dump $dumper)
     {
         $this->reflectionObject = new \ReflectionObject($object);
-        $this->setDumper($dumper);
 
         // extends
         $this->parents = array();
@@ -150,16 +148,6 @@ class ObjectProxy
     public function getConstants()
     {
         return $this->getClass()->getConstants();
-    }
-
-    /**
-     * Returns dumper
-     *
-     * @return Dump
-     */
-    public function getDumper()
-    {
-        return $this->dumper;
     }
 
     /**
@@ -350,20 +338,6 @@ class ObjectProxy
     public function hasTraits()
     {
         return (boolean) count($this->getTraits());
-    }
-
-    /**
-     * Set dumper
-     *
-     * @param Dump $dumper
-     *
-     * @return ArrayProxy
-     */
-    public function setDumper(Dump $dumper)
-    {
-        $this->dumper = $dumper;
-
-        return $this;
     }
 
     protected function calculateMaxLength(array $array)

@@ -13,7 +13,7 @@ use mock\Marmotz\Dumper\Dump as mockDump;
 
 class ArrayProxy extends atoum
 {
-    public function testProxy($array, $withMock)
+    public function testProxy(array $array, $withMock)
     {
         if ($withMock) {
             $dumpers = array(
@@ -27,26 +27,26 @@ class ArrayProxy extends atoum
         }
 
         foreach ($dumpers as $key => $dumper) {
-            $maxLength = 0;
-            $count     = 0;
-
-            reset($array);
+            $maxLength   = 0;
+            $count       = 0;
+            $arrayKeys   = array_keys($array);
+            $arrayValues = array_values($array);
 
             $this
                 ->object($proxy = new TestedClass($array, $dumper))
                     ->foreach(
                         $proxy,
-                        function($assert, $value, $key) use($dumper, &$maxLength, &$array, &$count) {
+                        function($assert, $value, $key) use($dumper, &$maxLength, $arrayKeys, $arrayValues, &$count) {
+
                             $assert
                                 ->variable($key)
-                                    ->isEqualTo($dumper->getDump(key($array), null, Dump::FORMAT_KEY))
+                                    ->isEqualTo($dumper->getDump($arrayKeys[$count], null, Dump::FORMAT_KEY))
                                 ->variable($value)
-                                    ->isEqualTo(current($array))
+                                    ->isEqualTo($arrayValues[$count])
                             ;
 
                             $maxLength = max($maxLength, strlen($key));
                             $count++;
-                            next($array);
                         }
                     )
                 ->integer($proxy->getMaxKeyLength())

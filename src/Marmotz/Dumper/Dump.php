@@ -19,7 +19,9 @@ abstract class Dump
     const FORMAT_VALUE = 'value';
 
     protected $level;
-    protected $hashes = array();
+    protected $objectHashes = array();
+    protected $dumpedArrayMarker;
+    protected $dumpedArrays = array();
 
     /**
      * Do dump array variable
@@ -72,18 +74,43 @@ abstract class Dump
     public function __construct()
     {
         $this->reset();
+
+        // init dumpedArrayMarker
+        $str = '';
+
+        for ($i = 0; $i < 128; $i++) {
+            $str .= chr(rand(32, 126));
+        }
+
+        $this->setDumpedArrayMarker($str);
     }
 
     /**
-     * Add given hash to hash repository
+     * Add a dumped array
+     *
+     * @param array $array
+     *
+     * @return Dump
+     */
+    public function addDumpedArray(array &$array)
+    {
+        $array[$this->getDumpedArrayMarker()] = true;
+
+        $this->dumpedArrays[] =& $array;
+
+        return $this;
+    }
+
+    /**
+     * Add an object hash to hash repository
      *
      * @param string $hash
      *
      * @return Dump
      */
-    public function addHash($hash)
+    public function addObjectHash($hash)
     {
-        $this->hashes[] = $hash;
+        $this->objectHashes[] = $hash;
 
         return $this;
     }
@@ -122,7 +149,7 @@ abstract class Dump
      * @param Output $parentOutput
      * @param string $format
      */
-    public function dump($variable, Output $parentOutput = null, $format = self::FORMAT_VALUE)
+    public function dump(&$variable, Output $parentOutput = null, $format = self::FORMAT_VALUE)
     {
         $output = $this->createOutput($parentOutput);
 
@@ -131,26 +158,15 @@ abstract class Dump
         $type = strtolower(gettype($variable));
 
         switch ($type) {
-            case 'object':
-                ob_start();
-                var_dump($variable);
-                $hash = sha1(ob_get_clean());
-
-                if ($this->hasHash($hash)) {
-                    $output->addLn('*RECURSION*');
-                    break;
-                } else {
-                    $this->addHash($hash);
-                    // now, dump !
-                }
             case 'array':
             case 'boolean':
             case 'double':
             case 'float':
             case 'integer':
+            case 'object':
             case 'resource':
             case 'string':
-                $method = 'dump' . ucfirst(strtolower($type));
+                $method = 'dump' . ucfirst($type);
 
                 $this->$method($variable, $output, $format);
                 break;
@@ -177,12 +193,18 @@ abstract class Dump
      * @param array  $array
      * @param Output $output
      */
-    public function dumpArray(array $array, Output $output)
+    public function dumpArray(array &$array, Output $output)
     {
-        $this->doDumpArray(
-            new Proxy\ArrayProxy($array, $this),
-            $output
-        );
+        if ($this->isDumpedArray($array)) {
+            $output->addLn('*ARRAY ALREADY DUMPED*');
+        } else {
+            $this->addDumpedArray($array);
+
+            $this->doDumpArray(
+                new Proxy\ArrayProxy($array, $this),
+                $output
+            );
+        }
     }
 
     /**
@@ -269,12 +291,20 @@ abstract class Dump
      * @param object $object
      * @param Output $output
      */
-    public function dumpObject($object, Output $output)
+    public function dumpObject(&$object, Output $output)
     {
-        $this->doDumpObject(
-            new Proxy\ObjectProxy($object, $this),
-            $output
-        );
+        $hash = spl_object_hash($object);
+
+        if ($this->hasObjectHash($hash)) {
+            $output->addLn('*OBJECT ALREADY DUMPED*');
+        } else {
+            $this->addObjectHash($hash);
+
+            $this->doDumpObject(
+                new Proxy\ObjectProxy($object, $this),
+                $output
+            );
+        }
     }
 
     /**
@@ -350,13 +380,29 @@ abstract class Dump
     }
 
     /**
+     * Empty dumped arrays
+     *
+     * @return Dump
+     */
+    public function emptyDumpedArrays()
+    {
+        foreach (array_keys($this->dumpedArrays) as $key) {
+            unset($this->dumpedArrays[$key][$this->getDumpedArrayMarker()]);
+        }
+
+        $this->dumpedArrays = array();
+
+        return $this;
+    }
+
+    /**
      * Empty the hashes
      *
      * @return Dump
      */
-    public function emptyHashes()
+    public function emptyObjectHashes()
     {
-        $this->hashes = array();
+        $this->objectHashes = array();
 
         return $this;
     }
@@ -370,13 +416,23 @@ abstract class Dump
      *
      * @return string
      */
-    public function getDump($variable, Output $output = null, $format = self::FORMAT_VALUE)
+    public function getDump(&$variable, Output $output = null, $format = self::FORMAT_VALUE)
     {
         ob_start();
 
         $this->dump($variable, $output, $format);
 
         return ob_get_clean();
+    }
+
+    /**
+     * Returns current dumped array marker
+     *
+     * @return string
+     */
+    public function getDumpedArrayMarker()
+    {
+        return $this->dumpedArrayMarker;
     }
 
     /**
@@ -396,9 +452,9 @@ abstract class Dump
      *
      * @return boolean
      */
-    public function hasHash($hash)
+    public function hasObjectHash($hash)
     {
-        return in_array($hash, $this->hashes);
+        return in_array($hash, $this->objectHashes);
     }
 
     /**
@@ -412,6 +468,18 @@ abstract class Dump
     }
 
     /**
+     * Check if a given array was already dumped
+     *
+     * @param array $array
+     *
+     * @return boolean
+     */
+    public function isDumpedArray(array $array)
+    {
+        return isset($array[$this->getDumpedArrayMarker()]);
+    }
+
+    /**
      * Reset current dumper
      *
      * @return self
@@ -420,8 +488,23 @@ abstract class Dump
     {
         return $this
             ->setLevel(0)
-            ->emptyHashes()
+            ->emptyObjectHashes()
+            ->emptyDumpedArrays()
         ;
+    }
+
+    /**
+     * Set current dumped array marker
+     *
+     * @param string $marker
+     *
+     * @return Dump
+     */
+    public function setDumpedArrayMarker($marker)
+    {
+        $this->dumpedArrayMarker = $marker;
+
+        return $this;
     }
 
     /**

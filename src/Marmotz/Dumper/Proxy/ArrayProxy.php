@@ -16,11 +16,9 @@ use Marmotz\Dumper\Dump;
 class ArrayProxy implements \Iterator
 {
     protected $array;
-    protected $dumper;
     protected $keys;
     protected $maxKeyLength;
     protected $pointer;
-    protected $recursion;
 
     /**
      * Constructor
@@ -28,109 +26,23 @@ class ArrayProxy implements \Iterator
      * @param array $array
      * @param Dump  $dumper
      */
-    public function __construct(array $array, Dump $dumper)
+    public function __construct(array &$array, Dump $dumper)
     {
-        $this
-            ->setDumper($dumper)
-            ->setMaxKeyLength(0)
-        ;
+        $this->setMaxKeyLength(0);
 
         $this->array = array();
 
         foreach ($array as $key => $value) {
-            $dumpedKey               = $this->getDumper()->getDump($key, null, Dump::FORMAT_KEY);
-            $this->array[$dumpedKey] = $value;
+            if ($key !== $dumper->getDumpedArrayMarker()) {
+                $dumpedKey               = $dumper->getDump($key, null, Dump::FORMAT_KEY);
+                $this->array[$dumpedKey] = $value;
 
-            $this
-                ->setIfMaxKeyLength(strlen($dumpedKey))
-                ->addRecursion(
-                    $dumpedKey,
-                    $this->checkIfIsRecursion($array, $key)
-                )
-            ;
+                $this->setIfMaxKeyLength(strlen($dumpedKey));
+            }
         }
 
         $this->keys    = array_keys($this->array);
         $this->pointer = 0;
-    }
-
-    /**
-     * Set if a given key is a recursion
-     *
-     * @param string  $key
-     * @param boolean $isRecursion
-     *
-     * @return ArrayProxy
-     */
-    public function addRecursion($key, $isRecursion)
-    {
-        $this->recursion[$key] = (boolean) $isRecursion;
-
-        return $this;
-    }
-
-    /**
-     * Check if given key of a given array is a recursion
-     *
-     * @param array $array
-     * @param mixed $key
-     *
-     * @return boolean
-     */
-    public function checkIfIsRecursion(array $array, $key)
-    {
-        ob_start();
-        debug_zval_dump($array);
-        $contents = trim(ob_get_clean());
-        $contents = preg_replace('/ refcount\(\d+\)/', '', $contents);
-
-        $searchString = sprintf(
-            '  [%s]=>' . PHP_EOL . '  &',
-            is_string($key) ? '"' . $key . '"' : $key
-        );
-
-        if (strpos($contents, $searchString) !== false) {
-            $hash = sha1($contents);
-
-            if ($this->getDumper()->hasHash($hash)) {
-                return true;
-            } else {
-                $this->getDumper()->addHash($hash);
-
-                return false;
-            }
-        } else {
-            // generate hash from debug_zval_dump
-            $hash = sha1($contents);
-
-            ob_start();
-            var_dump($array);
-            $contents = trim(ob_get_clean());
-            $contents = preg_replace('/<[^>]+>/', '', $contents);
-            $contents = html_entity_decode($contents);
-
-            $searchString1 = sprintf(
-                "  '%s' =>" . PHP_EOL . '  &',
-                $key
-            );
-
-            $searchString2 = sprintf(
-                "  '%s' => " . PHP_EOL . '    &',
-                $key
-            );
-
-            if (strpos($contents, $searchString1) !== false || strpos($contents, $searchString2) !== false) {
-                if ($this->getDumper()->hasHash($hash)) {
-                    return true;
-                } else {
-                    $this->getDumper()->addHash($hash);
-
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
     }
 
     /**
@@ -144,16 +56,6 @@ class ArrayProxy implements \Iterator
     }
 
     /**
-     * Returns dumper
-     *
-     * @return Dump
-     */
-    public function getDumper()
-    {
-        return $this->dumper;
-    }
-
-    /**
      * Return max length for keys
      *
      * @return integer
@@ -161,18 +63,6 @@ class ArrayProxy implements \Iterator
     public function getMaxKeyLength()
     {
         return $this->maxKeyLength;
-    }
-
-    /**
-     * Returns if given key is a recursion
-     *
-     * @param mixed $key
-     *
-     * @return boolean
-     */
-    public function isRecursion($key)
-    {
-        return isset($this->recursion[$key]) && $this->recursion[$key] === true;
     }
 
     /**
@@ -199,20 +89,6 @@ class ArrayProxy implements \Iterator
     public function rewind()
     {
         $this->rewind = 0;
-    }
-
-    /**
-     * Set dumper
-     *
-     * @param Dump $dumper
-     *
-     * @return ArrayProxy
-     */
-    public function setDumper(Dump $dumper)
-    {
-        $this->dumper = $dumper;
-
-        return $this;
     }
 
     /**

@@ -68,15 +68,7 @@ class HtmlDump extends Dump
                         ->addLn('<th>%s</th>', $key)
                         ->addLn('<td>')
                         ->inc()
-                ;
-
-                if ($array->isRecursion($key)) {
-                    $output->addLn('*RECURSION*');
-                } else {
-                    $output->dump($value);
-                }
-
-                $output
+                            ->dump($value)
                         ->dec()
                         ->addLn('</td>')
                     ->dec()
