@@ -1,4 +1,4 @@
-/bin
+/bin/atoum
 /composer.lock
 /tests/coverage
 /vendor

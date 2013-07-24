@@ -1,0 +1,43 @@
+#! /bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+// variables to dump
+$variables = array(
+    $_SERVER,
+    new DateTime
+);
+
+
+// get template
+$template = file_get_contents(__DIR__ . '/../resources/template.README.md');
+
+
+// cli dump
+$dumper = Marmotz\Dumper\Dump::factory('cli');
+
+$dump = '';
+
+foreach (array_keys($variables) as $key) {
+    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+}
+
+$template = str_replace('{{cli-dump}}', $dump, $template);
+
+
+// html dump
+$dumper = Marmotz\Dumper\Dump::factory('apache2');
+
+$dump = '';
+
+foreach (array_keys($variables) as $key) {
+    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+}
+
+$template = str_replace('{{html-dump}}', $dump, $template);
+
+
+// write README.md
+file_put_contents(__DIR__ . '/../README.md', $template);

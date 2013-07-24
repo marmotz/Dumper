@@ -39,17 +39,19 @@ dump($_SERVER);
 
 Dumper self-determines output type between HTML and cli.
 
+With following code:
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+dump($_SERVER, new DateTime);
+```
 
 ### CLI
 
 Here is an example of cli output:
-
-```php
-<?php
-    require_once __DIR__ . '/vendor/autoload.php';
-
-    dump($_SERVER, new DateTime);
-```
 
 ```
 array(58)
@@ -59,42 +61,42 @@ array(58)
 |                    "SHLVL": string(1) "1"
 |                  "LOGNAME": string(9) "rlittolff"
 |                 "XDG_VTNR": string(1) "7"
-|                      "PWD": string(30) "/home/rlittolff/dev/DumperTest"
+|                      "PWD": string(26) "/home/rlittolff/dev/Dumper"
 |          "MOZ_PLUGIN_PATH": string(24) "/usr/lib/mozilla/plugins"
 |               "XAUTHORITY": string(27) "/home/rlittolff/.Xauthority"
-|     "DESKTOP_AUTOSTART_ID": string(46) "10f86fdf463a7038813739577887426300000008590006"
+|     "DESKTOP_AUTOSTART_ID": string(48) "10929648d715c91b6e137465067499818100000008580006"
 |                "COLORTERM": string(14) "gnome-terminal"
-|           "XDG_SESSION_ID": string(1) "1"
+|           "XDG_SESSION_ID": string(2) "c1"
 |                "JAVA_HOME": string(31) "/usr/lib/jvm/java-7-openjdk/jre"
 |          "DESKTOP_SESSION": string(21) "/usr/bin/mate-session"
-|     "MATE_KEYRING_CONTROL": string(19) "/tmp/keyring-FMtBnT"
+|     "MATE_KEYRING_CONTROL": string(19) "/tmp/keyring-36nC8W"
 |  "MATE_DESKTOP_SESSION_ID": string(18) "this-is-deprecated"
-| "DBUS_SESSION_BUS_ADDRESS": string(72) "unix:abstract=/tmp/dbus-zcTyLcOLol,guid=bba59691e442470f12bc52cb51e4ee9a"
-|          "TERMINATOR_UUID": string(45) "urn:uuid:e437e22b-63e6-4900-a11b-d12923db058f"
-|                        "_": string(12) "/usr/bin/php"
+| "DBUS_SESSION_BUS_ADDRESS": string(72) "unix:abstract=/tmp/dbus-2WCetVs9VN,guid=602e8159a7ab39980813ad1051ef8132"
+|          "TERMINATOR_UUID": string(45) "urn:uuid:9d8da1f3-b198-4adc-be5a-baa842909276"
+|                        "_": string(47) "/home/rlittolff/dev/Dumper/./bin/generateReadme"
 |        "AUTOJUMP_DATA_DIR": string(37) "/home/rlittolff/.local/share/autojump"
-|       "XDG_SESSION_COOKIE": string(60) "dc0cbc75b3cb4c17ae58385fb4568ad8-1373957785.974977-655903641"
-|                   "OLDPWD": string(19) "/home/rlittolff/dev"
+|       "XDG_SESSION_COOKIE": string(61) "14e1cba1928f4b8cba34619db23f6dd3-1374650674.158265-1724706027"
+|                   "OLDPWD": string(30) "/home/rlittolff/dev/DumperTest"
 |                    "SHELL": string(8) "/bin/zsh"
-|                 "WINDOWID": string(8) "52428803"
+|                 "WINDOWID": string(8) "58720259"
 |                     "TERM": string(5) "xterm"
-|          "SESSION_MANAGER": string(57) "local/mya:@/tmp/.ICE-unix/859,unix/mya:/tmp/.ICE-unix/859"
-|            "SSH_AUTH_SOCK": string(23) "/tmp/keyring-FMtBnT/ssh"
+|          "SESSION_MANAGER": string(57) "local/mya:@/tmp/.ICE-unix/858,unix/mya:/tmp/.ICE-unix/858"
+|            "SSH_AUTH_SOCK": string(23) "/tmp/keyring-36nC8W/ssh"
 |                     "PATH": string(191) "/usr/local/bin:/usr/local/sbin:/home/rlittolff/bin:/home/rlittolff/pear/bin:/home/rlittolff/.gem/ruby/2.0.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin/core_perl"
 |                     "HOME": string(15) "/home/rlittolff"
 |                 "XDG_SEAT": string(5) "seat0"
 |          "XDG_RUNTIME_DIR": string(14) "/run/user/1000"
-|           "GPG_AGENT_INFO": string(27) "/tmp/keyring-FMtBnT/gpg:0:1"
+|           "GPG_AGENT_INFO": string(27) "/tmp/keyring-36nC8W/gpg:0:1"
 |                     "USER": string(9) "rlittolff"
 |                   "EDITOR": string(3) "vim"
 |                 "MANPAGER": string(9) "less -FRX"
-|          "LESS_TERMCAP_mb": string(8) ""
-|          "LESS_TERMCAP_md": string(13) ""
-|          "LESS_TERMCAP_me": string(4) ""
-|          "LESS_TERMCAP_se": string(4) ""
-|          "LESS_TERMCAP_so": string(11) ""
-|          "LESS_TERMCAP_ue": string(4) ""
-|          "LESS_TERMCAP_us": string(12) ""
+|          "LESS_TERMCAP_mb": string(8) "[01;31m"
+|          "LESS_TERMCAP_md": string(13) "[01;38;5;74m"
+|          "LESS_TERMCAP_me": string(4) "[0m"
+|          "LESS_TERMCAP_se": string(4) "[0m"
+|          "LESS_TERMCAP_so": string(11) "[38;5;246m"
+|          "LESS_TERMCAP_ue": string(4) "[0m"
+|          "LESS_TERMCAP_us": string(12) "[04;33;146m"
 |             "GREP_OPTIONS": string(12) "--color=auto"
 |               "GREP_COLOR": string(4) "1;32"
 |                    "PAGER": string(4) "less"
@@ -102,15 +104,15 @@ array(58)
 |                 "LC_CTYPE": string(11) "fr_FR.UTF-8"
 |                 "LSCOLORS": string(22) "Gxfxcxdxbxegedabagacad"
 |                "NODE_PATH": string(21) "/usr/lib/node_modules"
-|                 "PHP_SELF": string(9) "index.php"
-|              "SCRIPT_NAME": string(9) "index.php"
-|          "SCRIPT_FILENAME": string(9) "index.php"
-|          "PATH_TRANSLATED": string(9) "index.php"
+|                 "PHP_SELF": string(20) "./bin/generateReadme"
+|              "SCRIPT_NAME": string(20) "./bin/generateReadme"
+|          "SCRIPT_FILENAME": string(20) "./bin/generateReadme"
+|          "PATH_TRANSLATED": string(20) "./bin/generateReadme"
 |            "DOCUMENT_ROOT": string(0) ""
-|       "REQUEST_TIME_FLOAT": float(1373964176.3316)
-|             "REQUEST_TIME": integer(1373964176)
+|       "REQUEST_TIME_FLOAT": float(1374659240.9352)
+|             "REQUEST_TIME": integer(1374659240)
 |                     "argv": array(1)
-|                             | 0: string(9) "index.php"
+|                             | 0: string(20) "./bin/generateReadme"
 |                     "argc": integer(1)
 
 object DateTime
@@ -145,6 +147,8 @@ object DateTime
 |   public        setTimestamp($unixtimestamp)
 |   public        getTimestamp()
 |   public        diff($object, $absolute)
+
+
 ```
 
 
@@ -152,183 +156,374 @@ object DateTime
 
 Here is an example of HTML output:
 
-```php
-<?php
-    require_once __DIR__ . '/vendor/autoload.php';
-
-    dump($_SERVER);
-```
-
 ```html
-
 <table class="dumper array">
     <thead>
         <tr>
-            <th colspan="2">array(27)</th>
+            <th colspan="2">array(58)</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th>"UNIQUE_ID"</th>
+            <th>"LC_MESSAGES"</th>
             <td>
-                string(24) "UeUH-H8AAQEAAAg2T@QAAAAA"
+                string(11) "fr_FR.UTF-8"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_HOST"</th>
+            <th>"LANG"</th>
             <td>
-                string(9) "localhost"
+                string(11) "fr_FR.UTF-8"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_CONNECTION"</th>
+            <th>"DISPLAY"</th>
             <td>
-                string(10) "keep-alive"
+                string(2) ":0"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT"</th>
+            <th>"SHLVL"</th>
             <td>
-                string(63) "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                string(1) "1"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_USER_AGENT"</th>
+            <th>"LOGNAME"</th>
             <td>
-                string(104) "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36"
+                string(9) "rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT_ENCODING"</th>
+            <th>"XDG_VTNR"</th>
             <td>
-                string(17) "gzip,deflate,sdch"
+                string(1) "7"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT_LANGUAGE"</th>
+            <th>"PWD"</th>
             <td>
-                string(23) "fr,en-US;q=0.8,en;q=0.6"
+                string(26) "/home/rlittolff/dev/Dumper"
+            </td>
+        </tr>
+        <tr>
+            <th>"MOZ_PLUGIN_PATH"</th>
+            <td>
+                string(24) "/usr/lib/mozilla/plugins"
+            </td>
+        </tr>
+        <tr>
+            <th>"XAUTHORITY"</th>
+            <td>
+                string(27) "/home/rlittolff/.Xauthority"
+            </td>
+        </tr>
+        <tr>
+            <th>"DESKTOP_AUTOSTART_ID"</th>
+            <td>
+                string(48) "10929648d715c91b6e137465067499818100000008580006"
+            </td>
+        </tr>
+        <tr>
+            <th>"COLORTERM"</th>
+            <td>
+                string(14) "gnome-terminal"
+            </td>
+        </tr>
+        <tr>
+            <th>"XDG_SESSION_ID"</th>
+            <td>
+                string(2) "c1"
+            </td>
+        </tr>
+        <tr>
+            <th>"JAVA_HOME"</th>
+            <td>
+                string(31) "/usr/lib/jvm/java-7-openjdk/jre"
+            </td>
+        </tr>
+        <tr>
+            <th>"DESKTOP_SESSION"</th>
+            <td>
+                string(21) "/usr/bin/mate-session"
+            </td>
+        </tr>
+        <tr>
+            <th>"MATE_KEYRING_CONTROL"</th>
+            <td>
+                string(19) "/tmp/keyring-36nC8W"
+            </td>
+        </tr>
+        <tr>
+            <th>"MATE_DESKTOP_SESSION_ID"</th>
+            <td>
+                string(18) "this-is-deprecated"
+            </td>
+        </tr>
+        <tr>
+            <th>"DBUS_SESSION_BUS_ADDRESS"</th>
+            <td>
+                string(72) "unix:abstract=/tmp/dbus-2WCetVs9VN,guid=602e8159a7ab39980813ad1051ef8132"
+            </td>
+        </tr>
+        <tr>
+            <th>"TERMINATOR_UUID"</th>
+            <td>
+                string(45) "urn:uuid:9d8da1f3-b198-4adc-be5a-baa842909276"
+            </td>
+        </tr>
+        <tr>
+            <th>"_"</th>
+            <td>
+                string(47) "/home/rlittolff/dev/Dumper/./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"AUTOJUMP_DATA_DIR"</th>
+            <td>
+                string(37) "/home/rlittolff/.local/share/autojump"
+            </td>
+        </tr>
+        <tr>
+            <th>"XDG_SESSION_COOKIE"</th>
+            <td>
+                string(61) "14e1cba1928f4b8cba34619db23f6dd3-1374650674.158265-1724706027"
+            </td>
+        </tr>
+        <tr>
+            <th>"OLDPWD"</th>
+            <td>
+                string(30) "/home/rlittolff/dev/DumperTest"
+            </td>
+        </tr>
+        <tr>
+            <th>"SHELL"</th>
+            <td>
+                string(8) "/bin/zsh"
+            </td>
+        </tr>
+        <tr>
+            <th>"WINDOWID"</th>
+            <td>
+                string(8) "58720259"
+            </td>
+        </tr>
+        <tr>
+            <th>"TERM"</th>
+            <td>
+                string(5) "xterm"
+            </td>
+        </tr>
+        <tr>
+            <th>"SESSION_MANAGER"</th>
+            <td>
+                string(57) "local/mya:@/tmp/.ICE-unix/858,unix/mya:/tmp/.ICE-unix/858"
+            </td>
+        </tr>
+        <tr>
+            <th>"SSH_AUTH_SOCK"</th>
+            <td>
+                string(23) "/tmp/keyring-36nC8W/ssh"
             </td>
         </tr>
         <tr>
             <th>"PATH"</th>
             <td>
-                string(49) "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+                string(191) "/usr/local/bin:/usr/local/sbin:/home/rlittolff/bin:/home/rlittolff/pear/bin:/home/rlittolff/.gem/ruby/2.0.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin/core_perl"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_SIGNATURE"</th>
+            <th>"HOME"</th>
             <td>
-                string(115) "<address>Apache/2.2.24 (Unix) mod_ssl/2.2.24 OpenSSL/1.0.1e DAV/2 PHP/5.4.17 Server at localhost Port 80</address>
-"
+                string(15) "/home/rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_SOFTWARE"</th>
+            <th>"XDG_SEAT"</th>
             <td>
-                string(67) "Apache/2.2.24 (Unix) mod_ssl/2.2.24 OpenSSL/1.0.1e DAV/2 PHP/5.4.17"
+                string(5) "seat0"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_NAME"</th>
+            <th>"XDG_RUNTIME_DIR"</th>
             <td>
-                string(9) "localhost"
+                string(14) "/run/user/1000"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_ADDR"</th>
+            <th>"GPG_AGENT_INFO"</th>
             <td>
-                string(3) "::1"
+                string(27) "/tmp/keyring-36nC8W/gpg:0:1"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_PORT"</th>
+            <th>"USER"</th>
             <td>
-                string(2) "80"
+                string(9) "rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"REMOTE_ADDR"</th>
+            <th>"EDITOR"</th>
             <td>
-                string(3) "::1"
+                string(3) "vim"
             </td>
         </tr>
         <tr>
-            <th>"DOCUMENT_ROOT"</th>
+            <th>"MANPAGER"</th>
             <td>
-                string(19) "/home/rlittolff/dev"
+                string(9) "less -FRX"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_ADMIN"</th>
+            <th>"LESS_TERMCAP_mb"</th>
             <td>
-                string(16) "renaud@atipik.fr"
+                string(8) "[01;31m"
             </td>
         </tr>
         <tr>
-            <th>"SCRIPT_FILENAME"</th>
+            <th>"LESS_TERMCAP_md"</th>
             <td>
-                string(40) "/home/rlittolff/dev/DumperTest/index.php"
+                string(13) "[01;38;5;74m"
             </td>
         </tr>
         <tr>
-            <th>"REMOTE_PORT"</th>
+            <th>"LESS_TERMCAP_me"</th>
             <td>
-                string(5) "36846"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"GATEWAY_INTERFACE"</th>
+            <th>"LESS_TERMCAP_se"</th>
             <td>
-                string(7) "CGI/1.1"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_PROTOCOL"</th>
+            <th>"LESS_TERMCAP_so"</th>
             <td>
-                string(8) "HTTP/1.1"
+                string(11) "[38;5;246m"
             </td>
         </tr>
         <tr>
-            <th>"REQUEST_METHOD"</th>
+            <th>"LESS_TERMCAP_ue"</th>
             <td>
-                string(3) "GET"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"QUERY_STRING"</th>
+            <th>"LESS_TERMCAP_us"</th>
             <td>
-                string(0) ""
+                string(12) "[04;33;146m"
             </td>
         </tr>
         <tr>
-            <th>"REQUEST_URI"</th>
+            <th>"GREP_OPTIONS"</th>
             <td>
-                string(12) "/DumperTest/"
+                string(12) "--color=auto"
             </td>
         </tr>
         <tr>
-            <th>"SCRIPT_NAME"</th>
+            <th>"GREP_COLOR"</th>
             <td>
-                string(21) "/DumperTest/index.php"
+                string(4) "1;32"
+            </td>
+        </tr>
+        <tr>
+            <th>"PAGER"</th>
+            <td>
+                string(4) "less"
+            </td>
+        </tr>
+        <tr>
+            <th>"LESS"</th>
+            <td>
+                string(2) "-R"
+            </td>
+        </tr>
+        <tr>
+            <th>"LC_CTYPE"</th>
+            <td>
+                string(11) "fr_FR.UTF-8"
+            </td>
+        </tr>
+        <tr>
+            <th>"LSCOLORS"</th>
+            <td>
+                string(22) "Gxfxcxdxbxegedabagacad"
+            </td>
+        </tr>
+        <tr>
+            <th>"NODE_PATH"</th>
+            <td>
+                string(21) "/usr/lib/node_modules"
             </td>
         </tr>
         <tr>
             <th>"PHP_SELF"</th>
             <td>
-                string(21) "/DumperTest/index.php"
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"SCRIPT_NAME"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"SCRIPT_FILENAME"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"PATH_TRANSLATED"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"DOCUMENT_ROOT"</th>
+            <td>
+                string(0) ""
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME_FLOAT"</th>
             <td>
-                float(1373964284.083)
+                float(1374659240.9352)
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME"</th>
             <td>
-                integer(1373964284)
+                integer(1374659240)
+            </td>
+        </tr>
+        <tr>
+            <th>"argv"</th>
+            <td>
+                <table class="dumper array">
+                    <thead>
+                        <tr>
+                            <th colspan="2">array(1)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>0</th>
+                            <td>
+                                string(20) "./bin/generateReadme"
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>"argc"</th>
+            <td>
+                integer(1)
             </td>
         </tr>
     </tbody>
@@ -477,177 +672,377 @@ Here is an example of HTML output:
         </tr>
     </tbody>
 </table>
+
+
 ```
 
-
 <table class="dumper array">
     <thead>
         <tr>
-            <th colspan="2">array(27)</th>
+            <th colspan="2">array(58)</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th>"UNIQUE_ID"</th>
+            <th>"LC_MESSAGES"</th>
             <td>
-                string(24) "UeUH-H8AAQEAAAg2T@QAAAAA"
+                string(11) "fr_FR.UTF-8"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_HOST"</th>
+            <th>"LANG"</th>
             <td>
-                string(9) "localhost"
+                string(11) "fr_FR.UTF-8"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_CONNECTION"</th>
+            <th>"DISPLAY"</th>
             <td>
-                string(10) "keep-alive"
+                string(2) ":0"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT"</th>
+            <th>"SHLVL"</th>
             <td>
-                string(63) "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                string(1) "1"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_USER_AGENT"</th>
+            <th>"LOGNAME"</th>
             <td>
-                string(104) "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36"
+                string(9) "rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT_ENCODING"</th>
+            <th>"XDG_VTNR"</th>
             <td>
-                string(17) "gzip,deflate,sdch"
+                string(1) "7"
             </td>
         </tr>
         <tr>
-            <th>"HTTP_ACCEPT_LANGUAGE"</th>
+            <th>"PWD"</th>
             <td>
-                string(23) "fr,en-US;q=0.8,en;q=0.6"
+                string(26) "/home/rlittolff/dev/Dumper"
+            </td>
+        </tr>
+        <tr>
+            <th>"MOZ_PLUGIN_PATH"</th>
+            <td>
+                string(24) "/usr/lib/mozilla/plugins"
+            </td>
+        </tr>
+        <tr>
+            <th>"XAUTHORITY"</th>
+            <td>
+                string(27) "/home/rlittolff/.Xauthority"
+            </td>
+        </tr>
+        <tr>
+            <th>"DESKTOP_AUTOSTART_ID"</th>
+            <td>
+                string(48) "10929648d715c91b6e137465067499818100000008580006"
+            </td>
+        </tr>
+        <tr>
+            <th>"COLORTERM"</th>
+            <td>
+                string(14) "gnome-terminal"
+            </td>
+        </tr>
+        <tr>
+            <th>"XDG_SESSION_ID"</th>
+            <td>
+                string(2) "c1"
+            </td>
+        </tr>
+        <tr>
+            <th>"JAVA_HOME"</th>
+            <td>
+                string(31) "/usr/lib/jvm/java-7-openjdk/jre"
+            </td>
+        </tr>
+        <tr>
+            <th>"DESKTOP_SESSION"</th>
+            <td>
+                string(21) "/usr/bin/mate-session"
+            </td>
+        </tr>
+        <tr>
+            <th>"MATE_KEYRING_CONTROL"</th>
+            <td>
+                string(19) "/tmp/keyring-36nC8W"
+            </td>
+        </tr>
+        <tr>
+            <th>"MATE_DESKTOP_SESSION_ID"</th>
+            <td>
+                string(18) "this-is-deprecated"
+            </td>
+        </tr>
+        <tr>
+            <th>"DBUS_SESSION_BUS_ADDRESS"</th>
+            <td>
+                string(72) "unix:abstract=/tmp/dbus-2WCetVs9VN,guid=602e8159a7ab39980813ad1051ef8132"
+            </td>
+        </tr>
+        <tr>
+            <th>"TERMINATOR_UUID"</th>
+            <td>
+                string(45) "urn:uuid:9d8da1f3-b198-4adc-be5a-baa842909276"
+            </td>
+        </tr>
+        <tr>
+            <th>"_"</th>
+            <td>
+                string(47) "/home/rlittolff/dev/Dumper/./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"AUTOJUMP_DATA_DIR"</th>
+            <td>
+                string(37) "/home/rlittolff/.local/share/autojump"
+            </td>
+        </tr>
+        <tr>
+            <th>"XDG_SESSION_COOKIE"</th>
+            <td>
+                string(61) "14e1cba1928f4b8cba34619db23f6dd3-1374650674.158265-1724706027"
+            </td>
+        </tr>
+        <tr>
+            <th>"OLDPWD"</th>
+            <td>
+                string(30) "/home/rlittolff/dev/DumperTest"
+            </td>
+        </tr>
+        <tr>
+            <th>"SHELL"</th>
+            <td>
+                string(8) "/bin/zsh"
+            </td>
+        </tr>
+        <tr>
+            <th>"WINDOWID"</th>
+            <td>
+                string(8) "58720259"
+            </td>
+        </tr>
+        <tr>
+            <th>"TERM"</th>
+            <td>
+                string(5) "xterm"
+            </td>
+        </tr>
+        <tr>
+            <th>"SESSION_MANAGER"</th>
+            <td>
+                string(57) "local/mya:@/tmp/.ICE-unix/858,unix/mya:/tmp/.ICE-unix/858"
+            </td>
+        </tr>
+        <tr>
+            <th>"SSH_AUTH_SOCK"</th>
+            <td>
+                string(23) "/tmp/keyring-36nC8W/ssh"
             </td>
         </tr>
         <tr>
             <th>"PATH"</th>
             <td>
-                string(49) "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+                string(191) "/usr/local/bin:/usr/local/sbin:/home/rlittolff/bin:/home/rlittolff/pear/bin:/home/rlittolff/.gem/ruby/2.0.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin/core_perl"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_SIGNATURE"</th>
+            <th>"HOME"</th>
             <td>
-                string(115) "<address>Apache/2.2.24 (Unix) mod_ssl/2.2.24 OpenSSL/1.0.1e DAV/2 PHP/5.4.17 Server at localhost Port 80</address>
-"
+                string(15) "/home/rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_SOFTWARE"</th>
+            <th>"XDG_SEAT"</th>
             <td>
-                string(67) "Apache/2.2.24 (Unix) mod_ssl/2.2.24 OpenSSL/1.0.1e DAV/2 PHP/5.4.17"
+                string(5) "seat0"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_NAME"</th>
+            <th>"XDG_RUNTIME_DIR"</th>
             <td>
-                string(9) "localhost"
+                string(14) "/run/user/1000"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_ADDR"</th>
+            <th>"GPG_AGENT_INFO"</th>
             <td>
-                string(3) "::1"
+                string(27) "/tmp/keyring-36nC8W/gpg:0:1"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_PORT"</th>
+            <th>"USER"</th>
             <td>
-                string(2) "80"
+                string(9) "rlittolff"
             </td>
         </tr>
         <tr>
-            <th>"REMOTE_ADDR"</th>
+            <th>"EDITOR"</th>
             <td>
-                string(3) "::1"
+                string(3) "vim"
             </td>
         </tr>
         <tr>
-            <th>"DOCUMENT_ROOT"</th>
+            <th>"MANPAGER"</th>
             <td>
-                string(19) "/home/rlittolff/dev"
+                string(9) "less -FRX"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_ADMIN"</th>
+            <th>"LESS_TERMCAP_mb"</th>
             <td>
-                string(16) "renaud@atipik.fr"
+                string(8) "[01;31m"
             </td>
         </tr>
         <tr>
-            <th>"SCRIPT_FILENAME"</th>
+            <th>"LESS_TERMCAP_md"</th>
             <td>
-                string(40) "/home/rlittolff/dev/DumperTest/index.php"
+                string(13) "[01;38;5;74m"
             </td>
         </tr>
         <tr>
-            <th>"REMOTE_PORT"</th>
+            <th>"LESS_TERMCAP_me"</th>
             <td>
-                string(5) "36846"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"GATEWAY_INTERFACE"</th>
+            <th>"LESS_TERMCAP_se"</th>
             <td>
-                string(7) "CGI/1.1"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"SERVER_PROTOCOL"</th>
+            <th>"LESS_TERMCAP_so"</th>
             <td>
-                string(8) "HTTP/1.1"
+                string(11) "[38;5;246m"
             </td>
         </tr>
         <tr>
-            <th>"REQUEST_METHOD"</th>
+            <th>"LESS_TERMCAP_ue"</th>
             <td>
-                string(3) "GET"
+                string(4) "[0m"
             </td>
         </tr>
         <tr>
-            <th>"QUERY_STRING"</th>
+            <th>"LESS_TERMCAP_us"</th>
             <td>
-                string(0) ""
+                string(12) "[04;33;146m"
             </td>
         </tr>
         <tr>
-            <th>"REQUEST_URI"</th>
+            <th>"GREP_OPTIONS"</th>
             <td>
-                string(12) "/DumperTest/"
+                string(12) "--color=auto"
             </td>
         </tr>
         <tr>
-            <th>"SCRIPT_NAME"</th>
+            <th>"GREP_COLOR"</th>
             <td>
-                string(21) "/DumperTest/index.php"
+                string(4) "1;32"
+            </td>
+        </tr>
+        <tr>
+            <th>"PAGER"</th>
+            <td>
+                string(4) "less"
+            </td>
+        </tr>
+        <tr>
+            <th>"LESS"</th>
+            <td>
+                string(2) "-R"
+            </td>
+        </tr>
+        <tr>
+            <th>"LC_CTYPE"</th>
+            <td>
+                string(11) "fr_FR.UTF-8"
+            </td>
+        </tr>
+        <tr>
+            <th>"LSCOLORS"</th>
+            <td>
+                string(22) "Gxfxcxdxbxegedabagacad"
+            </td>
+        </tr>
+        <tr>
+            <th>"NODE_PATH"</th>
+            <td>
+                string(21) "/usr/lib/node_modules"
             </td>
         </tr>
         <tr>
             <th>"PHP_SELF"</th>
             <td>
-                string(21) "/DumperTest/index.php"
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"SCRIPT_NAME"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"SCRIPT_FILENAME"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"PATH_TRANSLATED"</th>
+            <td>
+                string(20) "./bin/generateReadme"
+            </td>
+        </tr>
+        <tr>
+            <th>"DOCUMENT_ROOT"</th>
+            <td>
+                string(0) ""
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME_FLOAT"</th>
             <td>
-                float(1373964284.083)
+                float(1374659240.9352)
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME"</th>
             <td>
-                integer(1373964284)
+                integer(1374659240)
+            </td>
+        </tr>
+        <tr>
+            <th>"argv"</th>
+            <td>
+                <table class="dumper array">
+                    <thead>
+                        <tr>
+                            <th colspan="2">array(1)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>0</th>
+                            <td>
+                                string(20) "./bin/generateReadme"
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>"argc"</th>
+            <td>
+                integer(1)
             </td>
         </tr>
     </tbody>
@@ -796,3 +1191,4 @@ Here is an example of HTML output:
         </tr>
     </tbody>
 </table>
+
