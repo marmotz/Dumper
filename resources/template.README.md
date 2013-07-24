@@ -54,7 +54,19 @@ With following code:
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-dump($_SERVER, new DateTime);
+$array = array(
+    1, 2, fopen(__FILE__, 'r'),
+    uniqid() => array(
+        4,
+        array(
+            uniqid() => 5, 'foobar'
+        ),
+        7
+    ),
+    8 => new stdClass
+);
+
+dump($array, new DateTime);
 ```
 
 ### CLI
@@ -71,7 +83,7 @@ Here is an example of cli output:
 Here is an example of HTML output:
 
 ```html
-{{html-dump}}
+{{html-dump-with-css}}
 ```
 
 {{html-dump}}

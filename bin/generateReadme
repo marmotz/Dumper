@@ -3,10 +3,19 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
 // variables to dump
 $variables = array(
-    $_SERVER,
+    array(
+        1, 2, fopen(__FILE__, 'r'),
+        uniqid() => array(
+            4,
+            array(
+                uniqid() => 5, 'foobar'
+            ),
+            7
+        ),
+        8 => new stdClass
+    ),
     new DateTime
 );
 
@@ -30,6 +39,16 @@ $template = str_replace('{{cli-dump}}', $dump, $template);
 // html dump
 $dumper = Marmotz\Dumper\Dump::factory('apache2');
 
+// with css
+$dump = '';
+
+foreach (array_keys($variables) as $key) {
+    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+}
+
+$template = str_replace('{{html-dump-with-css}}', $dump, $template);
+
+// without css
 $dump = '';
 
 foreach (array_keys($variables) as $key) {

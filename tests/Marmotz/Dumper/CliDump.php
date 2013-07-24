@@ -5,10 +5,6 @@ namespace tests\units\Marmotz\Dumper;
 use atoum;
 use Marmotz\Dumper\CliDump as TestedClass;
 
-require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
-require_once __DIR__ . '/../../resources/classes/SampleClass3.php';
-require_once __DIR__ . '/../../resources/classes/SampleClass4.php';
-
 
 class CliDump extends atoum
 {
@@ -183,6 +179,10 @@ class CliDump extends atoum
      */
     public function testDumpObject()
     {
+        require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
+        require_once __DIR__ . '/../../resources/classes/SampleClass3.php';
+        require_once __DIR__ . '/../../resources/classes/SampleClass4.php';
+
         $this
             ->if($dump = new TestedClass())
                 ->output(
