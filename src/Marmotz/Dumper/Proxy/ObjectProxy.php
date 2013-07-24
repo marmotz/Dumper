@@ -116,7 +116,7 @@ class ObjectProxy
                         );
 
                         if ($parameter->isDefaultValueAvailable()) {
-                            $return['default'] = $parameter->isDefaultValueConstant()
+                            $return['default'] = version_compare(PHP_VERSION, '5.4.6', '>=') && $parameter->isDefaultValueConstant()
                                 ? $parameter->getDefaultValueConstantName()
                                 : $parameter->getDefaultValue()
                             ;
