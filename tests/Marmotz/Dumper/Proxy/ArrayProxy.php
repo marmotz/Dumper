@@ -13,18 +13,12 @@ use mock\Marmotz\Dumper\Dump as mockDump;
 
 class ArrayProxy extends atoum
 {
-    public function testProxy(array $array, $withMock)
+    public function testProxy(array $array)
     {
-        if ($withMock) {
-            $dumpers = array(
-                new mockDump
-            );
-        } else {
-            $dumpers = array(
-                new CliDump,
-                new HtmlDump,
-            );
-        }
+        $dumpers = array(
+            new CliDump,
+            new HtmlDump,
+        );
 
         foreach ($dumpers as $key => $dumper) {
             $maxLength   = 0;
@@ -32,12 +26,14 @@ class ArrayProxy extends atoum
             $arrayKeys   = array_keys($array);
             $arrayValues = array_values($array);
 
+            // fake dump to dump css for HtmlDump
+            $dumper->getDump($maxLength);
+
             $this
                 ->object($proxy = new TestedClass($array, $dumper))
                     ->foreach(
                         $proxy,
                         function($assert, $value, $key) use($dumper, &$maxLength, $arrayKeys, $arrayValues, &$count) {
-
                             $assert
                                 ->variable($key)
                                     ->isEqualTo($dumper->getDump($arrayKeys[$count], null, Dump::FORMAT_SHORT))
@@ -62,16 +58,13 @@ class ArrayProxy extends atoum
     {
         return array(
             array(
-                array(1),
-                true
+                array(1)
             ),
             array(
-                array(1, 'key' => 42),
-                true
+                array(1, 'key' => 42)
             ),
             array(
-                array(1, 'key' => 42, array('dump')),
-                false
+                array(1, 'key' => 42, array('dump'))
             ),
         );
     }

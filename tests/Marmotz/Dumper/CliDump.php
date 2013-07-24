@@ -91,6 +91,96 @@ class CliDump extends atoum
         ;
     }
 
+    public function testDumpBoolean()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpBoolean(true, $dump->createOutput());
+                    }
+                )
+                    ->isEqualTo('boolean(true)' . PHP_EOL)
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpBoolean(false, $dump->createOutput());
+                    }
+                )
+                    ->isEqualTo('boolean(false)' . PHP_EOL)
+        ;
+    }
+
+    public function testDumpDouble()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $variable = 1.2;
+                        $dump->dump($variable);
+                    }
+                )
+                    ->isEqualTo('float(1.2)' . PHP_EOL)
+        ;
+    }
+
+    public function testDumpFloat()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $variable = 1.2;
+                        $dump->dump($variable);
+                    }
+                )
+                    ->isEqualTo('float(1.2)' . PHP_EOL)
+        ;
+    }
+
+    public function testDumpInteger()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $variable = 42;
+                        $dump->dump($variable, null, TestedClass::FORMAT_SHORT);
+                    }
+                )
+                    ->isEqualTo('42')
+                ->output(
+                    function() use($dump) {
+                        $variable = 42;
+                        $dump->dump($variable, null, TestedClass::FORMAT_COMPLETE);
+                    }
+                )
+                    ->isEqualTo('integer(42)' . PHP_EOL)
+        ;
+    }
+
+    public function testDumpNull()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_SHORT);
+                    }
+                )
+                    ->isEqualTo('NULL')
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                    }
+                )
+                    ->isEqualTo('NULL' . PHP_EOL)
+        ;
+    }
+
+    /**
+     * @php >= 5.4
+     */
     public function testDumpObject()
     {
         $this
@@ -169,6 +259,60 @@ class CliDump extends atoum
                         '|               |   public $object' . PHP_EOL .
                         '|               |     Current : *OBJECT ALREADY DUMPED*' . PHP_EOL
                     )
+        ;
+    }
+
+    public function testDumpResource()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpResource(fopen(__FILE__, 'r'), $dump->createOutput());
+                    }
+                )
+                    ->match('/^resource stream "Resource id #[0-9]+"$/')
+        ;
+    }
+
+    public function testDumpString()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_SHORT);
+                    }
+                )
+                    ->isEqualTo('"azerty"')
+                ->output(
+                    function() use($dump) {
+                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                    }
+                )
+                    ->isEqualTo('string(6) "azerty"' . PHP_EOL)
+        ;
+    }
+
+    /** @extensions mbstring */
+    public function testDumpStringIUtf8()
+    {
+        $this
+            ->if($dump = new TestedClass)
+            ->and($variable = 'àâäéèêëîïôöùüŷÿ')
+            ->and($variable = mb_convert_encoding($variable, 'UTF-8', mb_detect_encoding($variable)))
+                ->output(
+                    function() use($dump, $variable) {
+                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_SHORT);
+                    }
+                )
+                    ->isEqualTo('"àâäéèêëîïôöùüŷÿ"')
+                ->output(
+                    function() use($dump, $variable) {
+                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                    }
+                )
+                    ->isEqualTo('string(15) "àâäéèêëîïôöùüŷÿ"' . PHP_EOL)
         ;
     }
 }

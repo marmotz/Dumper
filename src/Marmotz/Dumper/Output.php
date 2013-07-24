@@ -76,6 +76,11 @@ class Output
     public function addLn(/*$format, $args1, ... */)
     {
         $args = func_get_args();
+
+        if (!isset($args[0])) {
+            $args[0] = '';
+        }
+
         $args[0] .= PHP_EOL;
 
         return call_user_func_array(

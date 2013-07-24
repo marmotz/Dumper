@@ -154,6 +154,24 @@ abstract class Dump
     }
 
     /**
+     * Method called just after the whole dump process
+     *
+     * @param Output $output
+     */
+    public function afterDump(Output $output)
+    {
+    }
+
+    /**
+     * Method called just before the whole dump process
+     *
+     * @param Output $output
+     */
+    public function beforeDump(Output $output)
+    {
+    }
+
+    /**
      * Create an Output object
      *
      * @param Output $parentOutput
@@ -195,40 +213,45 @@ abstract class Dump
 
         $output = $this->createOutput($parentOutput);
 
+        if ($this->getLevel() === 0) {
+            $this->beforeDump($output);
+        }
+
         $this->incLevel();
 
-        if (static::isMaxLevelOfRecursion($this->getLevel())) {
-            $this->dumpMaxLevelOfRecursion($output);
-        } else {
-            $type = strtolower(gettype($variable));
+        $type = strtolower(gettype($variable));
 
-            switch ($type) {
-                case 'array':
-                case 'boolean':
-                case 'double':
-                case 'float':
-                case 'integer':
-                case 'object':
-                case 'resource':
-                case 'string':
-                    $method = 'dump' . ucfirst($type);
-
-                    $this->$method($variable, $output, $format);
+        switch ($type) {
+            case 'array':
+            case 'object':
+                if (static::isMaxLevelOfRecursion($this->getLevel())) {
+                    $this->dumpMaxLevelOfRecursion($type, $output);
                     break;
+                }
+            case 'boolean':
+            case 'double':
+            case 'float':
+            case 'integer':
+            case 'resource':
+            case 'string':
+                $method = 'dump' . ucfirst($type);
 
-                case 'null':
-                    $this->dumpNull($output, $format);
-                    break;
+                $this->$method($variable, $output, $format);
+                break;
 
-                default:
-                    $this->dumpUnknown($type, $variable, $output);
-                    break;
-            }
+            case 'null':
+                $this->dumpNull($output, $format);
+                break;
+
+            default:
+                $this->dumpUnknown($type, $variable, $output);
+                break;
         }
 
         $this->decLevel();
 
         if ($this->getLevel() === 0) {
+            $this->afterDump($output);
             $this->reset();
         }
     }
@@ -254,22 +277,6 @@ abstract class Dump
     }
 
     /**
-     * Dump boolean
-     *
-     * @param boolean $boolean
-     * @param Output  $output
-     */
-    public function dumpBoolean($boolean, Output $output)
-    {
-        $output
-            ->addLn(
-                'boolean(%s)',
-                $boolean ? 'true' : 'false'
-            )
-        ;
-    }
-
-    /**
      * Dump double
      *
      * @param float  $float
@@ -281,67 +288,14 @@ abstract class Dump
     }
 
     /**
-     * Dump float
-     *
-     * @param float  $float
-     * @param Output $output
-     */
-    public function dumpFloat($float, Output $output)
-    {
-        $output
-            ->addLn(
-                'float(%s)',
-                $float
-            )
-        ;
-    }
-
-    /**
-     * Dump integer variable
-     *
-     * @param integer $integer
-     * @param Output  $output
-     * @param integer $format
-     */
-    public function dumpInteger($integer, Output $output, $format)
-    {
-        if ($format === self::FORMAT_COMPLETE) {
-            $output
-                ->addLn(
-                    'integer(%d)',
-                    $integer
-                )
-            ;
-        } else {
-            $output
-                ->add((string) $integer)
-            ;
-        }
-    }
-
-    /**
      * Dump reach max level of recursion
      *
+     * @param string $type
      * @param Output $output
      */
-    public function dumpMaxLevelOfRecursion(Output $output)
+    public function dumpMaxLevelOfRecursion($type, Output $output)
     {
-        $output->addLn('*MAX LEVEL OF RECURSION*');
-    }
-
-    /**
-     * Dump null
-     *
-     * @param Output  $output
-     * @param integer $format
-     */
-    public function dumpNull(Output $output, $format)
-    {
-        if ($format === self::FORMAT_COMPLETE) {
-            $output->addLn('NULL');
-        } else {
-            $output->add('NULL');
-        }
+        $output->addLn($type . ' *MAX LEVEL OF RECURSION*');
     }
 
     /**
@@ -367,23 +321,6 @@ abstract class Dump
     }
 
     /**
-     * Dump resource
-     *
-     * @param resource $resource
-     * @param Output   $output
-     */
-    public function dumpResource($resource, Output $output)
-    {
-        $output
-            ->addLn(
-                'resource %s "%s"',
-                get_resource_type($resource),
-                (string) $resource
-            )
-        ;
-    }
-
-    /**
      * Dump string variable
      *
      * @param string  $string
@@ -392,28 +329,13 @@ abstract class Dump
      */
     public function dumpString($string, Output $output, $format)
     {
-        if ($format === self::FORMAT_COMPLETE) {
-            if (function_exists('mb_strlen')) {
-                $len = mb_strlen($string, 'UTF-8');
-            } else {
-                $len = strlen($string);
-            }
-
-            $output
-                ->addLn(
-                    'string(%d) "%s"',
-                    $len,
-                    $string
-                )
-            ;
+        if (function_exists('mb_strlen')) {
+            $length = mb_strlen($string, 'UTF-8');
         } else {
-            $output
-                ->add(
-                    '"%s"',
-                    $string
-                )
-            ;
+            $length = strlen($string);
         }
+
+        $this->doDumpString($string, $length, $output, $format);
     }
 
     /**
@@ -429,13 +351,7 @@ abstract class Dump
         var_dump($variable);
         $dump = ob_get_clean();
 
-        $output
-            ->addLn(
-                'unknown type "%s" : %s',
-                $type,
-                trim($dump)
-            )
-        ;
+        $this->doDumpString($type, $dump, $output);
     }
 
     /**
