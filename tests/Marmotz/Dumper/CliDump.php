@@ -179,9 +179,9 @@ class CliDump extends atoum
      */
     public function testDumpObject()
     {
-        require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
-        require_once __DIR__ . '/../../resources/classes/SampleClass3.php';
-        require_once __DIR__ . '/../../resources/classes/SampleClass4.php';
+        require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
+        require_once __DIR__ . '/../../../resources/classes/SampleClass3.php';
+        require_once __DIR__ . '/../../../resources/classes/SampleClass4.php';
 
         $this
             ->if($dump = new TestedClass())

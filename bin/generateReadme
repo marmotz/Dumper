@@ -3,6 +3,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Knp\Snappy\Image;
+
 // variables to dump
 $variables = array(
     array(
@@ -39,24 +41,24 @@ $template = str_replace('{{cli-dump}}', $dump, $template);
 // html dump
 $dumper = Marmotz\Dumper\Dump::factory('apache2');
 
-// with css
 $dump = '';
 
 foreach (array_keys($variables) as $key) {
     $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
 }
 
-$template = str_replace('{{html-dump-with-css}}', $dump, $template);
+// generate image
+$imagePath = __DIR__ . '/../resources/readme.dump.jpg';
 
-// without css
-$dump = '';
-
-foreach (array_keys($variables) as $key) {
-    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+if (file_exists($imagePath)) {
+    unlink($imagePath);
 }
 
-$template = str_replace('{{html-dump}}', $dump, $template);
+$arch = PHP_INT_SIZE === 8 ? 'amd64' : 'i386';
 
+$snappy = new Image(__DIR__ . "/../vendor/google/wkhtmltoimage-$arch/wkhtmltoimage-$arch");
+$snappy->setOption('crop-w', 350);
+$snappy->generateFromHtml($dump, $imagePath);
 
 // write README.md
 file_put_contents(__DIR__ . '/../README.md', $template);

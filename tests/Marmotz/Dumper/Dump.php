@@ -8,7 +8,7 @@ use mock\Marmotz\Dumper\Dump as mockTestedClass;
 use Marmotz\Dumper\Output;
 use Marmotz\Dumper\Proxy;
 
-require_once __DIR__ . '/../../resources/classes/SampleClass1.php';
+require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
 
 
 class Dump extends atoum

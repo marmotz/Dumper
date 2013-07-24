@@ -82,8 +82,4 @@ Here is an example of cli output:
 
 Here is an example of HTML output:
 
-```html
-{{html-dump-with-css}}
-```
-
-{{html-dump}}
+![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.jpg "HTML Dump")
