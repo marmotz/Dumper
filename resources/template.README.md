@@ -34,6 +34,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 dump($_SERVER);
 ```
 
+## Configuration
+
+You can limit the depth of the dump by using setMaxLevelOfRecursion function like this:
+
+```php
+Marmotz\Dumper\Dump::setMaxLevelOfRecursion(5);
+```
+
 
 ## Output
 

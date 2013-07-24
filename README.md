@@ -34,6 +34,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 dump($_SERVER);
 ```
 
+## Configuration
+
+You can limit the depth of the dump by using setMaxLevelOfRecursion function like this:
+
+```php
+Marmotz\Dumper\Dump::setMaxLevelOfRecursion(5);
+```
+
 
 ## Output
 
@@ -109,8 +117,8 @@ array(58)
 |          "SCRIPT_FILENAME": string(20) "./bin/generateReadme"
 |          "PATH_TRANSLATED": string(20) "./bin/generateReadme"
 |            "DOCUMENT_ROOT": string(0) ""
-|       "REQUEST_TIME_FLOAT": float(1374659240.9352)
-|             "REQUEST_TIME": integer(1374659240)
+|       "REQUEST_TIME_FLOAT": float(1374659814.8354)
+|             "REQUEST_TIME": integer(1374659814)
 |                     "argv": array(1)
 |                             | 0: string(20) "./bin/generateReadme"
 |                     "argc": integer(1)
@@ -491,13 +499,13 @@ Here is an example of HTML output:
         <tr>
             <th>"REQUEST_TIME_FLOAT"</th>
             <td>
-                float(1374659240.9352)
+                float(1374659814.8354)
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME"</th>
             <td>
-                integer(1374659240)
+                integer(1374659814)
             </td>
         </tr>
         <tr>
@@ -1010,13 +1018,13 @@ Here is an example of HTML output:
         <tr>
             <th>"REQUEST_TIME_FLOAT"</th>
             <td>
-                float(1374659240.9352)
+                float(1374659814.8354)
             </td>
         </tr>
         <tr>
             <th>"REQUEST_TIME"</th>
             <td>
-                integer(1374659240)
+                integer(1374659814)
             </td>
         </tr>
         <tr>
