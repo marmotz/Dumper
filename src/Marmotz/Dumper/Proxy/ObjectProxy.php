@@ -109,7 +109,7 @@ class ObjectProxy
                             'name'      => '$' . $parameter->getName(),
                             'reference' => $parameter->isPassedByReference() ? '&' : '',
                             'type'      => $parameter->isArray() ? 'array' : (
-                                $parameter->isCallable() ? 'callable' : (
+                                version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable() ? 'callable' : (
                                     $parameter->getClass() ? $parameter->getClass()->getName() : ''
                                 )
                             ),
