@@ -5,7 +5,6 @@ namespace tests\units\Marmotz\Dumper;
 use atoum;
 use Marmotz\Dumper\HtmlDump as TestedClass;
 
-require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
 
 
 class HtmlDump extends atoum
@@ -212,8 +211,13 @@ class HtmlDump extends atoum
         ;
     }
 
+    /**
+     * @php >= 5.4
+     */
     public function testDumpObject()
     {
+        require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
+
         $this
             ->if($dump = new TestedClass())
                 ->output(

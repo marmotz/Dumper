@@ -6,13 +6,16 @@ use atoum;
 use Marmotz\Dumper\Proxy\ObjectProxy as TestedClass;
 use mock\Marmotz\Dumper\Dump         as mockDump;
 
-require_once __DIR__ . '/../../../../resources/classes/SampleClass1.php';
-
 
 class ObjectProxy extends atoum
 {
+    /**
+     * @php >= 5.4
+     */
     public function testProxy()
     {
+        require_once __DIR__ . '/../../../../resources/classes/SampleClass1.php';
+
         $this
             ->if($proxy = new TestedClass($object = new \SampleClass1, new mockDump))
                 ->object($class = $proxy->getClass())
