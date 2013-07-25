@@ -3,19 +3,12 @@
 /**
  * helper to dump variables
  */
-function dump(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null)
+function dump()
 {
     $dumper = Marmotz\Dumper\Dump::factory();
 
-    $args = debug_backtrace();
-    $args = $args[0]['args'];
-
-    foreach (array_keys($args) as $key) {
-        $dumper->dump($args[$key]);
+    foreach (func_get_args() as $variable) {
+        $dumper->dump($variable);
         echo PHP_EOL;
     }
 }
@@ -23,21 +16,9 @@ function dump(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = nu
 /**
  * helper to dump variables and die
  */
-function dumpd(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null)
+function dumpd()
 {
-    $dumper = Marmotz\Dumper\Dump::factory();
-
-    $args = debug_backtrace();
-    $args = $args[0]['args'];
-
-    foreach (array_keys($args) as $key) {
-        $dumper->dump($args[$key]);
-        echo PHP_EOL;
-    }
+    call_user_func_array('dump', func_get_args());
 
     die;
 }
@@ -47,21 +28,14 @@ function dumpd(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = n
  *
  * @return string
  */
-function getDump(&$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null,
-              &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null, &$arg = null)
+function getDump()
 {
     $dumper = Marmotz\Dumper\Dump::factory();
 
-    $args = debug_backtrace();
-    $args = $args[0]['args'];
-
     $dump = '';
 
-    foreach (array_keys($args) as $key) {
-        $dump .= $dumper->getDump($args[$key]) . PHP_EOL;
+    foreach (func_get_args() as $variable) {
+        $dump .= $dumper->getDump($variable) . PHP_EOL;
     }
 
     return $dump;

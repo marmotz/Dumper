@@ -20,10 +20,8 @@ abstract class Dump
 
     protected $level;
     protected $objectHashes = array();
-    protected $dumpedArrayMarker;
-    protected $dumpedArrays = array();
 
-    static protected $maxLevelOfRecursion = false;
+    static protected $maxLevelOfRecursion = 10;
 
     /**
      * Do dump array variable
@@ -112,31 +110,6 @@ abstract class Dump
     public function __construct()
     {
         $this->reset();
-
-        // init dumpedArrayMarker
-        $str = '';
-
-        for ($i = 0; $i < 128; $i++) {
-            $str .= chr(rand(32, 126));
-        }
-
-        $this->setDumpedArrayMarker($str);
-    }
-
-    /**
-     * Add a dumped array
-     *
-     * @param array &$array
-     *
-     * @return Dump
-     */
-    public function addDumpedArray(array &$array)
-    {
-        $array[$this->getDumpedArrayMarker()] = true;
-
-        $this->dumpedArrays[] =& $array;
-
-        return $this;
     }
 
     /**
@@ -264,16 +237,10 @@ abstract class Dump
      */
     public function dumpArray(array &$array, Output $output)
     {
-        if ($this->isDumpedArray($array)) {
-            $output->addLn('*ARRAY ALREADY DUMPED*');
-        } else {
-            $this->addDumpedArray($array);
-
-            $this->doDumpArray(
-                new Proxy\ArrayProxy($array, $this),
-                $output
-            );
-        }
+        $this->doDumpArray(
+            new Proxy\ArrayProxy($array, $this),
+            $output
+        );
     }
 
     /**
@@ -355,22 +322,6 @@ abstract class Dump
     }
 
     /**
-     * Empty dumped arrays
-     *
-     * @return Dump
-     */
-    public function emptyDumpedArrays()
-    {
-        foreach (array_keys($this->dumpedArrays) as $key) {
-            unset($this->dumpedArrays[$key][$this->getDumpedArrayMarker()]);
-        }
-
-        $this->dumpedArrays = array();
-
-        return $this;
-    }
-
-    /**
      * Empty the hashes
      *
      * @return Dump
@@ -398,16 +349,6 @@ abstract class Dump
         $this->dump($variable, $output, $format);
 
         return ob_get_clean();
-    }
-
-    /**
-     * Returns current dumped array marker
-     *
-     * @return string
-     */
-    public function getDumpedArrayMarker()
-    {
-        return $this->dumpedArrayMarker;
     }
 
     /**
@@ -443,18 +384,6 @@ abstract class Dump
     }
 
     /**
-     * Check if a given array was already dumped
-     *
-     * @param array $array
-     *
-     * @return boolean
-     */
-    public function isDumpedArray(array $array)
-    {
-        return isset($array[$this->getDumpedArrayMarker()]);
-    }
-
-    /**
      * Reset current dumper
      *
      * @return self
@@ -464,22 +393,7 @@ abstract class Dump
         return $this
             ->setLevel(0)
             ->emptyObjectHashes()
-            ->emptyDumpedArrays()
         ;
-    }
-
-    /**
-     * Set current dumped array marker
-     *
-     * @param string $marker
-     *
-     * @return Dump
-     */
-    public function setDumpedArrayMarker($marker)
-    {
-        $this->dumpedArrayMarker = $marker;
-
-        return $this;
     }
 
     /**

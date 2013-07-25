@@ -82,7 +82,34 @@ class CliDump extends atoum
                         'array(3)' . PHP_EOL .
                         '| 0: integer(1)' . PHP_EOL .
                         '| 1: integer(2)' . PHP_EOL .
-                        '| 2: *ARRAY ALREADY DUMPED*' . PHP_EOL
+                        '| 2: array(3)' . PHP_EOL .
+                        '|    | 0: integer(1)' . PHP_EOL .
+                        '|    | 1: integer(2)' . PHP_EOL .
+                        '|    | 2: array(3)' . PHP_EOL .
+                        '|    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    | 2: array(3)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    |    | 0: integer(1)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    |    | 1: integer(2)' . PHP_EOL .
+                        '|    |    |    |    |    |    |    |    |    | 2: array *MAX LEVEL OF RECURSION*' . PHP_EOL
                     )
         ;
     }

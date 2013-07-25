@@ -33,12 +33,10 @@ class ArrayProxy implements \Iterator
         $this->array = array();
 
         foreach ($array as $key => $value) {
-            if ($key !== $dumper->getDumpedArrayMarker()) {
-                $dumpedKey               = $dumper->getDump($key, null, Dump::FORMAT_SHORT);
-                $this->array[$dumpedKey] = $value;
+            $dumpedKey               = $dumper->getDump($key, null, Dump::FORMAT_SHORT);
+            $this->array[$dumpedKey] = $value;
 
-                $this->setIfMaxKeyLength(strlen($dumpedKey));
-            }
+            $this->setIfMaxKeyLength(strlen($dumpedKey));
         }
 
         $this->keys    = array_keys($this->array);

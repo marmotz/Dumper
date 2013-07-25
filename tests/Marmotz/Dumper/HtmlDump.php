@@ -208,6 +208,340 @@ class HtmlDump extends atoum
                         '    </table>' . PHP_EOL .
                         '</div>' . PHP_EOL
                     )
+
+                ->output(
+                    function() use($dump) {
+                        $array = array(1, 2);
+                        $array[] =& $array;
+
+                        $dump->dump($array);
+                    }
+                )
+                    ->isEqualTo(
+                        '<div class="dumper">' . PHP_EOL .
+                        '    <table class="array">' . PHP_EOL .
+                        '        <thead>' . PHP_EOL .
+                        '            <tr>' . PHP_EOL .
+                        '                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '            </tr>' . PHP_EOL .
+                        '        </thead>' . PHP_EOL .
+                        '        <tbody>' . PHP_EOL .
+                        '            <tr>' . PHP_EOL .
+                        '                <th>' . PHP_EOL .
+                        '                    <span class="integer">0</span>' . PHP_EOL .
+                        '                </th>' . PHP_EOL .
+                        '                <td>' . PHP_EOL .
+                        '                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                </td>' . PHP_EOL .
+                        '            </tr>' . PHP_EOL .
+                        '            <tr>' . PHP_EOL .
+                        '                <th>' . PHP_EOL .
+                        '                    <span class="integer">1</span>' . PHP_EOL .
+                        '                </th>' . PHP_EOL .
+                        '                <td>' . PHP_EOL .
+                        '                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                </td>' . PHP_EOL .
+                        '            </tr>' . PHP_EOL .
+                        '            <tr>' . PHP_EOL .
+                        '                <th>' . PHP_EOL .
+                        '                    <span class="integer">2</span>' . PHP_EOL .
+                        '                </th>' . PHP_EOL .
+                        '                <td>' . PHP_EOL .
+                        '                    <table class="array">' . PHP_EOL .
+                        '                        <thead>' . PHP_EOL .
+                        '                            <tr>' . PHP_EOL .
+                        '                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                            </tr>' . PHP_EOL .
+                        '                        </thead>' . PHP_EOL .
+                        '                        <tbody>' . PHP_EOL .
+                        '                            <tr>' . PHP_EOL .
+                        '                                <th>' . PHP_EOL .
+                        '                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                </th>' . PHP_EOL .
+                        '                                <td>' . PHP_EOL .
+                        '                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                </td>' . PHP_EOL .
+                        '                            </tr>' . PHP_EOL .
+                        '                            <tr>' . PHP_EOL .
+                        '                                <th>' . PHP_EOL .
+                        '                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                </th>' . PHP_EOL .
+                        '                                <td>' . PHP_EOL .
+                        '                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                </td>' . PHP_EOL .
+                        '                            </tr>' . PHP_EOL .
+                        '                            <tr>' . PHP_EOL .
+                        '                                <th>' . PHP_EOL .
+                        '                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                </th>' . PHP_EOL .
+                        '                                <td>' . PHP_EOL .
+                        '                                    <table class="array">' . PHP_EOL .
+                        '                                        <thead>' . PHP_EOL .
+                        '                                            <tr>' . PHP_EOL .
+                        '                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                            </tr>' . PHP_EOL .
+                        '                                        </thead>' . PHP_EOL .
+                        '                                        <tbody>' . PHP_EOL .
+                        '                                            <tr>' . PHP_EOL .
+                        '                                                <th>' . PHP_EOL .
+                        '                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                </th>' . PHP_EOL .
+                        '                                                <td>' . PHP_EOL .
+                        '                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                </td>' . PHP_EOL .
+                        '                                            </tr>' . PHP_EOL .
+                        '                                            <tr>' . PHP_EOL .
+                        '                                                <th>' . PHP_EOL .
+                        '                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                </th>' . PHP_EOL .
+                        '                                                <td>' . PHP_EOL .
+                        '                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                </td>' . PHP_EOL .
+                        '                                            </tr>' . PHP_EOL .
+                        '                                            <tr>' . PHP_EOL .
+                        '                                                <th>' . PHP_EOL .
+                        '                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                </th>' . PHP_EOL .
+                        '                                                <td>' . PHP_EOL .
+                        '                                                    <table class="array">' . PHP_EOL .
+                        '                                                        <thead>' . PHP_EOL .
+                        '                                                            <tr>' . PHP_EOL .
+                        '                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                            </tr>' . PHP_EOL .
+                        '                                                        </thead>' . PHP_EOL .
+                        '                                                        <tbody>' . PHP_EOL .
+                        '                                                            <tr>' . PHP_EOL .
+                        '                                                                <th>' . PHP_EOL .
+                        '                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                </th>' . PHP_EOL .
+                        '                                                                <td>' . PHP_EOL .
+                        '                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                </td>' . PHP_EOL .
+                        '                                                            </tr>' . PHP_EOL .
+                        '                                                            <tr>' . PHP_EOL .
+                        '                                                                <th>' . PHP_EOL .
+                        '                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                </th>' . PHP_EOL .
+                        '                                                                <td>' . PHP_EOL .
+                        '                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                </td>' . PHP_EOL .
+                        '                                                            </tr>' . PHP_EOL .
+                        '                                                            <tr>' . PHP_EOL .
+                        '                                                                <th>' . PHP_EOL .
+                        '                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                </th>' . PHP_EOL .
+                        '                                                                <td>' . PHP_EOL .
+                        '                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                        <thead>' . PHP_EOL .
+                        '                                                                            <tr>' . PHP_EOL .
+                        '                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                            </tr>' . PHP_EOL .
+                        '                                                                        </thead>' . PHP_EOL .
+                        '                                                                        <tbody>' . PHP_EOL .
+                        '                                                                            <tr>' . PHP_EOL .
+                        '                                                                                <th>' . PHP_EOL .
+                        '                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                </th>' . PHP_EOL .
+                        '                                                                                <td>' . PHP_EOL .
+                        '                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                </td>' . PHP_EOL .
+                        '                                                                            </tr>' . PHP_EOL .
+                        '                                                                            <tr>' . PHP_EOL .
+                        '                                                                                <th>' . PHP_EOL .
+                        '                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                </th>' . PHP_EOL .
+                        '                                                                                <td>' . PHP_EOL .
+                        '                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                </td>' . PHP_EOL .
+                        '                                                                            </tr>' . PHP_EOL .
+                        '                                                                            <tr>' . PHP_EOL .
+                        '                                                                                <th>' . PHP_EOL .
+                        '                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                </th>' . PHP_EOL .
+                        '                                                                                <td>' . PHP_EOL .
+                        '                                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                                        <thead>' . PHP_EOL .
+                        '                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                        </thead>' . PHP_EOL .
+                        '                                                                                        <tbody>' . PHP_EOL .
+                        '                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                                </td>' . PHP_EOL .
+                        '                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                                </td>' . PHP_EOL .
+                        '                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                                                        <thead>' . PHP_EOL .
+                        '                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                        </thead>' . PHP_EOL .
+                        '                                                                                                        <tbody>' . PHP_EOL .
+                        '                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                                                                        <thead>' . PHP_EOL .
+                        '                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                        </thead>' . PHP_EOL .
+                        '                                                                                                                        <tbody>' . PHP_EOL .
+                        '                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                                                                                        <thead>' . PHP_EOL .
+                        '                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                        </thead>' . PHP_EOL .
+                        '                                                                                                                                        <tbody>' . PHP_EOL .
+                        '                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                    <table class="array">' . PHP_EOL .
+                        '                                                                                                                                                        <thead>' . PHP_EOL .
+                        '                                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                                <th colspan="2">array(3)</th>' . PHP_EOL .
+                        '                                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                                        </thead>' . PHP_EOL .
+                        '                                                                                                                                                        <tbody>' . PHP_EOL .
+                        '                                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                                    <span class="integer">0</span>' . PHP_EOL .
+                        '                                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                                    <span class="integer">integer(1)</span>' . PHP_EOL .
+                        '                                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                                    <span class="integer">1</span>' . PHP_EOL .
+                        '                                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                                    <span class="integer">integer(2)</span>' . PHP_EOL .
+                        '                                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                                            <tr>' . PHP_EOL .
+                        '                                                                                                                                                                <th>' . PHP_EOL .
+                        '                                                                                                                                                                    <span class="integer">2</span>' . PHP_EOL .
+                        '                                                                                                                                                                </th>' . PHP_EOL .
+                        '                                                                                                                                                                <td>' . PHP_EOL .
+                        '                                                                                                                                                                    array *MAX LEVEL OF RECURSION*' . PHP_EOL .
+                        '                                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                                        </tbody>' . PHP_EOL .
+                        '                                                                                                                                                    </table>' . PHP_EOL .
+                        '                                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                                        </tbody>' . PHP_EOL .
+                        '                                                                                                                                    </table>' . PHP_EOL .
+                        '                                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                                        </tbody>' . PHP_EOL .
+                        '                                                                                                                    </table>' . PHP_EOL .
+                        '                                                                                                                </td>' . PHP_EOL .
+                        '                                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                                        </tbody>' . PHP_EOL .
+                        '                                                                                                    </table>' . PHP_EOL .
+                        '                                                                                                </td>' . PHP_EOL .
+                        '                                                                                            </tr>' . PHP_EOL .
+                        '                                                                                        </tbody>' . PHP_EOL .
+                        '                                                                                    </table>' . PHP_EOL .
+                        '                                                                                </td>' . PHP_EOL .
+                        '                                                                            </tr>' . PHP_EOL .
+                        '                                                                        </tbody>' . PHP_EOL .
+                        '                                                                    </table>' . PHP_EOL .
+                        '                                                                </td>' . PHP_EOL .
+                        '                                                            </tr>' . PHP_EOL .
+                        '                                                        </tbody>' . PHP_EOL .
+                        '                                                    </table>' . PHP_EOL .
+                        '                                                </td>' . PHP_EOL .
+                        '                                            </tr>' . PHP_EOL .
+                        '                                        </tbody>' . PHP_EOL .
+                        '                                    </table>' . PHP_EOL .
+                        '                                </td>' . PHP_EOL .
+                        '                            </tr>' . PHP_EOL .
+                        '                        </tbody>' . PHP_EOL .
+                        '                    </table>' . PHP_EOL .
+                        '                </td>' . PHP_EOL .
+                        '            </tr>' . PHP_EOL .
+                        '        </tbody>' . PHP_EOL .
+                        '    </table>' . PHP_EOL .
+                        '</div>' . PHP_EOL
+                    )
         ;
     }
 
