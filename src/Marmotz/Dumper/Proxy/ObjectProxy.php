@@ -263,7 +263,11 @@ class ObjectProxy
      */
     public function getTraits()
     {
-        return array_values($this->getClass()->getTraits());
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            return array_values($this->getClass()->getTraits());
+        } else {
+            return array();
+        }
     }
 
     /**
