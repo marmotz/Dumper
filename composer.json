@@ -40,7 +40,7 @@
     ],
     "autoload": {
         "files": [
-            "src/Marmotz/Dumper/functions.php"
+            "src/Marmotz/Dumper/helpers.php"
         ],
         "psr-0": {
             "Marmotz\\Dumper": "src"

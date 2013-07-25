@@ -11,4 +11,4 @@ verbose=true
 src/
 
 # Black list of files and directories (optional)
-!src/Marmotz/Dumper/functions.php
+!src/Marmotz/Dumper/helpers.php
