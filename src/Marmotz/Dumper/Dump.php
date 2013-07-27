@@ -49,6 +49,88 @@ abstract class Dump
     abstract public function initOutput(Output $output);
 
     /**
+     * Do dump boolean
+     *
+     * @param string $boolean
+     * @param Output $output
+     */
+    abstract public function doDumpBoolean($boolean, Output $output);
+
+
+    /**
+     * Dump boolean
+     *
+     * @param boolean $boolean
+     * @param Output  $output
+     */
+    public function dumpBoolean($boolean, Output $output)
+    {
+        $this->doDumpBoolean(
+            $boolean ? 'true' : 'false',
+            $output
+        );
+    }
+
+    /**
+     * Dump float
+     *
+     * @param float  $float
+     * @param Output $output
+     */
+    abstract public function dumpFloat($float, Output $output);
+
+    /**
+     * Dump integer variable
+     *
+     * @param integer $integer
+     * @param Output  $output
+     * @param integer $format
+     */
+    abstract public function dumpInteger($integer, Output $output, $format);
+
+    /**
+     * Dump null
+     *
+     * @param Output  $output
+     * @param integer $format
+     */
+    abstract public function dumpNull(Output $output, $format);
+
+    /**
+     * Do dump resource
+     *
+     * @param string $type
+     * @param string $resource
+     * @param Output $output
+     */
+    abstract public function doDumpResource($type, $resource, Output $output);
+
+    /**
+     * Dump resource
+     *
+     * @param resource $resource
+     * @param Output   $output
+     */
+    public function dumpResource($resource, Output $output)
+    {
+        $this->doDumpResource(
+            get_resource_type($resource),
+            (string) $resource,
+            $output
+        );
+    }
+
+    /**
+     * Do dump string variable
+     *
+     * @param string  $string
+     * @param integer $length
+     * @param Output  $output
+     * @param integer $format
+     */
+    abstract public function doDumpString($string, $length, Output $output, $format);
+
+    /**
      * Create a dump instance by decorator
      *
      * @param string $decorator
@@ -127,6 +209,16 @@ abstract class Dump
     }
 
     /**
+     * Returns array of object hashes
+     *
+     * @return array
+     */
+    public function getObjectHashes()
+    {
+        return $this->objectHashes;
+    }
+
+    /**
      * Method called just after the whole dump process
      *
      * @param Output $output
@@ -174,11 +266,11 @@ abstract class Dump
      *
      * Dispatch to all dump methods
      *
-     * @param mixed   &$variable
+     * @param mixed   $variable
      * @param Output  $parentOutput
      * @param integer $format
      */
-    public function dump(&$variable, Output $parentOutput = null, $format = null)
+    public function dump($variable, Output $parentOutput = null, $format = null)
     {
         if ($format === null) {
             $format = self::FORMAT_COMPLETE;
@@ -232,10 +324,10 @@ abstract class Dump
     /**
      * Dump array variable
      *
-     * @param array  &$array
+     * @param array  $array
      * @param Output $output
      */
-    public function dumpArray(array &$array, Output $output)
+    public function dumpArray(array $array, Output $output)
     {
         $this->doDumpArray(
             new Proxy\ArrayProxy($array, $this),
@@ -306,6 +398,15 @@ abstract class Dump
     }
 
     /**
+     * Do dump unknown variable
+     *
+     * @param string $type
+     * @param mixed  $dump
+     * @param Output $output
+     */
+    abstract public function doDumpUnknown($type, $dump, Output $output);
+
+    /**
      * Dump unknown variable
      *
      * @param string $type
@@ -318,7 +419,7 @@ abstract class Dump
         var_dump($variable);
         $dump = ob_get_clean();
 
-        $this->doDumpString($type, $dump, $output);
+        $this->doDumpUnknown($type, $dump, $output);
     }
 
     /**
@@ -336,13 +437,13 @@ abstract class Dump
     /**
      * Returns a dump
      *
-     * @param mixed   &$variable
+     * @param mixed   $variable
      * @param Output  $output
      * @param integer $format
      *
      * @return string
      */
-    public function getDump(&$variable, Output $output = null, $format = self::FORMAT_COMPLETE)
+    public function getDump($variable, Output $output = null, $format = self::FORMAT_COMPLETE)
     {
         ob_start();
 

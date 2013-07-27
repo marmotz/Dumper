@@ -57,7 +57,7 @@ class ObjectProxy extends atoum
                     )
 
                 ->array($properties = $proxy->getProperties())
-                    ->hasSize(13)
+                    ->hasSize(11)
                     ->foreach(
                         $properties,
                         function($assert, $property) {
@@ -83,7 +83,8 @@ class ObjectProxy extends atoum
                             ;
                         }
                     )
-                ->array($property = $properties[0])
+                ->given($i = 0)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('privatePropertyWithoutDefaultValue')
                 ->variable($property['defaultValue'])
@@ -91,7 +92,8 @@ class ObjectProxy extends atoum
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[1])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('protectedPropertyWithoutDefaultValue')
                 ->variable($property['defaultValue'])
@@ -99,7 +101,8 @@ class ObjectProxy extends atoum
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[2])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('publicPropertyWithoutDefaultValue')
                 ->variable($property['defaultValue'])
@@ -107,7 +110,8 @@ class ObjectProxy extends atoum
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[3])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('privatePropertyWithDefaultValue')
                 ->string($property['defaultValue'])
@@ -115,7 +119,8 @@ class ObjectProxy extends atoum
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[4])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('protectedPropertyWithDefaultValue')
                 ->string($property['defaultValue'])
@@ -123,15 +128,17 @@ class ObjectProxy extends atoum
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[5])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('publicPropertyWithDefaultValue')
                 ->string($property['defaultValue'])
                     ->isEqualTo('default')
                 ->object($property['value'])
-                    ->isInstanceOf('SampleClass2')
+                    ->isInstanceOf('SampleClass3')
 
-                ->array($property = $properties[6])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('traitProperty')
                 ->variable($property['defaultValue'])
@@ -139,37 +146,29 @@ class ObjectProxy extends atoum
                 ->variable($property['value'])
                     ->isNull()
 
-                ->array($property = $properties[7])
-                ->string($property['property']->getName())
-                    ->isEqualTo('staticPrivatePropertyWithoutDefaultValue')
-                ->string($property['value'])
-                    ->isEqualTo('construct')
-
-                ->array($property = $properties[8])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('staticProtectedPropertyWithoutDefaultValue')
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[9])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('staticPublicPropertyWithoutDefaultValue')
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[10])
-                ->string($property['property']->getName())
-                    ->isEqualTo('staticPrivatePropertyWithDefaultValue')
-                ->string($property['value'])
-                    ->isEqualTo('construct')
-
-                ->array($property = $properties[11])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('staticProtectedPropertyWithDefaultValue')
                 ->string($property['value'])
                     ->isEqualTo('construct')
 
-                ->array($property = $properties[12])
+                ->given($i++)
+                ->array($property = $properties[$i])
                 ->string($property['property']->getName())
                     ->isEqualTo('staticPublicPropertyWithDefaultValue')
                 ->string($property['value'])

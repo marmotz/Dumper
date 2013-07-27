@@ -47,6 +47,13 @@ class ObjectProxy
 
         $defaultPropertiesValue = $this->getClass()->getDefaultProperties();
 
+        foreach ($this->parents as $parent) {
+            $defaultPropertiesValue = array_merge(
+                $defaultPropertiesValue,
+                $parent->getDefaultProperties()
+            );
+        }
+
         $arrayObject = (array) $object;
 
         foreach (array_keys($arrayObject) as $propertyName) {
