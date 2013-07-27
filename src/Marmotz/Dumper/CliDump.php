@@ -47,6 +47,22 @@ class CliDump extends Dump
     }
 
     /**
+     * Do dump boolean
+     *
+     * @param string $boolean
+     * @param Output $output
+     */
+    public function doDumpBoolean($boolean, Output $output)
+    {
+        $output
+            ->addLn(
+                'boolean(%s)',
+                $boolean
+            )
+        ;
+    }
+
+    /**
      * Do dump object variable
      *
      * @param Proxy\ObjectProxy $object
@@ -205,6 +221,24 @@ class CliDump extends Dump
     }
 
     /**
+     * Do dump resource
+     *
+     * @param string $type
+     * @param string $resource
+     * @param Output $output
+     */
+    public function doDumpResource($type, $resource, Output $output)
+    {
+        $output
+            ->addLn(
+                'resource %s "%s"',
+                $type,
+                $resource
+            )
+        ;
+    }
+
+    /**
      * Do dump string variable
      *
      * @param string  $string
@@ -318,23 +352,6 @@ class CliDump extends Dump
         if ($format === self::FORMAT_COMPLETE) {
             $output->addLn();
         }
-    }
-
-    /**
-     * Dump resource
-     *
-     * @param resource $resource
-     * @param Output   $output
-     */
-    public function dumpResource($resource, Output $output)
-    {
-        $output
-            ->addLn(
-                'resource %s "%s"',
-                get_resource_type($resource),
-                (string) $resource
-            )
-        ;
     }
 
     /**

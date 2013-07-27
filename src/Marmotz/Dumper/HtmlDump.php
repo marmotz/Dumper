@@ -18,6 +18,24 @@ class HtmlDump extends Dump
     static protected $cssWritten = false;
 
     /**
+     * Do dump unknown variable
+     *
+     * @param string $type
+     * @param string $dump
+     * @param Output $output
+     */
+    public function doDumpUnknown($type, $dump, Output $output)
+    {
+        $output
+            ->addLn(
+                '<span class="unknown">unknown type "%s" : %s</span>',
+                $type,
+                trim($dump)
+            )
+        ;
+    }
+
+    /**
      * Method called just after the whole dump process
      *
      * @param Output $output
@@ -184,6 +202,11 @@ class HtmlDump extends Dump
                     ->addLn('color: #055;')
                 ->dec()
                 ->addLn('}')
+                ->addLn('.dumper .unknown {')
+                ->inc()
+                    ->addLn('color: #900;')
+                ->dec()
+                ->addLn('}')
             ->dec()
             ->addLn('</style>')
             ;
@@ -266,6 +289,22 @@ class HtmlDump extends Dump
         $output
             ->dec()
             ->addLn('</table>')
+        ;
+    }
+
+    /**
+     * Do dump boolean
+     *
+     * @param string $boolean
+     * @param Output $output
+     */
+    public function doDumpBoolean($boolean, Output $output)
+    {
+        $output
+            ->addLn(
+                'boolean(%s)',
+                $boolean
+            )
         ;
     }
 
@@ -583,6 +622,24 @@ class HtmlDump extends Dump
     }
 
     /**
+     * Do dump resource
+     *
+     * @param string $type
+     * @param string $resource
+     * @param Output $output
+     */
+    public function doDumpResource($type, $resource, Output $output)
+    {
+        $output
+            ->addLn(
+                'resource %s "%s"',
+                $type,
+                $resource
+            )
+        ;
+    }
+
+    /**
      * Do dump string variable
      *
      * @param string  $string
@@ -592,11 +649,9 @@ class HtmlDump extends Dump
      */
     public function doDumpString($string, $length, Output $output, $format)
     {
-        $output->add('<span class="string">');
-
         if ($format === self::FORMAT_COMPLETE) {
             $output
-                ->add(
+                ->addLn(
                     'string(%d) "%s"',
                     $length,
                     $string
@@ -610,46 +665,6 @@ class HtmlDump extends Dump
                 )
             ;
         }
-
-        $output->add('</span>');
-
-        if ($format === self::FORMAT_COMPLETE) {
-            $output->addLn();
-        }
-    }
-
-    /**
-     * Do dump unknown variable
-     *
-     * @param string $type
-     * @param string $dump
-     * @param Output $output
-     */
-    public function doDumpUnknown($type, $dump, Output $output)
-    {
-        $output
-            ->addLn(
-                '<span class="unknown">unknown type "%s" : %s</span>',
-                $type,
-                trim($dump)
-            )
-        ;
-    }
-
-    /**
-     * Dump boolean
-     *
-     * @param boolean $boolean
-     * @param Output  $output
-     */
-    public function dumpBoolean($boolean, Output $output)
-    {
-        $output
-            ->addLn(
-                '<span class="boolean">boolean(%s)</span>',
-                $boolean ? 'true' : 'false'
-            )
-        ;
     }
 
     /**
@@ -662,7 +677,7 @@ class HtmlDump extends Dump
     {
         $output
             ->addLn(
-                '<span class="float">float(%s)</span>',
+                'float(%s)',
                 $float
             )
         ;
@@ -677,11 +692,9 @@ class HtmlDump extends Dump
      */
     public function dumpInteger($integer, Output $output, $format)
     {
-        $output->add('<span class="integer">');
-
         if ($format === self::FORMAT_COMPLETE) {
             $output
-                ->add(
+                ->addLn(
                     'integer(%d)',
                     $integer
                 )
@@ -690,12 +703,6 @@ class HtmlDump extends Dump
             $output
                 ->add((string) $integer)
             ;
-        }
-
-        $output->add('</span>');
-
-        if ($format === self::FORMAT_COMPLETE) {
-            $output->addLn();
         }
     }
 
@@ -707,28 +714,11 @@ class HtmlDump extends Dump
      */
     public function dumpNull(Output $output, $format)
     {
-        $output->add('<span class="null">NULL</span>');
+        $output->add('NULL');
 
         if ($format === self::FORMAT_COMPLETE) {
             $output->addLn();
         }
-    }
-
-    /**
-     * Dump resource
-     *
-     * @param resource $resource
-     * @param Output   $output
-     */
-    public function dumpResource($resource, Output $output)
-    {
-        $output
-            ->addLn(
-                '<span class="resource">resource %s "%s"</span>',
-                get_resource_type($resource),
-                (string) $resource
-            )
-        ;
     }
 
     /**

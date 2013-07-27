@@ -241,18 +241,25 @@ class CliDump extends atoum
                         '|     Current : string(9) "construct"' . PHP_EOL .
                         '|   public           $publicPropertyWithDefaultValue' . PHP_EOL .
                         '|     Default : string(7) "default"' . PHP_EOL .
-                        '|     Current : object SampleClass2' . PHP_EOL .
-                        '|               | extends abstract SampleAbstract1' . PHP_EOL .
-                        '|               | implements SampleInterface1' . PHP_EOL .
+                        '|     Current : object SampleClass3' . PHP_EOL .
+                        '|               | Properties :' . PHP_EOL .
+                        '|               |   public $object' . PHP_EOL .
+                        '|               |     Current : array(10)' . PHP_EOL .
+                        '|               |               | 0: integer(1)' . PHP_EOL .
+                        '|               |               | 1: integer(2)' . PHP_EOL .
+                        '|               |               | 2: integer(3)' . PHP_EOL .
+                        '|               |               | 3: integer(4)' . PHP_EOL .
+                        '|               |               | 4: integer(5)' . PHP_EOL .
+                        '|               |               | 5: integer(6)' . PHP_EOL .
+                        '|               |               | 6: integer(7)' . PHP_EOL .
+                        '|               |               | 7: integer(8)' . PHP_EOL .
+                        '|               |               | 8: integer(9)' . PHP_EOL .
+                        '|               |               | 9: integer(10)' . PHP_EOL .
                         '|   protected        $traitProperty' . PHP_EOL .
                         '|     Current : NULL' . PHP_EOL .
-                        '|   private static   $staticPrivatePropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
                         '|   protected static $staticProtectedPropertyWithoutDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
                         '|   public static    $staticPublicPropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   private static   $staticPrivatePropertyWithDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
                         '|   protected static $staticProtectedPropertyWithDefaultValue' . PHP_EOL .
                         '|     Current : string(9) "construct"' . PHP_EOL .
