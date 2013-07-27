@@ -79,12 +79,27 @@ class HtmlDump extends Dump
                 ->addLn('.dumper table.array thead {')
                 ->inc()
                     ->addLn('background-color: #345678;')
+                    ->addLn('background:    -moz-linear-gradient(top, #345678 0%%, #56789A 100%%);')
+                    ->addLn('background: -webkit-linear-gradient(top, #345678 0%%, #56789A 100%%);')
+                    ->addLn('background:      -o-linear-gradient(top, #345678 0%%, #56789A 100%%);')
+                    ->addLn('background:     -ms-linear-gradient(top, #345678 0%%, #56789A 100%%);')
+                    ->addLn('background:         linear-gradient(top, #345678 0%%, #56789A 100%%);')
                     ->addLn('color: white;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.array thead th {')
+                ->inc()
+                    ->addLn('text-align: center;')
                 ->dec()
                 ->addLn('}')
                 ->addLn('.dumper table.array tbody > tr > th {')
                 ->inc()
                     ->addLn('background-color: #56789A;')
+                    ->addLn('background:    -moz-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
+                    ->addLn('background: -webkit-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
+                    ->addLn('background:      -o-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
+                    ->addLn('background:     -ms-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
+                    ->addLn('background:         linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
                     ->addLn('color: white;')
                 ->dec()
                 ->addLn('}')
@@ -97,13 +112,76 @@ class HtmlDump extends Dump
                 ->addLn('.dumper table.object thead {')
                 ->inc()
                     ->addLn('background-color: #347856;')
+                    ->addLn('background:    -moz-linear-gradient(top, #347856 0%%, #569A78 100%%);')
+                    ->addLn('background: -webkit-linear-gradient(top, #347856 0%%, #569A78 100%%);')
+                    ->addLn('background:      -o-linear-gradient(top, #347856 0%%, #569A78 100%%);')
+                    ->addLn('background:     -ms-linear-gradient(top, #347856 0%%, #569A78 100%%);')
+                    ->addLn('background:         linear-gradient(top, #347856 0%%, #569A78 100%%);')
                     ->addLn('color: white;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object thead th {')
+                ->inc()
+                    ->addLn('text-align: center;')
                 ->dec()
                 ->addLn('}')
                 ->addLn('.dumper table.object tbody > tr > th {')
                 ->inc()
                     ->addLn('background-color: #569A78;')
+                    ->addLn('background:    -moz-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
+                    ->addLn('background: -webkit-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
+                    ->addLn('background:      -o-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
+                    ->addLn('background:     -ms-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
+                    ->addLn('background:         linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
                     ->addLn('color: white;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.classAttributes {')
+                ->inc()
+                    ->addLn('font-style: italic;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.classAttributes td span.class {')
+                ->inc()
+                    ->addLn('font-weight: bold;')
+                    ->addLn('font-style: normal;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.constants table {')
+                ->inc()
+                    ->addLn('width: 100%%;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.properties .visibility,')
+                ->addLn('.dumper table.object tbody.methods .visibility {')
+                ->inc()
+                    ->addLn('color: #258FD9;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.properties .static,')
+                ->addLn('.dumper table.object tbody.methods .static {')
+                ->inc()
+                    ->addLn('color: #25A96F;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.properties tr.default td:nth-child(n+2) {')
+                ->inc()
+                    ->addLn('color: #666;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.methods span.arguments .type {')
+                ->inc()
+                    ->addLn('color: #550;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.methods span.arguments .name {')
+                ->inc()
+                    ->addLn('color: #500;')
+                ->dec()
+                ->addLn('}')
+                ->addLn('.dumper table.object tbody.methods span.arguments .value {')
+                ->inc()
+                    ->addLn('color: #055;')
                 ->dec()
                 ->addLn('}')
             ->dec()
@@ -229,7 +307,7 @@ class HtmlDump extends Dump
                     ->addLn('<tr>')
                     ->inc()
                         ->addLn(
-                            '<td>extends %s%s</td>',
+                            '<td>extends %s<span class="class">%s</span></td>',
                             $parent->isAbstract() ? 'abstract ' : '',
                             $parent->getName()
                         )
@@ -255,7 +333,7 @@ class HtmlDump extends Dump
                     ->addLn('<tr>')
                     ->inc()
                         ->addLn(
-                            '<td>implements %s</td>',
+                            '<td>implements <span class="class">%s</span></td>',
                             $interface->getName()
                         )
                     ->dec()
@@ -280,7 +358,7 @@ class HtmlDump extends Dump
                     ->addLn('<tr>')
                     ->inc()
                         ->addLn(
-                            '<td>use trait %s</td>',
+                            '<td>use trait <span class="class">%s</span></td>',
                             $trait->getName()
                         )
                     ->dec()
@@ -316,10 +394,10 @@ class HtmlDump extends Dump
                                 ->addLn('<tr>')
                                 ->inc()
                                     ->addLn(
-                                        '<td class="name">%s</td>',
+                                        '<td>%s</td>',
                                         $name
                                     )
-                                    ->addLn('<td class="value">')
+                                    ->addLn('<td>')
                                     ->inc()
                                         ->dump($value)
                                     ->dec()
@@ -360,20 +438,23 @@ class HtmlDump extends Dump
 
             foreach ($object->getProperties() as $property) {
                 $output
-                                ->addLn('<tr>')
+                                ->addLn(
+                                    '<tr%s>',
+                                    isset($property['defaultValue']) ? ' class="default"' : ''
+                                )
                                 ->inc()
                                     ->addLn(
-                                        '<td class="name"%s>%s $%s</td>',
+                                        '<td%s><span class="visibility">%s</span> $%s</td>',
                                         isset($property['defaultValue']) ? ' rowspan="2"' : '',
-                                        ($property['property']->isStatic() ? 'static ' : '') . $property['visibility'],
+                                        ($property['property']->isStatic() ? '<span class="static">static</span> ' : '') . $property['visibility'],
                                         $property['property']->getName()
                                     )
                 ;
 
                 if (isset($property['defaultValue'])) {
                     $output
-                                    ->addLn('<td class="type">Default:</td>')
-                                    ->addLn('<td class="value default">')
+                                    ->addLn('<td>Default:</td>')
+                                    ->addLn('<td>')
                                     ->inc()
                                         ->dump($property['defaultValue'])
                                     ->dec()
@@ -386,8 +467,8 @@ class HtmlDump extends Dump
                 }
 
                 $output
-                                    ->addLn('<td class="type">Current:</td>')
-                                    ->addLn('<td class="value current">')
+                                    ->addLn('<td>Current:</td>')
+                                    ->addLn('<td>')
                                     ->inc()
                                         ->dump($property['value'])
                                     ->dec()
@@ -426,40 +507,60 @@ class HtmlDump extends Dump
                         ->inc()
                             ->add('<td>')
                             // visibility
-                            ->add(($method['method']->isStatic() ? 'static ' : '') . $method['visibility'])
+                            ->add(
+                                '<span class="visibility">%s</span>',
+                                ($method['method']->isStatic() ? '<span class="static">static</span> ' : '') . $method['visibility']
+                            )
                             // method name
                             ->add(' ' . $method['method']->getName() . '(')
                 ;
 
-                // arguments
-                foreach ($method['arguments'] as $key => $argument) {
-                    // type
-                    if ($argument['type']) {
-                        $output
-                            ->add($argument['type'] . ' ')
-                        ;
-                    }
-
+                if ($method['arguments']) {
                     $output
+                            ->add('<span class="arguments">')
+                    ;
+
+                    // arguments
+                    foreach ($method['arguments'] as $key => $argument) {
+                        // type
+                        if ($argument['type']) {
+                            $output
+                            ->add(
+                                '<span class="type">%s</span> ',
+                                $argument['type']
+                            )
+                            ;
+                        }
+
+                        $output
                             // reference "&"
                             ->add($argument['reference'])
                             // name
-                            ->add($argument['name'])
-                    ;
+                            ->add(
+                                '<span class="name">%s</span>',
+                                $argument['name']
+                            )
+                        ;
 
-                    // default value
-                    if (array_key_exists('default', $argument)) {
-                        $output
-                            ->add(' = ')
+                        // default value
+                        if (array_key_exists('default', $argument)) {
+                            $output
+                            ->add(' = <span class="value">')
                             ->dump($argument['default'], self::FORMAT_SHORT)
-                        ;
+                            ->add('</span>')
+                            ;
+                        }
+
+                        if ($key != count($method['arguments']) - 1) {
+                            $output
+                            ->add(', ')
+                            ;
+                        }
                     }
 
-                    if ($key != count($method['arguments']) - 1) {
-                        $output
-                            ->add(', ')
-                        ;
-                    }
+                    $output
+                            ->add('</span>')
+                    ;
                 }
 
                 $output
