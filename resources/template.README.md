@@ -2,6 +2,10 @@
 
 A pretty variable dumper for HTML & cli.
 
+[![Build Status](https://travis-ci.org/marmotz/Dumper.png)](https://travis-ci.org/marmotz/Dumper)
+
+
+
 
 ## Installation with composer
 
@@ -82,4 +86,4 @@ Here is an example of cli output:
 
 Here is an example of HTML output:
 
-![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.jpg "HTML Dump")
+![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.png "HTML Dump")

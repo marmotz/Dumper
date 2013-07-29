@@ -2,6 +2,10 @@
 
 A pretty variable dumper for HTML & cli.
 
+[![Build Status](https://travis-ci.org/marmotz/Dumper.png)](https://travis-ci.org/marmotz/Dumper)
+
+
+
 
 ## Installation with composer
 
@@ -78,10 +82,10 @@ array(5)
 |               0: integer(1)
 |               1: integer(2)
 |               2: resource stream "Resource id #11"
-| "51efef1bb4d77": array(3)
+| "51f624bb64671": array(3)
 |                  | 0: integer(4)
 |                  | 1: array(2)
-|                  |    | "51efef1bb4dc1": integer(5)
+|                  |    | "51f624bb646ca": integer(5)
 |                  |    |               0: string(6) "foobar"
 |                  | 2: integer(7)
 |               8: object stdClass
@@ -127,4 +131,4 @@ object DateTime
 
 Here is an example of HTML output:
 
-![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.jpg "HTML Dump")
+![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.png "HTML Dump")
