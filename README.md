@@ -17,7 +17,7 @@ A pretty variable dumper for HTML & cli.
 }
 ```
 
-In most of the cases you don't need AtoumBundle in your production environment.
+In most of the cases you don't need Dumper in your production environment.
 
 ```json
 {
@@ -82,10 +82,10 @@ array(5)
 |               0: integer(1)
 |               1: integer(2)
 |               2: resource stream "Resource id #11"
-| "51f624bb64671": array(3)
+| "51f68da2428f4": array(3)
 |                  | 0: integer(4)
 |                  | 1: array(2)
-|                  |    | "51f624bb646ca": integer(5)
+|                  |    | "51f68da242953": integer(5)
 |                  |    |               0: string(6) "foobar"
 |                  | 2: integer(7)
 |               8: object stdClass

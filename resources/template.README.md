@@ -17,7 +17,7 @@ A pretty variable dumper for HTML & cli.
 }
 ```
 
-In most of the cases you don't need AtoumBundle in your production environment.
+In most of the cases you don't need Dumper in your production environment.
 
 ```json
 {
