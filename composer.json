@@ -1,36 +1,12 @@
  {
     "name"       : "marmotz/dumper",
     "description": "A pretty variable dumper for HTML & cli",
-    "require-dev": {
-        "atoum/atoum"              : "dev-master",
-        "knplabs/knp-snappy"       : "*",
-        "google/wkhtmltoimage-i386"  : "0.11.0-RC1",
-        "google/wkhtmltoimage-amd64" : "0.11.0-RC1"
+    "require": {
+        "twig/twig": "1.*"
     },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "google/wkhtmltoimage-amd64",
-                "version": "0.11.0-RC1",
-                "dist": {
-                    "url": "http://wkhtmltopdf.googlecode.com/files/wkhtmltoimage-0.11.0_rc1-static-amd64.tar.bz2",
-                    "type": "tar"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "google/wkhtmltoimage-i386",
-                "version": "0.11.0-RC1",
-                "dist": {
-                    "url": "http://wkhtmltopdf.googlecode.com/files/wkhtmltoimage-0.11.0_rc1-static-i386.tar.bz2",
-                    "type": "tar"
-                }
-            }
-        }
-    ],
+    "require-dev": {
+        "atoum/atoum": "dev-master"
+    },
     "license": "GPL",
     "authors": [
         {

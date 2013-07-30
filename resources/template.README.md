@@ -2,6 +2,10 @@
 
 A pretty variable dumper for HTML & cli.
 
+[![Build Status](https://travis-ci.org/marmotz/Dumper.png)](https://travis-ci.org/marmotz/Dumper)
+
+
+
 
 ## Installation with composer
 
@@ -13,7 +17,7 @@ A pretty variable dumper for HTML & cli.
 }
 ```
 
-In most of the cases you don't need AtoumBundle in your production environment.
+In most of the cases you don't need Dumper in your production environment.
 
 ```json
 {
@@ -82,4 +86,4 @@ Here is an example of cli output:
 
 Here is an example of HTML output:
 
-![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.jpg "HTML Dump")
+![HTML Dump](https://github.com/marmotz/Dumper/raw/master/resources/readme.dump.png "HTML Dump")

@@ -48,17 +48,18 @@ foreach (array_keys($variables) as $key) {
 }
 
 // generate image
-$imagePath = __DIR__ . '/../resources/readme.dump.jpg';
+$resourcePath = realpath(__DIR__ . '/../resources');
+$jsPath       = $resourcePath . '/generateScreenshot.js';
+$imagePath    = $resourcePath . '/readme.dump.png';
+$tmpPath      = tempnam('/tmp', 'dumper');
 
 if (file_exists($imagePath)) {
     unlink($imagePath);
 }
 
-$arch = PHP_INT_SIZE === 8 ? 'amd64' : 'i386';
+file_put_contents($tmpPath, $dump);
 
-$snappy = new Image(__DIR__ . "/../vendor/google/wkhtmltoimage-$arch/wkhtmltoimage-$arch");
-$snappy->setOption('crop-w', 350);
-$snappy->generateFromHtml($dump, $imagePath);
+exec("slimerjs $jsPath $tmpPath $imagePath \"400*900\" 1");
 
 // write README.md
 file_put_contents(__DIR__ . '/../README.md', $template);

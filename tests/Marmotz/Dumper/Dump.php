@@ -183,9 +183,9 @@ class Dump extends atoum
         $this
             ->if($dump = new mockTestedClass)
             ->and(
-                $this->calling($dump)->doDumpObject = function(\Marmotz\Dumper\Proxy\ObjectProxy $object, \Marmotz\Dumper\Output $output) {
+                $this->calling($dump)->doDumpObject = function(\Marmotz\Dumper\Proxy\ObjectProxy $object, \Marmotz\Dumper\Output $output) use($dump) {
                     foreach ($object->getProperties() as $property) {
-                        $this->dump($property['value'], $output);
+                        $dump->dump($property['value'], $output);
                     }
                 }
             )
@@ -244,9 +244,9 @@ class Dump extends atoum
             ->and($mockOutput = new mockOutput($dump))
             ->and($this->calling($dump)->createOutput = $mockOutput)
             ->and(
-                $this->calling($dump)->doDumpObject = function(\Marmotz\Dumper\Proxy\ObjectProxy $object, \Marmotz\Dumper\Output $output) {
+                $this->calling($dump)->doDumpObject = function(\Marmotz\Dumper\Proxy\ObjectProxy $object, \Marmotz\Dumper\Output $output) use($dump) {
                     foreach ($object->getProperties() as $property) {
-                        $this->dump($property['value'], $output);
+                        $dump->dump($property['value'], $output);
                     }
                 }
             )
