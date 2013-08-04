@@ -54,6 +54,7 @@ class HtmlDump extends atoum
                         __DIR__ . '/../../../resources/dumps/html/array.1.key_42.array.dump.html'
                     )
 
+            ->if(TestedClass::setMaxLevelOfRecursion(3))
                 ->output(
                     function() use($dump) {
                         $array = array(1, 2);
@@ -77,6 +78,7 @@ class HtmlDump extends atoum
 
         $this
             ->if($dump = new TestedClass())
+            ->and($dump->setCssWritten(true))   // disable css for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump(new \SampleClass1);
@@ -370,8 +372,7 @@ class HtmlDump extends atoum
                         '            </tr>' . PHP_EOL .
                         '        </tbody>' . PHP_EOL .
                         '    </table>' . PHP_EOL .
-                        '</div>' . PHP_EOL .
-                        $this->getCss()
+                        '</div>' . PHP_EOL
                     )
         ;
     }

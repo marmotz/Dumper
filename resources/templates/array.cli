@@ -1,0 +1,4 @@
+array({{ $array->size() }})
+    {% foreach($array as $key => $value) %}
+    {{ str_pad($key, $array->getMaxKeyLength(), ' ', STR_PAD_LEFT) }}: {{{ $value }}}
+    {% end %}

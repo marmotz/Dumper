@@ -48,168 +48,7 @@ class HtmlDump extends Dump
         ;
 
         if (!$this->isCssWasWritten()) {
-            $output
-            ->addLn('<style type="text/css">')
-            ->inc()
-                ->addLn('.dumper, .dumper table {')
-                ->inc()
-                    ->addLn('background-color: white;')
-                    ->addLn('color: black;')
-                    ->addLn('font-family: sans-serif;')
-                    ->addLn('font-size: 12px;')
-                ->dec()
-                ->addLn('}')
-
-                ->addLn('.dumper table {')
-                ->inc()
-                    ->addLn('border-spacing: 1px;')
-                    ->addLn('background-color: white;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table tbody th {')
-                ->inc()
-                    ->addLn('text-align: left;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table tbody td {')
-                ->inc()
-                    ->addLn('background: #EEE;')
-                ->dec()
-                ->addLn('}')
-
-                ->addLn('.dumper > table.array, .dumper > table.object {')
-                ->inc()
-                    ->addLn('margin: 10px 0;')
-                    ->addLn('box-shadow: 2px 2px 10px black;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.array, .dumper table.object {')
-                ->inc()
-                    ->addLn('border: 1px solid black;')
-                ->dec()
-                ->addLn('}')
-
-                ->addLn('.dumper table.array {')
-                ->inc()
-                    ->addLn('border-color: #345678;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.array thead {')
-                ->inc()
-                    ->addLn('background-color: #345678;')
-                    ->addLn('background:    -moz-linear-gradient(top, #345678 0%%, #56789A 100%%);')
-                    ->addLn('background: -webkit-linear-gradient(top, #345678 0%%, #56789A 100%%);')
-                    ->addLn('background:      -o-linear-gradient(top, #345678 0%%, #56789A 100%%);')
-                    ->addLn('background:     -ms-linear-gradient(top, #345678 0%%, #56789A 100%%);')
-                    ->addLn('background:         linear-gradient(top, #345678 0%%, #56789A 100%%);')
-                    ->addLn('color: white;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.array thead th {')
-                ->inc()
-                    ->addLn('text-align: center;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.array tbody > tr > th {')
-                ->inc()
-                    ->addLn('background-color: #56789A;')
-                    ->addLn('background:    -moz-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
-                    ->addLn('background: -webkit-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
-                    ->addLn('background:      -o-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
-                    ->addLn('background:     -ms-linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
-                    ->addLn('background:         linear-gradient(left, #56789A 0%%, #89ABCD 100%%);')
-                    ->addLn('color: white;')
-                ->dec()
-                ->addLn('}')
-
-                ->addLn('.dumper table.object {')
-                ->inc()
-                    ->addLn('border-color: #347856;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object thead {')
-                ->inc()
-                    ->addLn('background-color: #347856;')
-                    ->addLn('background:    -moz-linear-gradient(top, #347856 0%%, #569A78 100%%);')
-                    ->addLn('background: -webkit-linear-gradient(top, #347856 0%%, #569A78 100%%);')
-                    ->addLn('background:      -o-linear-gradient(top, #347856 0%%, #569A78 100%%);')
-                    ->addLn('background:     -ms-linear-gradient(top, #347856 0%%, #569A78 100%%);')
-                    ->addLn('background:         linear-gradient(top, #347856 0%%, #569A78 100%%);')
-                    ->addLn('color: white;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object thead th {')
-                ->inc()
-                    ->addLn('text-align: center;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody > tr > th {')
-                ->inc()
-                    ->addLn('background-color: #569A78;')
-                    ->addLn('background:    -moz-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
-                    ->addLn('background: -webkit-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
-                    ->addLn('background:      -o-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
-                    ->addLn('background:     -ms-linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
-                    ->addLn('background:         linear-gradient(left, #569A78 0%%, #89CDAB 100%%);')
-                    ->addLn('color: white;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.classAttributes {')
-                ->inc()
-                    ->addLn('font-style: italic;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.classAttributes td span.class {')
-                ->inc()
-                    ->addLn('font-weight: bold;')
-                    ->addLn('font-style: normal;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.constants table {')
-                ->inc()
-                    ->addLn('width: 100%%;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.properties .visibility,')
-                ->addLn('.dumper table.object tbody.methods .visibility {')
-                ->inc()
-                    ->addLn('color: #258FD9;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.properties .static,')
-                ->addLn('.dumper table.object tbody.methods .static {')
-                ->inc()
-                    ->addLn('color: #25A96F;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.properties tr.default td:nth-child(n+2) {')
-                ->inc()
-                    ->addLn('color: #666;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.methods span.arguments .type {')
-                ->inc()
-                    ->addLn('color: #550;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.methods span.arguments .name {')
-                ->inc()
-                    ->addLn('color: #500;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper table.object tbody.methods span.arguments .value {')
-                ->inc()
-                    ->addLn('color: #055;')
-                ->dec()
-                ->addLn('}')
-                ->addLn('.dumper .unknown {')
-                ->inc()
-                    ->addLn('color: #900;')
-                ->dec()
-                ->addLn('}')
-            ->dec()
-            ->addLn('</style>')
-            ;
+            $output->render('css.html');
 
             $this->setCssWritten(true);
         }
@@ -238,58 +77,65 @@ class HtmlDump extends Dump
      */
     public function doDumpArray(Proxy\ArrayProxy $array, Output $output)
     {
-        $output
-            ->addLn('<table class="array">')
-            ->inc()
-                ->addLn('<thead>')
-                ->inc()
-                    ->addLn('<tr>')
-                    ->inc()
-                        ->addLn(
-                            '<th colspan="2">array(%d)</th>',
-                            $array->size()
-                        )
-                    ->dec()
-                    ->addLn('</tr>')
-                ->dec()
-                ->addLn('</thead>')
-        ;
+        $output->render(
+            'array.html',
+            array(
+                'array' => $array,
+            )
+        );
 
-        if ($array->size()) {
-            $output
-                ->addLn('<tbody>')
-                ->inc()
-            ;
+        // $output
+        //     ->addLn('<table class="array">')
+        //     ->inc()
+        //         ->addLn('<thead>')
+        //         ->inc()
+        //             ->addLn('<tr>')
+        //             ->inc()
+        //                 ->addLn(
+        //                     '<th colspan="2">array(%d)</th>',
+        //                     $array->size()
+        //                 )
+        //             ->dec()
+        //             ->addLn('</tr>')
+        //         ->dec()
+        //         ->addLn('</thead>')
+        // ;
 
-            foreach ($array as $key => $value) {
-                $output
-                    ->addLn('<tr>')
-                    ->inc()
-                        ->addLn('<th>')
-                        ->inc()
-                            ->addLn($key)
-                        ->dec()
-                        ->addLn('</th>')
-                        ->addLn('<td>')
-                        ->inc()
-                            ->dump($value)
-                        ->dec()
-                        ->addLn('</td>')
-                    ->dec()
-                    ->addLn('</tr>')
-                ;
-            }
+        // if ($array->size()) {
+        //     $output
+        //         ->addLn('<tbody>')
+        //         ->inc()
+        //     ;
 
-            $output
-                ->dec()
-                ->addLn('</tbody>')
-            ;
-        }
+        //     foreach ($array as $key => $value) {
+        //         $output
+        //             ->addLn('<tr>')
+        //             ->inc()
+        //                 ->addLn('<th>')
+        //                 ->inc()
+        //                     ->addLn($key)
+        //                 ->dec()
+        //                 ->addLn('</th>')
+        //                 ->addLn('<td>')
+        //                 ->inc()
+        //                     ->dump($value)
+        //                 ->dec()
+        //                 ->addLn('</td>')
+        //             ->dec()
+        //             ->addLn('</tr>')
+        //         ;
+        //     }
 
-        $output
-            ->dec()
-            ->addLn('</table>')
-        ;
+        //     $output
+        //         ->dec()
+        //         ->addLn('</tbody>')
+        //     ;
+        // }
+
+        // $output
+        //     ->dec()
+        //     ->addLn('</table>')
+        // ;
     }
 
     /**

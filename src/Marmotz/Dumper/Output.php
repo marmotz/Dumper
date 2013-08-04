@@ -21,6 +21,11 @@ class Output
     protected $parentOutput;
     protected $prefix;
 
+    static protected $templates = array();
+    protected $currentTemplate;
+    protected $currentTemplateIndent;
+    protected $addLnAfterLine;
+
     /**
      * Constructor
      *
@@ -61,7 +66,10 @@ class Output
         } else {
             $this
                 ->setAutoIndent(false)
-                ->setCurrentPosition(strlen($toAdd) + $this->getIndent() * $this->getLevel())
+                ->setCurrentPosition(
+                    ($this->getCurrentPosition() ?: $this->getIndent() * $this->getLevel())
+                    + strlen($toAdd)
+                )
             ;
         }
 
@@ -90,6 +98,93 @@ class Output
     }
 
     /**
+     * Compile indentation
+     *
+     * @param string $indent
+     */
+    public function compileIndent($indent)
+    {
+        $nbIndent = substr_count($indent, '    ');
+
+        if ($nbIndent > $this->currentTemplateIndent) {
+            for ($i = 0; $i < ($nbIndent - $this->currentTemplateIndent); $i++) {
+                $this->addToCompiledTemplate('$this->inc();');
+            }
+        } elseif ($nbIndent < $this->currentTemplateIndent) {
+            for ($i = 0; $i < ($this->currentTemplateIndent - $nbIndent); $i++) {
+                $this->addToCompiledTemplate('$this->dec();');
+            }
+        }
+
+        $this->currentTemplateIndent = $nbIndent;
+    }
+
+    /**
+     * Compile given line
+     *
+     * @param string  $line
+     */
+    public function compileLine($line)
+    {
+        $trimLine = trim($line);
+
+        if ($trimLine === '{{}}') {
+            return;
+        } else {
+            if (preg_match('/^([ ]*)([^ ].*)$/U', $line, $matches)) {
+                $this->compileIndent($matches[1]);
+
+                $trimLine = $matches[2];
+            }
+
+            if (preg_match('/^{%(.*)%}$/U', $trimLine, $matches)) {
+                $code = trim($matches[1]);
+
+                if ($code === 'end') {
+                    $code = '}';
+                } else {
+                    $code .= ' {';
+                }
+
+                $this->addToCompiledTemplate($code);
+            } else {
+                $this->processLine($trimLine);
+
+                if ($this->addLnAfterLine) {
+                    $this->addToCompiledTemplate('$this->addLn();');
+                }
+            }
+        }
+    }
+
+    /**
+     * Compile load template
+     *
+     * @return Output
+     */
+    public function compileCurrentTemplate()
+    {
+        if (self::$templates[$this->currentTemplate]['compiled'] === null) {
+            self::$templates[$this->currentTemplate]['compiled'] = '';
+
+            $this->currentTemplateIndent = 0;
+
+            foreach (self::$templates[$this->currentTemplate]['raw'] as $line) {
+                $this->compileLine($line);
+            }
+            $this->compileIndent('');
+
+            self::$templates[$this->currentTemplate]['compiled'] = str_replace(
+                'FORMAT_SHORT',
+                '\Marmotz\Dumper\Dump::FORMAT_SHORT',
+                self::$templates[$this->currentTemplate]['compiled']
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Decrements indentation
      *
      * @return Output
@@ -112,6 +207,22 @@ class Output
         $this->getDumper()->dump($variable, $this, $format);
 
         $this->setCurrentPosition(null);
+
+        return $this;
+    }
+
+    /**
+     * execute current template
+     *
+     * @param array $data
+     *
+     * @return Output
+     */
+    public function executeCurrentTemplate(array $data)
+    {
+        extract($data);
+
+        eval(self::$templates[$this->currentTemplate]['compiled']);
 
         return $this;
     }
@@ -221,6 +332,92 @@ class Output
     public function inc()
     {
         return $this->setLevel($this->getLevel() + 1);
+    }
+
+    /**
+     * Load a template
+     *
+     * @param string $template
+     *
+     * @return Output
+     */
+    public function loadTemplate($template)
+    {
+        $this->currentTemplate = $template;
+
+        if (!isset(self::$templates[$this->currentTemplate])) {
+            self::$templates[$this->currentTemplate] = array(
+                'raw'      => file(__DIR__ . '/../../../resources/templates/' . $template),
+                'compiled' => null,
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add code to current compiled template
+     *
+     * @param string $code
+     */
+    public function addToCompiledTemplate($code)
+    {
+        self::$templates[$this->currentTemplate]['compiled'] .= $code . PHP_EOL;
+    }
+
+    /**
+     * Process given line (without indentation)
+     *
+     * @param string $line
+     */
+    public function processLine($line)
+    {
+        $this->addLnAfterLine = true;
+
+        if (preg_match('/^(.*){{{(.*)}}}(.*)$/U', $line, $matches)) {
+            if ($matches[1] !== '') {
+                $this->processLine($matches[1]);
+            }
+
+            $this->addToCompiledTemplate('$this->dump(' . $matches[2] . ');');
+
+            if ($matches[3] !== '') {
+                $this->processLine($matches[3]);
+            }
+
+            $this->addLnAfterLine = false;
+        } elseif (preg_match('/^(.*){{(.*)}}(.*)$/U', $line, $matches)) {
+            if ($matches[1] !== '') {
+                $this->processLine($matches[1]);
+            }
+
+            $this->addToCompiledTemplate('$this->add(' . $matches[2] . ');');
+
+            if ($matches[3] !== '') {
+                $this->processLine($matches[3]);
+            }
+        } else {
+            $this->addToCompiledTemplate('$this->add("' . addslashes($line) . '");');
+        }
+
+        if (preg_match('/^(.*){{}}$/U', $line)) {
+            $this->addLnAfterLine = false;
+        }
+    }
+
+    /**
+     * Render a template
+     *
+     * @param string $template
+     * @param array  $data
+     */
+    public function render($template, array $data = array())
+    {
+        $this
+            ->loadTemplate($template)
+            ->compileCurrentTemplate()
+            ->executeCurrentTemplate($data)
+        ;
     }
 
     /**

@@ -1,0 +1,52 @@
+object {{ $object->getClass()->getName() }}
+    {% foreach ($object->getParents() as $parent) %}
+    extends {{ $parent->isAbstract() ? 'abstract ' : '' }}{{ $parent->getName() }}
+    {% end %}
+{{}}
+    {% foreach ($object->getInterfaces() as $interface) %}
+    implements {{ $interface->getName() }}
+    {% end %}
+{{}}
+    {% foreach ($object->getTraits() as $trait) %}
+    use trait {{ $trait->getName() }}
+    {% end %}
+{{}}
+    {% if ($object->hasConstants()) %}
+    Constants :
+        {% foreach ($object->getConstants() as $name => $value) %}
+        {{ str_pad($name, $object->getMaxLengthConstantNames()) }}: {{{ $value }}}
+        {% end %}
+    {% end %}
+{{}}
+    {% if ($object->hasProperties()) %}
+    Properties :
+        {% foreach ($object->getProperties() as $property) %}
+        {{ str_pad($property['visibility'] . ($property['property']->isStatic() ? ' static' : ''), $object->getMaxLengthPropertyVisibilities()) }} {{}}
+        ${{ $property['property']->getName() }}
+        {% if (isset($property['defaultValue'])) %}
+            Default : {{{ $property['defaultValue'] }}}
+        {% end %}
+            Current : {{{ $property['value'] }}}
+        {% end %}
+    {% end %}
+{{}}
+    {% if ($object->hasMethods()) %}
+    Methods :
+        {% foreach ($object->getMethods() as $method) %}
+        {{ str_pad($method['visibility'] . ($method['method']->isStatic() ? ' static' : ''), $object->getMaxLengthMethodVisibilities()) }} {{}}
+        {{ $method['method']->getName() }}({{}}
+        {% foreach ($method['arguments'] as $key => $argument) %}
+        {% if ($argument['type']) %}
+        {{ $argument['type'] }} {{}}
+        {% end %}
+        {{ $argument['reference'] }}{{ $argument['name'] }}{{}}
+        {% if (array_key_exists('default', $argument)) %}
+        {{ ' = ' }}{{{ $argument['default'], FORMAT_SHORT }}}{{}}
+        {% end %}
+        {% if ($key != count($method['arguments']) - 1) %}
+        , {{}}
+        {% end %}
+        {% end %}
+        )
+        {% end %}
+    {% end %}

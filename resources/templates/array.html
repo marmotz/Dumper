@@ -1,0 +1,21 @@
+<table class="array">
+    <thead>
+        <tr>
+            <th colspan="2">array({{ $array->size() }})</th>
+        </tr>
+    </thead>
+    {% if ($array->size()) %}
+    <tbody>
+        {% foreach ($array as $key => $value) %}
+        <tr>
+            <th>
+                {{ $key }}
+            </th>
+            <td>
+                {{{ $value }}}
+            </td>
+        </tr>
+        {% end %}
+    </tbody>
+    {% end %}
+</table>
