@@ -1,0 +1,7 @@
+object SampleClass3
+| Properties :
+|   public $object
+|     Current : object SampleClass4
+|               | Properties :
+|               |   public $object
+|               |     Current : *OBJECT ALREADY DUMPED*

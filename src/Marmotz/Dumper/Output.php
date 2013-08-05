@@ -98,6 +98,73 @@ class Output
     }
 
     /**
+     * Add code to current compiled template
+     *
+     * @param string $code
+     *
+     * @return Output
+     */
+    public function addToCompiledTemplate($code)
+    {
+        self::$templates[$this->currentTemplate]['compiled'] .= $code . PHP_EOL;
+
+        return $this;
+    }
+
+    /**
+     * Set code to current compiled template
+     *
+     * @param string $code
+     *
+     * @return Output
+     */
+    public function setCompiledTemplate($code)
+    {
+        self::$templates[$this->currentTemplate]['compiled'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code from current compiled template
+     *
+     * @return string
+     */
+    public function getCompiledTemplate()
+    {
+        return self::$templates[$this->currentTemplate]['compiled'];
+    }
+
+    /**
+     * Compile load template
+     *
+     * @return Output
+     */
+    public function compileCurrentTemplate()
+    {
+        if (self::$templates[$this->currentTemplate]['compiled'] === null) {
+            self::$templates[$this->currentTemplate]['compiled'] = '';
+
+            $this->currentTemplateIndent = 0;
+
+            foreach (self::$templates[$this->currentTemplate]['raw'] as $line) {
+                $this->compileLine($line);
+            }
+            $this->compileIndent('');
+
+            $this->setCompiledTemplate(
+                str_replace(
+                    'FORMAT_SHORT',
+                    '\Marmotz\Dumper\Dump::FORMAT_SHORT',
+                    $this->getCompiledTemplate()
+                )
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Compile indentation
      *
      * @param string $indent
@@ -148,7 +215,7 @@ class Output
 
                 $this->addToCompiledTemplate($code);
             } else {
-                $this->processLine($trimLine);
+                $this->compileText($trimLine);
 
                 if ($this->addLnAfterLine) {
                     $this->addToCompiledTemplate('$this->addLn();');
@@ -158,30 +225,43 @@ class Output
     }
 
     /**
-     * Compile load template
+     * Compile given text
      *
-     * @return Output
+     * @param string $text
      */
-    public function compileCurrentTemplate()
+    public function compileText($text)
     {
-        if (self::$templates[$this->currentTemplate]['compiled'] === null) {
-            self::$templates[$this->currentTemplate]['compiled'] = '';
+        $this->addLnAfterLine = true;
 
-            $this->currentTemplateIndent = 0;
-
-            foreach (self::$templates[$this->currentTemplate]['raw'] as $line) {
-                $this->compileLine($line);
+        if (preg_match('/^(.*){{{(.*)}}}(.*)$/U', $text, $matches)) {
+            if ($matches[1] !== '') {
+                $this->compileText($matches[1]);
             }
-            $this->compileIndent('');
 
-            self::$templates[$this->currentTemplate]['compiled'] = str_replace(
-                'FORMAT_SHORT',
-                '\Marmotz\Dumper\Dump::FORMAT_SHORT',
-                self::$templates[$this->currentTemplate]['compiled']
-            );
+            $this->addToCompiledTemplate('$this->dump(' . $matches[2] . ');');
+
+            if ($matches[3] !== '') {
+                $this->compileText($matches[3]);
+            }
+
+            $this->addLnAfterLine = false;
+        } elseif (preg_match('/^(.*){{(.*)}}(.*)$/U', $text, $matches)) {
+            if ($matches[1] !== '') {
+                $this->compileText($matches[1]);
+            }
+
+            $this->addToCompiledTemplate('$this->add(' . $matches[2] . ');');
+
+            if ($matches[3] !== '') {
+                $this->compileText($matches[3]);
+            }
+        } else {
+            $this->addToCompiledTemplate('$this->add("' . str_replace('%', '%%', addslashes($text)) . '");');
         }
 
-        return $this;
+        if (preg_match('/^(.*){{}}$/U', $text)) {
+            $this->addLnAfterLine = false;
+        }
     }
 
     /**
@@ -223,6 +303,10 @@ class Output
         extract($data);
 
         eval(self::$templates[$this->currentTemplate]['compiled']);
+
+        if ($this->getCurrentPosition() !== null) {
+            $this->addLn();
+        }
 
         return $this;
     }
@@ -353,56 +437,6 @@ class Output
         }
 
         return $this;
-    }
-
-    /**
-     * Add code to current compiled template
-     *
-     * @param string $code
-     */
-    public function addToCompiledTemplate($code)
-    {
-        self::$templates[$this->currentTemplate]['compiled'] .= $code . PHP_EOL;
-    }
-
-    /**
-     * Process given line (without indentation)
-     *
-     * @param string $line
-     */
-    public function processLine($line)
-    {
-        $this->addLnAfterLine = true;
-
-        if (preg_match('/^(.*){{{(.*)}}}(.*)$/U', $line, $matches)) {
-            if ($matches[1] !== '') {
-                $this->processLine($matches[1]);
-            }
-
-            $this->addToCompiledTemplate('$this->dump(' . $matches[2] . ');');
-
-            if ($matches[3] !== '') {
-                $this->processLine($matches[3]);
-            }
-
-            $this->addLnAfterLine = false;
-        } elseif (preg_match('/^(.*){{(.*)}}(.*)$/U', $line, $matches)) {
-            if ($matches[1] !== '') {
-                $this->processLine($matches[1]);
-            }
-
-            $this->addToCompiledTemplate('$this->add(' . $matches[2] . ');');
-
-            if ($matches[3] !== '') {
-                $this->processLine($matches[3]);
-            }
-        } else {
-            $this->addToCompiledTemplate('$this->add("' . addslashes($line) . '");');
-        }
-
-        if (preg_match('/^(.*){{}}$/U', $line)) {
-            $this->addLnAfterLine = false;
-        }
     }
 
     /**

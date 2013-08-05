@@ -1,0 +1,10 @@
+array(3)
+| 0: integer(1)
+| 1: integer(2)
+| 2: array(3)
+|    | 0: integer(1)
+|    | 1: integer(2)
+|    | 2: array(3)
+|    |    | 0: integer(1)
+|    |    | 1: integer(2)
+|    |    | 2: array *MAX LEVEL OF RECURSION*

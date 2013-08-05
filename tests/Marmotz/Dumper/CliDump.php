@@ -18,8 +18,8 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo(
-                        'array(0)' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/array.empty.cli'
                     )
                 ->output(
                     function() use($dump) {
@@ -27,9 +27,8 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo(
-                        'array(1)' . PHP_EOL .
-                        '| 0: integer(1)' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/array.1.cli'
                     )
                 ->output(
                     function() use($dump) {
@@ -37,10 +36,8 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo(
-                        'array(2)' . PHP_EOL .
-                        '|     0: integer(1)' . PHP_EOL .
-                        '| "key": integer(42)' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/array.1.key_42.cli'
                     )
                 ->output(
                     function() use($dump) {
@@ -48,27 +45,8 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo(
-                        'array(3)' . PHP_EOL .
-                        '|     0: integer(1)' . PHP_EOL .
-                        '| "key": integer(42)' . PHP_EOL .
-                        '|     1: array(1)' . PHP_EOL .
-                        '|        | 0: string(4) "dump"' . PHP_EOL
-                    )
-                ->output(
-                    function() use($dump) {
-                        $variable = array(1, 'key' => 42, array('dump', array('deep')));
-                        $dump->dump($variable);
-                    }
-                )
-                    ->isEqualTo(
-                        'array(3)' . PHP_EOL .
-                        '|     0: integer(1)' . PHP_EOL .
-                        '| "key": integer(42)' . PHP_EOL .
-                        '|     1: array(2)' . PHP_EOL .
-                        '|        | 0: string(4) "dump"' . PHP_EOL .
-                        '|        | 1: array(1)' . PHP_EOL .
-                        '|        |    | 0: string(4) "deep"' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/array.1.key_42.array.dump.cli'
                     )
 
             ->if(TestedClass::setMaxLevelOfRecursion(3))
@@ -80,17 +58,8 @@ class CliDump extends atoum
                         $dump->dump($array);
                     }
                 )
-                    ->isEqualTo(
-                        'array(3)' . PHP_EOL .
-                        '| 0: integer(1)' . PHP_EOL .
-                        '| 1: integer(2)' . PHP_EOL .
-                        '| 2: array(3)' . PHP_EOL .
-                        '|    | 0: integer(1)' . PHP_EOL .
-                        '|    | 1: integer(2)' . PHP_EOL .
-                        '|    | 2: array(3)' . PHP_EOL .
-                        '|    |    | 0: integer(1)' . PHP_EOL .
-                        '|    |    | 1: integer(2)' . PHP_EOL .
-                        '|    |    | 2: array *MAX LEVEL OF RECURSION*' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/array.recursive.cli'
                     )
         ;
     }
@@ -182,98 +151,56 @@ class CliDump extends atoum
         ;
     }
 
-    /**
-     * @php >= 5.4
-     */
     public function testDumpObject()
     {
-        require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
-        require_once __DIR__ . '/../../../resources/classes/SampleClass3.php';
-        require_once __DIR__ . '/../../../resources/classes/SampleClass4.php';
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            require_once __DIR__ . '/../../../resources/classes/SampleClass1.php';
+
+            $this
+                ->if($dump = new TestedClass())
+                    ->output(
+                        function() use($dump) {
+                            $dump->dump(new \SampleClass1);
+                        }
+                    )
+                        ->isEqualToContentsOfFile(
+                            __DIR__ . '/../../../resources/dumps/cli/object.sampleclass1.cli'
+                        )
+            ;
+        }
+
+        require_once __DIR__ . '/../../../resources/classes/SampleClass2.php';
 
         $this
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $dump->dump(new \SampleClass1);
+                        $dump->dump(new \SampleClass2);
                     }
                 )
-                    ->isEqualTo(
-                        'object SampleClass1' . PHP_EOL .
-                        '| extends SampleClass2' . PHP_EOL .
-                        '| extends abstract SampleAbstract1' . PHP_EOL .
-                        '| implements SampleInterface1' . PHP_EOL .
-                        '| use trait SampleTrait1' . PHP_EOL .
-                        '| Constants :' . PHP_EOL .
-                        '|   CONST1   : string(6) "const1"' . PHP_EOL .
-                        '|   CONSTANT2: string(9) "constant2"' . PHP_EOL .
-                        '| Properties :' . PHP_EOL .
-                        '|   private          $privatePropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   protected        $protectedPropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   public           $publicPropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   private          $privatePropertyWithDefaultValue' . PHP_EOL .
-                        '|     Default : string(7) "default"' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   protected        $protectedPropertyWithDefaultValue' . PHP_EOL .
-                        '|     Default : string(7) "default"' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   public           $publicPropertyWithDefaultValue' . PHP_EOL .
-                        '|     Default : string(7) "default"' . PHP_EOL .
-                        '|     Current : object SampleClass3' . PHP_EOL .
-                        '|               | Properties :' . PHP_EOL .
-                        '|               |   public $object' . PHP_EOL .
-                        '|               |     Current : array(10)' . PHP_EOL .
-                        '|               |               | 0: integer(1)' . PHP_EOL .
-                        '|               |               | 1: integer(2)' . PHP_EOL .
-                        '|               |               | 2: integer(3)' . PHP_EOL .
-                        '|               |               | 3: integer(4)' . PHP_EOL .
-                        '|               |               | 4: integer(5)' . PHP_EOL .
-                        '|               |               | 5: integer(6)' . PHP_EOL .
-                        '|               |               | 6: integer(7)' . PHP_EOL .
-                        '|               |               | 7: integer(8)' . PHP_EOL .
-                        '|               |               | 8: integer(9)' . PHP_EOL .
-                        '|               |               | 9: integer(10)' . PHP_EOL .
-                        '|   protected        $traitProperty' . PHP_EOL .
-                        '|     Current : NULL' . PHP_EOL .
-                        '|   protected static $staticProtectedPropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   public static    $staticPublicPropertyWithoutDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   protected static $staticProtectedPropertyWithDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '|   public static    $staticPublicPropertyWithDefaultValue' . PHP_EOL .
-                        '|     Current : string(9) "construct"' . PHP_EOL .
-                        '| Methods :' . PHP_EOL .
-                        '|   public    __construct()' . PHP_EOL .
-                        '|   private   privateMethod($arg1, array &$arg2)' . PHP_EOL .
-                        '|   protected protectedMethod($arg1, stdClass $arg2, $arg3 = NULL, $arg4 = 42, $arg5 = "foobar")' . PHP_EOL .
-                        '|   public    publicMethod()' . PHP_EOL .
-                        '|   public    traitMethod()' . PHP_EOL
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/object.sampleclass2.cli'
                     )
+        ;
 
-                ->output(
-                    function() use($dump) {
-                        $object1 = new \SampleClass3;
-                        $object2 = new \SampleClass4;
+        require_once __DIR__ . '/../../../resources/classes/SampleClass3.php';
+        require_once __DIR__ . '/../../../resources/classes/SampleClass4.php';
 
-                        $object1->object = $object2;
-                        $object2->object = $object1;
+        $this
+            ->output(
+                function() use($dump) {
+                    $object1 = new \SampleClass3;
+                    $object2 = new \SampleClass4;
 
-                        $dump->dump($object1);
-                    }
+                    $object1->object = $object2;
+                    $object2->object = $object1;
+
+                    $dump->dump($object1);
+                }
+            )
+                ->isEqualToContentsOfFile(
+                    __DIR__ . '/../../../resources/dumps/cli/object.recursive.cli'
                 )
-                    ->isEqualTo(
-                        'object SampleClass3' . PHP_EOL .
-                        '| Properties :' . PHP_EOL .
-                        '|   public $object' . PHP_EOL .
-                        '|     Current : object SampleClass4' . PHP_EOL .
-                        '|               | Properties :' . PHP_EOL .
-                        '|               |   public $object' . PHP_EOL .
-                        '|               |     Current : *OBJECT ALREADY DUMPED*' . PHP_EOL
-                    )
         ;
     }
 

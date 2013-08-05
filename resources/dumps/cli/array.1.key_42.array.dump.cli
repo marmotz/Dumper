@@ -1,0 +1,5 @@
+array(3)
+|     0: integer(1)
+| "key": integer(42)
+|     1: array(1)
+|        | 0: string(4) "dump"
