@@ -70,13 +70,13 @@ class CliDump extends atoum
             ->if($dump = new TestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpBoolean(true, $dump->createOutput());
+                        $dump->dump(true);
                     }
                 )
                     ->isEqualTo('boolean(true)' . PHP_EOL)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpBoolean(false, $dump->createOutput());
+                        $dump->dump(false);
                     }
                 )
                     ->isEqualTo('boolean(false)' . PHP_EOL)
@@ -255,6 +255,23 @@ class CliDump extends atoum
                     }
                 )
                     ->isEqualTo('string(15) "àâäéèêëîïôöùüŷÿ"' . PHP_EOL)
+        ;
+    }
+
+    /**
+     * @php >= 5.4
+     */
+    public function testDumpUnknown()
+    {
+        $this
+            ->if($dump = new TestedClass)
+            ->and($this->function->gettype = $type = uniqid())
+                ->output(
+                    function() use($dump) {
+                        $dump->dump('unknown variable');
+                    }
+                )
+                    ->isEqualTo('unknown type "' . $type . '" : string(16) "unknown variable"' . PHP_EOL)
         ;
     }
 }

@@ -41,12 +41,10 @@ class CliDump extends Dump
      */
     public function doDumpBoolean($boolean, Output $output)
     {
-        $output
-            ->addLn(
-                'boolean(%s)',
-                $boolean
-            )
-        ;
+        $output->addLn(
+            'boolean(%s)',
+            $boolean
+        );
     }
 
     /**
@@ -76,13 +74,11 @@ class CliDump extends Dump
      */
     public function doDumpResource($type, $resource, Output $output)
     {
-        $output
-            ->addLn(
-                'resource %s "%s"',
-                $type,
-                $resource
-            )
-        ;
+        $output->addLn(
+            'resource %s "%s"',
+            $type,
+            $resource
+        );
     }
 
     /**
@@ -96,20 +92,16 @@ class CliDump extends Dump
     public function doDumpString($string, $length, Output $output, $format)
     {
         if ($format === self::FORMAT_COMPLETE) {
-            $output
-                ->addLn(
-                    'string(%d) "%s"',
-                    $length,
-                    $string
-                )
-            ;
+            $output->addLn(
+                'string(%d) "%s"',
+                $length,
+                $string
+            );
         } else {
-            $output
-                ->add(
-                    '"%s"',
-                    $string
-                )
-            ;
+            $output->add(
+                '"%s"',
+                $string
+            );
         }
     }
 
@@ -122,29 +114,11 @@ class CliDump extends Dump
      */
     public function doDumpUnknown($type, $dump, Output $output)
     {
-        $output
-            ->addLn(
-                'unknown type "%s" : %s',
-                $type,
-                trim($dump)
-            )
-        ;
-    }
-
-    /**
-     * Dump boolean
-     *
-     * @param boolean $boolean
-     * @param Output  $output
-     */
-    public function dumpBoolean($boolean, Output $output)
-    {
-        $output
-            ->addLn(
-                'boolean(%s)',
-                $boolean ? 'true' : 'false'
-            )
-        ;
+        $output->addLn(
+            'unknown type "%s" : %s',
+            $type,
+            trim($dump)
+        );
     }
 
     /**
@@ -155,12 +129,10 @@ class CliDump extends Dump
      */
     public function dumpFloat($float, Output $output)
     {
-        $output
-            ->addLn(
-                'float(%s)',
-                $float
-            )
-        ;
+        $output->addLn(
+            'float(%s)',
+            $float
+        );
     }
 
     /**
@@ -173,16 +145,12 @@ class CliDump extends Dump
     public function dumpInteger($integer, Output $output, $format)
     {
         if ($format === self::FORMAT_COMPLETE) {
-            $output
-                ->addLn(
-                    'integer(%d)',
-                    $integer
-                )
-            ;
+            $output->addLn(
+                'integer(%d)',
+                $integer
+            );
         } else {
-            $output
-                ->add((string) $integer)
-            ;
+            $output->add((string) $integer);
         }
     }
 

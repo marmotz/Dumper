@@ -18,24 +18,6 @@ class HtmlDump extends Dump
     static protected $cssWritten = false;
 
     /**
-     * Do dump unknown variable
-     *
-     * @param string $type
-     * @param string $dump
-     * @param Output $output
-     */
-    public function doDumpUnknown($type, $dump, Output $output)
-    {
-        $output
-            ->addLn(
-                '<span class="unknown">unknown type "%s" : %s</span>',
-                $type,
-                trim($dump)
-            )
-        ;
-    }
-
-    /**
      * Method called just after the whole dump process
      *
      * @param Output $output
@@ -46,12 +28,6 @@ class HtmlDump extends Dump
             ->dec()
             ->addLn('</div>')
         ;
-
-        if (!$this->isCssWasWritten()) {
-            $output->render('css.html');
-
-            $this->setCssWritten(true);
-        }
     }
 
     /**
@@ -61,6 +37,8 @@ class HtmlDump extends Dump
      */
     public function beforeDump(Output $output)
     {
+        $this->writeCss($output);
+
         $output
             ->addLn('<div class="dumper">')
             ->inc()
@@ -83,59 +61,6 @@ class HtmlDump extends Dump
                 'array' => $array,
             )
         );
-
-        // $output
-        //     ->addLn('<table class="array">')
-        //     ->inc()
-        //         ->addLn('<thead>')
-        //         ->inc()
-        //             ->addLn('<tr>')
-        //             ->inc()
-        //                 ->addLn(
-        //                     '<th colspan="2">array(%d)</th>',
-        //                     $array->size()
-        //                 )
-        //             ->dec()
-        //             ->addLn('</tr>')
-        //         ->dec()
-        //         ->addLn('</thead>')
-        // ;
-
-        // if ($array->size()) {
-        //     $output
-        //         ->addLn('<tbody>')
-        //         ->inc()
-        //     ;
-
-        //     foreach ($array as $key => $value) {
-        //         $output
-        //             ->addLn('<tr>')
-        //             ->inc()
-        //                 ->addLn('<th>')
-        //                 ->inc()
-        //                     ->addLn($key)
-        //                 ->dec()
-        //                 ->addLn('</th>')
-        //                 ->addLn('<td>')
-        //                 ->inc()
-        //                     ->dump($value)
-        //                 ->dec()
-        //                 ->addLn('</td>')
-        //             ->dec()
-        //             ->addLn('</tr>')
-        //         ;
-        //     }
-
-        //     $output
-        //         ->dec()
-        //         ->addLn('</tbody>')
-        //     ;
-        // }
-
-        // $output
-        //     ->dec()
-        //     ->addLn('</table>')
-        // ;
     }
 
     /**
@@ -146,12 +71,10 @@ class HtmlDump extends Dump
      */
     public function doDumpBoolean($boolean, Output $output)
     {
-        $output
-            ->addLn(
-                'boolean(%s)',
-                $boolean
-            )
-        ;
+        $output->addLn(
+            'boolean(%s)',
+            $boolean
+        );
     }
 
     /**
@@ -514,6 +437,24 @@ class HtmlDump extends Dump
     }
 
     /**
+     * Do dump unknown variable
+     *
+     * @param string $type
+     * @param string $dump
+     * @param Output $output
+     */
+    public function doDumpUnknown($type, $dump, Output $output)
+    {
+        $output
+            ->addLn(
+                '<span class="unknown">unknown type "%s" : %s</span>',
+                $type,
+                trim($dump)
+            )
+        ;
+    }
+
+    /**
      * Dump float
      *
      * @param float  $float
@@ -521,12 +462,10 @@ class HtmlDump extends Dump
      */
     public function dumpFloat($float, Output $output)
     {
-        $output
-            ->addLn(
-                'float(%s)',
-                $float
-            )
-        ;
+        $output->addLn(
+            'float(%s)',
+            $float
+        );
     }
 
     /**
@@ -539,16 +478,12 @@ class HtmlDump extends Dump
     public function dumpInteger($integer, Output $output, $format)
     {
         if ($format === self::FORMAT_COMPLETE) {
-            $output
-                ->addLn(
-                    'integer(%d)',
-                    $integer
-                )
-            ;
+            $output->addLn(
+                'integer(%d)',
+                $integer
+            );
         } else {
-            $output
-                ->add((string) $integer)
-            ;
+            $output->add((string) $integer);
         }
     }
 
@@ -601,5 +536,19 @@ class HtmlDump extends Dump
         static::$cssWritten = $bool;
 
         return $this;
+    }
+
+    /**
+     * Write css if not already written
+     *
+     * @param Output $output
+     */
+    public function writeCss(Output $output)
+    {
+        if (!$this->isCssWasWritten()) {
+            $output->render('css.html');
+
+            $this->setCssWritten(true);
+        }
     }
 }
