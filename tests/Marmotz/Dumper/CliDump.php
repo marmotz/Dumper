@@ -73,13 +73,17 @@ class CliDump extends atoum
                         $dump->dump(true);
                     }
                 )
-                    ->isEqualTo('boolean(true)' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/boolean.true.cli'
+                    )
                 ->output(
                     function() use($dump) {
                         $dump->dump(false);
                     }
                 )
-                    ->isEqualTo('boolean(false)' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/boolean.false.cli'
+                    )
         ;
     }
 
@@ -93,7 +97,9 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo('float(1.2)' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/float.1.2.cli'
+                    )
         ;
     }
 
@@ -107,7 +113,9 @@ class CliDump extends atoum
                         $dump->dump($variable);
                     }
                 )
-                    ->isEqualTo('float(1.2)' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/float.1.2.cli'
+                    )
         ;
     }
 
@@ -121,14 +129,18 @@ class CliDump extends atoum
                         $dump->dump($variable, null, TestedClass::FORMAT_SHORT);
                     }
                 )
-                    ->isEqualTo('42')
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/integer.42.short.cli'
+                    )
                 ->output(
                     function() use($dump) {
                         $variable = 42;
                         $dump->dump($variable, null, TestedClass::FORMAT_COMPLETE);
                     }
                 )
-                    ->isEqualTo('integer(42)' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/integer.42.complete.cli'
+                    )
         ;
     }
 
@@ -138,16 +150,20 @@ class CliDump extends atoum
             ->if($dump = new TestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_SHORT);
+                        $dump->dump(null, null, TestedClass::FORMAT_SHORT);
                     }
                 )
-                    ->isEqualTo('NULL')
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/null.short.cli'
+                    )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpNull($dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                        $dump->dump(null, null, TestedClass::FORMAT_COMPLETE);
                     }
                 )
-                    ->isEqualTo('NULL' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/null.complete.cli'
+                    )
         ;
     }
 
@@ -210,10 +226,10 @@ class CliDump extends atoum
             ->if($dump = new TestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpResource(fopen(__FILE__, 'r'), $dump->createOutput());
+                        $dump->dump(fopen(__FILE__, 'r'));
                     }
                 )
-                    ->match('/^resource stream "Resource id #[0-9]+"$/')
+                    ->match('|^' . file_get_contents(__DIR__ . '/../../../resources/dumps/cli/resource.file.cli') . '$|')
         ;
     }
 
@@ -223,16 +239,20 @@ class CliDump extends atoum
             ->if($dump = new TestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_SHORT);
+                        $dump->dump('azerty', null, TestedClass::FORMAT_SHORT);
                     }
                 )
-                    ->isEqualTo('"azerty"')
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/string.azerty.short.cli'
+                    )
                 ->output(
                     function() use($dump) {
-                        $dump->dumpString('azerty', $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                        $dump->dump('azerty', null, TestedClass::FORMAT_COMPLETE);
                     }
                 )
-                    ->isEqualTo('string(6) "azerty"' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/string.azerty.complete.cli'
+                    )
         ;
     }
 
@@ -245,16 +265,20 @@ class CliDump extends atoum
             ->and($variable = mb_convert_encoding($variable, 'UTF-8', mb_detect_encoding($variable)))
                 ->output(
                     function() use($dump, $variable) {
-                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_SHORT);
+                        $dump->dump($variable, null, TestedClass::FORMAT_SHORT);
                     }
                 )
-                    ->isEqualTo('"àâäéèêëîïôöùüŷÿ"')
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/stringutf8.aaaeeeeiioouuyy.short.cli'
+                    )
                 ->output(
                     function() use($dump, $variable) {
-                        $dump->dumpString($variable, $dump->createOutput(), TestedClass::FORMAT_COMPLETE);
+                        $dump->dump($variable, null, TestedClass::FORMAT_COMPLETE);
                     }
                 )
-                    ->isEqualTo('string(15) "àâäéèêëîïôöùüŷÿ"' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/stringutf8.aaaeeeeiioouuyy.complete.cli'
+                    )
         ;
     }
 
@@ -265,13 +289,15 @@ class CliDump extends atoum
     {
         $this
             ->if($dump = new TestedClass)
-            ->and($this->function->gettype = $type = uniqid())
+            ->and($this->function->gettype = 'unknown')
                 ->output(
                     function() use($dump) {
                         $dump->dump('unknown variable');
                     }
                 )
-                    ->isEqualTo('unknown type "' . $type . '" : string(16) "unknown variable"' . PHP_EOL)
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/cli/unknown.cli'
+                    )
         ;
     }
 }
