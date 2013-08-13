@@ -7,44 +7,37 @@ object SampleClass1
 |   CONST1   : string(6) "const1"
 |   CONSTANT2: string(9) "constant2"
 | Properties :
-|   private          $privatePropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   protected        $protectedPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   public           $publicPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
 |   private          $privatePropertyWithDefaultValue
 |     Default : string(7) "default"
 |     Current : string(9) "construct"
+|   private          $privatePropertyWithoutDefaultValue
+|     Current : string(9) "construct"
 |   protected        $protectedPropertyWithDefaultValue
 |     Default : string(7) "default"
+|     Current : string(9) "construct"
+|   protected        $protectedPropertyWithoutDefaultValue
 |     Current : string(9) "construct"
 |   public           $publicPropertyWithDefaultValue
 |     Default : string(7) "default"
 |     Current : object SampleClass3
 |               | Properties :
 |               |   public $object
-|               |     Current : array(10)
+|               |     Current : array(3)
 |               |               | 0: integer(1)
 |               |               | 1: integer(2)
 |               |               | 2: integer(3)
-|               |               | 3: integer(4)
-|               |               | 4: integer(5)
-|               |               | 5: integer(6)
-|               |               | 6: integer(7)
-|               |               | 7: integer(8)
-|               |               | 8: integer(9)
-|               |               | 9: integer(10)
-|   protected        $traitProperty
-|     Current : NULL
-|   protected static $staticProtectedPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   public static    $staticPublicPropertyWithoutDefaultValue
+|   public           $publicPropertyWithoutDefaultValue
 |     Current : string(9) "construct"
 |   protected static $staticProtectedPropertyWithDefaultValue
 |     Current : string(9) "construct"
+|   protected static $staticProtectedPropertyWithoutDefaultValue
+|     Current : string(9) "construct"
 |   public static    $staticPublicPropertyWithDefaultValue
 |     Current : string(9) "construct"
+|   public static    $staticPublicPropertyWithoutDefaultValue
+|     Current : string(9) "construct"
+|   protected        $traitProperty
+|     Current : NULL
 | Methods :
 |   public    __construct()
 |   private   privateMethod($arg1, array &$arg2)

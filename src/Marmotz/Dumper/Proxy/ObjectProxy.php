@@ -15,136 +15,46 @@ use Marmotz\Dumper\Dump;
  */
 class ObjectProxy
 {
+    protected $className;
+    protected $constants;
+    protected $interfaces;
     protected $maxLengthConstantNames;
     protected $maxLengthMethodVisibilities;
     protected $maxLengthPropertyVisibilities;
     protected $methods;
     protected $parents;
     protected $properties;
-    protected $reflectionObject;
+    protected $reflectionClass;
+    protected $traits;
 
     /**
      * Constructor
      *
      * @param object $object
-     * @param Dump   $dumper
      */
-    public function __construct($object, Dump $dumper)
+    public function __construct($object)
     {
-        $this->reflectionObject = new \ReflectionObject($object);
+        $this->reflectionClass = new \ReflectionObject($object);
 
-        // extends
-        $this->parents = array();
-
-        $parent = $this->getClass();
-
-        while ($parent = $parent->getParentClass()) {
-            $this->parents[] = $parent;
-        }
-
-        // properties
-        $this->properties = array();
-
-        $defaultPropertiesValue = $this->getClass()->getDefaultProperties();
-
-        foreach ($this->parents as $parent) {
-            $defaultPropertiesValue = array_merge(
-                $defaultPropertiesValue,
-                $parent->getDefaultProperties()
-            );
-        }
-
-        $arrayObject = (array) $object;
-
-        foreach (array_keys($arrayObject) as $propertyName) {
-            $propertyClass = $this->getClass()->getName();
-
-            if (strpos($propertyName, '*') === 1) {
-                $propertyName = substr($propertyName, 3);
-            } elseif (strpos($propertyName, $this->getClass()->getName()) === 1) {
-                $propertyName = substr($propertyName, strlen($this->getClass()->getName()) + 2);
-            } else {
-                foreach ($this->parents as $parent) {
-                    $parentName = $parent->getName();
-
-                    if (strpos($propertyName, $parentName) === 1) {
-                        $propertyName = substr($propertyName, strlen($parentName) + 2);
-                        $propertyClass = $parentName;
-                        break;
-                    }
-                }
-            }
-
-            try {
-                $property = new \ReflectionProperty($propertyClass, $propertyName);
-                $property->setAccessible(true);
-
-                $value = $property->getValue($object);
-
-                $this->properties[] = array(
-                    'property'     => $property,
-                    'isStatic'     => false,
-                    'visibility'   => $this->getVisibility($property),
-                    'defaultValue' => $defaultPropertiesValue[$propertyName],
-                    'value'        => $value,
-                );
-            } catch (\ReflectionException $e) {
-            }
-        }
-
-        foreach ($this->getClass()->getStaticproperties() as $propertyName => $value) {
-            $property = new \ReflectionProperty($this->getClass()->getName(), $propertyName);
-            $property->setAccessible(true);
-
-            $value = $property->getValue($object);
-
-            $this->properties[] = array(
-                'property'    => $property,
-                'isStatic'    => true,
-                'visibility'  => $this->getVisibility($property),
-                'value'       => $value,
-            );
-        }
-
-        foreach ($this->getClass()->getMethods() as $methodName => $method) {
-            $this->methods[] = array(
-                'method'     => $method,
-                'visibility' => $this->getVisibility($method),
-                'arguments'  => array_map(
-                    function($parameter) {
-                        $return = array(
-                            'name'      => '$' . $parameter->getName(),
-                            'reference' => $parameter->isPassedByReference() ? '&' : '',
-                            'type'      => $parameter->isArray() ? 'array' : (
-                                version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable() ? 'callable' : (
-                                    $parameter->getClass() ? $parameter->getClass()->getName() : ''
-                                )
-                            ),
-                        );
-
-                        if ($parameter->isDefaultValueAvailable()) {
-                            $return['default'] = version_compare(PHP_VERSION, '5.4.6', '>=') && $parameter->isDefaultValueConstant()
-                                ? $parameter->getDefaultValueConstantName()
-                                : $parameter->getDefaultValue()
-                            ;
-                        }
-
-                        return $return;
-                    },
-                    $method->getParameters()
-                )
-            );
-        }
+        $this
+            ->loadParents()
+            ->loadProperties($object)
+            ->loadMethods()
+        ;
     }
 
     /**
-     * Return ReflectionClass object
+     * Return class name of current object
      *
-     * @return \ReflectionClass
+     * @return string
      */
-    public function getClass()
+    public function getClassName()
     {
-        return $this->reflectionObject;
+        if ($this->className === null) {
+            $this->className = $this->getReflectionClass()->getName();
+        }
+
+        return $this->className;
     }
 
     /**
@@ -154,7 +64,11 @@ class ObjectProxy
      */
     public function getConstants()
     {
-        return $this->getClass()->getConstants();
+        if ($this->constants === null) {
+            $this->constants = $this->getReflectionClass()->getConstants();
+        }
+
+        return $this->constants;
     }
 
     /**
@@ -164,7 +78,11 @@ class ObjectProxy
      */
     public function getInterfaces()
     {
-        return array_values($this->getClass()->getInterfaces());
+        if ($this->interfaces === null) {
+            $this->interfaces = array_values($this->getReflectionClass()->getInterfaces());
+        }
+
+        return $this->interfaces;
     }
 
     /**
@@ -200,7 +118,7 @@ class ObjectProxy
                             return $method['visibility'];
                         }
                     },
-                    $this->methods
+                    $this->getMethods()
                 )
             );
         }
@@ -225,7 +143,7 @@ class ObjectProxy
                             return $property['visibility'];
                         }
                     },
-                    $this->properties
+                    $this->getProperties()
                 )
             );
         }
@@ -264,17 +182,31 @@ class ObjectProxy
     }
 
     /**
+     * Return ReflectionClass object
+     *
+     * @return \ReflectionClass
+     */
+    public function getReflectionClass()
+    {
+        return $this->reflectionClass;
+    }
+
+    /**
      * Return traits
      *
      * @return \ReflectionClass[]
      */
     public function getTraits()
     {
-        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-            return array_values($this->getClass()->getTraits());
-        } else {
-            return array();
+        if ($this->traits === null) {
+            if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+                $this->traits = array_values($this->getReflectionClass()->getTraits());
+            } else {
+                $this->traits = array();
+            }
         }
+
+        return $this->traits;
     }
 
     /**
@@ -349,6 +281,158 @@ class ObjectProxy
     public function hasTraits()
     {
         return (boolean) count($this->getTraits());
+    }
+
+    /**
+     * Load methods of current object
+     *
+     * @return Objectproxy
+     */
+    public function loadMethods()
+    {
+        $this->methods = array();
+
+        foreach ($this->getReflectionClass()->getMethods() as $methodName => $method) {
+            $this->methods[] = array(
+                'method'     => $method,
+                'visibility' => $this->getVisibility($method),
+                'arguments'  => array_map(
+                    function($parameter) {
+                        $return = array(
+                            'name'      => '$' . $parameter->getName(),
+                            'reference' => $parameter->isPassedByReference() ? '&' : '',
+                            'type'      => $parameter->isArray() ? 'array' : (
+                                version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable() ? 'callable' : (
+                                    $parameter->getClass() ? $parameter->getClass()->getName() : ''
+                                )
+                            ),
+                        );
+
+                        if ($parameter->isDefaultValueAvailable()) {
+                            $return['default'] = version_compare(PHP_VERSION, '5.4.6', '>=') && $parameter->isDefaultValueConstant()
+                                ? $parameter->getDefaultValueConstantName()
+                                : $parameter->getDefaultValue()
+                            ;
+                        }
+
+                        return $return;
+                    },
+                    $method->getParameters()
+                )
+            );
+        }
+
+        // sort by name
+        usort(
+            $this->methods,
+            function($a, $b) {
+                return strcasecmp($a['method']->getName(), $b['method']->getName());
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * Load parent classes of current object
+     *
+     * @return ObjectProxy
+     */
+    public function loadParents()
+    {
+        $this->parents = array();
+
+        $parent = $this->getReflectionClass();
+
+        while ($parent = $parent->getParentClass()) {
+            $this->parents[] = $parent;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Load properties of current object
+     *
+     * @param object $object
+     *
+     * @return ObjectProxy
+     */
+    public function loadProperties($object)
+    {
+        // properties
+        $this->properties = array();
+
+        $defaultPropertiesValue = $this->getReflectionClass()->getDefaultProperties();
+
+        foreach ($this->parents as $parent) {
+            $defaultPropertiesValue = array_merge(
+                $defaultPropertiesValue,
+                $parent->getDefaultProperties()
+            );
+        }
+
+        $arrayObject = (array) $object;
+
+        foreach (array_keys($arrayObject) as $propertyName) {
+            $propertyClass = $this->getReflectionClass()->getName();
+
+            if (strpos($propertyName, '*') === 1) {
+                $propertyName = substr($propertyName, 3);
+            } elseif (strpos($propertyName, $this->getReflectionClass()->getName()) === 1) {
+                $propertyName = substr($propertyName, strlen($this->getReflectionClass()->getName()) + 2);
+            } else {
+                foreach ($this->parents as $parent) {
+                    $parentName = $parent->getName();
+
+                    if (strpos($propertyName, $parentName) === 1) {
+                        $propertyName = substr($propertyName, strlen($parentName) + 2);
+                        $propertyClass = $parentName;
+                        break;
+                    }
+                }
+            }
+
+            try {
+                $property = new \ReflectionProperty($propertyClass, $propertyName);
+                $property->setAccessible(true);
+
+                $value = $property->getValue($object);
+
+                $this->properties[] = array(
+                    'property'     => $property,
+                    'isStatic'     => false,
+                    'visibility'   => $this->getVisibility($property),
+                    'defaultValue' => $defaultPropertiesValue[$propertyName],
+                    'value'        => $value,
+                );
+            } catch (\ReflectionException $e) {
+            }
+        }
+
+        foreach ($this->getReflectionClass()->getStaticproperties() as $propertyName => $value) {
+            $property = new \ReflectionProperty($this->getReflectionClass()->getName(), $propertyName);
+            $property->setAccessible(true);
+
+            $value = $property->getValue($object);
+
+            $this->properties[] = array(
+                'property'    => $property,
+                'isStatic'    => true,
+                'visibility'  => $this->getVisibility($property),
+                'value'       => $value,
+            );
+        }
+
+        // sort by name
+        usort(
+            $this->properties,
+            function($a, $b) {
+                return strcasecmp($a['property']->getName(), $b['property']->getName());
+            }
+        );
+
+        return $this;
     }
 
     protected function calculateMaxLength(array $array)

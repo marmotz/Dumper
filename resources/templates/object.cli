@@ -1,4 +1,4 @@
-object {{ $object->getClass()->getName() }}
+object {{ $object->getClassName() }}
     {% foreach ($object->getParents() as $parent) %}
     extends {{ $parent->isAbstract() ? 'abstract ' : '' }}{{ $parent->getName() }}
     {% end %}

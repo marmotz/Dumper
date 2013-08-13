@@ -36,7 +36,7 @@ class SampleClass2 extends SampleAbstract1 implements SampleInterface1
         $this->privatePropertyWithDefaultValue   = 'construct';
         $this->protectedPropertyWithDefaultValue = 'construct';
         $this->publicPropertyWithDefaultValue    = new SampleClass3;
-        $this->publicPropertyWithDefaultValue->object = range(1, 10);
+        $this->publicPropertyWithDefaultValue->object = range(1, 3);
 
 
         self::$staticPrivatePropertyWithoutDefaultValue   = 'construct';
