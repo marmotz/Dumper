@@ -373,7 +373,7 @@ abstract class Dump
             $this->addObjectHash($hash);
 
             $this->doDumpObject(
-                new Proxy\ObjectProxy($object, $this),
+                new Proxy\ObjectProxy($object),
                 $output
             );
         }

@@ -87,6 +87,12 @@ class HtmlDump extends Dump
      */
     public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
+        // $output->render(
+        //     'object.html',
+        //     array(
+        //         'array' => $array,
+        //     )
+        // );
         $output
             ->addLn('<table class="object">')
             ->inc()
@@ -96,7 +102,7 @@ class HtmlDump extends Dump
                     ->inc()
                         ->addLn(
                             '<th>object %s</th>',
-                            $object->getClass()->getName()
+                            $object->getClassName()
                         )
                     ->dec()
                     ->addLn('</tr>')

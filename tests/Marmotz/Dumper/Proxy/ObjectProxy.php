@@ -18,7 +18,7 @@ class ObjectProxy extends atoum
 
         $this
             ->if($proxy = new TestedClass($object = new \SampleClass1, new mockDump))
-                ->object($class = $proxy->getClass())
+                ->object($class = $proxy->getReflectionClass())
                     ->isInstanceOf('ReflectionClass')
                 ->string($class->getName())
                     ->isIdenticalTo('SampleClass1')
