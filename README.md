@@ -81,11 +81,11 @@ Here is an example of cli output:
 array(5)
 |               0: integer(1)
 |               1: integer(2)
-|               2: resource stream "Resource id #11"
-| "51f68da2428f4": array(3)
+|               2: resource stream "Resource id #12"
+| "520d1805c42de": array(3)
 |                  | 0: integer(4)
 |                  | 1: array(2)
-|                  |    | "51f68da242953": integer(5)
+|                  |    | "520d1805c4317": integer(5)
 |                  |    |               0: string(6) "foobar"
 |                  | 2: integer(7)
 |               8: object stdClass
@@ -105,23 +105,23 @@ object DateTime
 |   W3C    : string(13) "Y-m-d\TH:i:sP"
 | Methods :
 |   public        __construct($time, $object)
+|   static public __set_state()
 |   public        __wakeup()
-|   public static __set_state()
-|   public static createFromFormat($format, $time, $object)
-|   public static getLastErrors()
-|   public        format($format)
-|   public        modify($modify)
 |   public        add($interval)
-|   public        sub($interval)
-|   public        getTimezone()
-|   public        setTimezone($timezone)
+|   static public createFromFormat($format, $time, $object)
+|   public        diff($object, $absolute)
+|   public        format($format)
+|   static public getLastErrors()
 |   public        getOffset()
-|   public        setTime($hour, $minute, $second)
+|   public        getTimestamp()
+|   public        getTimezone()
+|   public        modify($modify)
 |   public        setDate($year, $month, $day)
 |   public        setISODate($year, $week, $day)
+|   public        setTime($hour, $minute, $second)
 |   public        setTimestamp($unixtimestamp)
-|   public        getTimestamp()
-|   public        diff($object, $absolute)
+|   public        setTimezone($timezone)
+|   public        sub($interval)
 
 
 ```
