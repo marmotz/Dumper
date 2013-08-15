@@ -1,0 +1,138 @@
+<table class="object">
+    <thead>
+        <tr>
+            <th>object {{ $object->getClassName() }}</th>
+        </tr>
+    </thead>
+    {% if ($object->hasParents()) %}
+    <tbody class="classAttributes parent">
+        {% foreach ($object->getParents() as $parent) %}
+        <tr>
+            <td>extends {{ $parent->isAbstract() ? 'abstract ' : '' }}<span class="class">{{ $parent->getName() }}</span></td>
+        </tr>
+        {% end %}
+    </tbody>
+    {% end %}
+    {% if ($object->hasInterfaces()) %}
+    <tbody class="classAttributes interface">
+        {% foreach ($object->getInterfaces() as $interface) %}
+        <tr>
+            <td>implements <span class="class">{{ $interface->getName() }}</span></td>
+        </tr>
+        {% end %}
+    </tbody>
+    {% end %}
+    {% if ($object->hasTraits()) %}
+    <tbody class="classAttributes trait">
+        {% foreach ($object->getTraits() as $trait) %}
+        <tr>
+            <td>use trait <span class="class">{{ $trait->getName() }}</span></td>
+        </tr>
+        {% end %}
+    </tbody>
+    {% end %}
+    {% if ($object->hasConstants()) %}
+    <tbody class="constants">
+        <tr>
+            <th>Constants :</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    {% foreach ($object->getConstants() as $name => $value) %}
+                    <tr>
+                        <td>{{ $name }}</td>
+                        <td>
+                            {{{ $value }}}
+                        </td>
+                    </tr>
+                    {% end %}
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    {% end %}
+    {% if ($object->hasProperties()) %}
+    <tbody class="properties">
+        <tr>
+            <th>Properties :</th>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    {% foreach ($object->getProperties() as $property) %}
+                    <tr{{ isset($property['defaultValue']) ? ' class="default"' : '' }}>
+                        <td{{ isset($property['defaultValue']) ? ' rowspan="2"' : '' }}>
+                            <span class="visibility">
+                                {% if ($property['property']->isStatic()) %}
+                                <span class="static">static</span>
+                                {% end %}
+                                {{ $property['visibility'] }}
+                            </span>
+                            ${{ $property['property']->getName()}}
+                        </td>
+                        {% if (isset($property['defaultValue'])) %}
+                        <td>Default:</td>
+                        <td>
+                            {{{ $property['defaultValue'] }}}
+                        </td>
+                    </tr>
+                    <tr>
+                        {% end %}
+                        <td>Current:</td>
+                        <td>
+                            {{{ $property['value'] }}}
+                        </td>
+                    </tr>
+                    {% end %}
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    {% end %}
+    {% if ($object->hasMethods()) %}
+    <tbody class="methods">
+        <tr>
+            <th>Methods :</th>
+        </tr>
+        {% foreach ($object->getMethods() as $method) %}
+        <tr>
+            <td>
+                <span class="visibility">
+                    {% if ($method['method']->isStatic()) %}
+                    <span class="static">static</span>
+                    {% end %}
+                    {{ $method['visibility'] }}
+                </span>
+                {{ $method['method']->getName() }}({{}}
+                {% if ($method['arguments']) %}
+                <span class="arguments">{{}}
+                {% foreach ($method['arguments'] as $key => $argument) %}
+                {% if ($argument['type'] && $argument['type'] !== 'constant') %}
+                <span class="type">{{ $argument['type'] }}</span> {{}}
+                {% end %}
+                {{ $argument['reference'] }}{{}}
+                <span class="name">{{ $argument['name'] }}</span>{{}}
+                {% if (array_key_exists('default', $argument)) %}
+                {{ ' = ' }}{{}}
+                <span class="value">{{}}
+                {% if ($argument['type'] && $argument['type'] === 'constant') %}
+                {{ $argument['default'] }}{{}}
+                {% else %}
+                {{{ $argument['default'], FORMAT_SHORT }}}
+                {% end %}
+                </span>{{}}
+                {% end %}
+                {% if ($key != count($method['arguments']) - 1) %}
+                , {{}}
+                {% end %}
+                {% end %}
+                </span>{{}}
+                {% end %}
+                )
+            </td>
+        </tr>
+        {% end %}
+    </tbody>
+    {% end %}
+</table>

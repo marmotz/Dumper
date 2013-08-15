@@ -95,7 +95,7 @@ class Dump extends atoum
             ->and($array = array())
                 ->output(
                     function() use($dump, $array) {
-                        $dump->dumpArray($array, $dump->createOutput());
+                        $dump->dump($array);
                     }
                 )
                 ->mock($dump)
@@ -255,8 +255,8 @@ class Dump extends atoum
                         $object1 = new \SampleClass3;
                         $object2 = new \SampleClass4;
 
-                        $object1->object = $object2;
-                        $object2->object = $object1;
+                        $object1->property = $object2;
+                        $object2->property = $object1;
 
                         $dump->dump($object1);
                     }
@@ -378,7 +378,7 @@ class Dump extends atoum
             ->if($dump = new mockTestedClass)
                 ->output(
                     function() use($dump) {
-                        $dump->dumpObject($dump, $dump->createOutput());
+                        $dump->dump($dump);
                     }
                 )
                 ->mock($dump)

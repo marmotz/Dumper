@@ -2,5 +2,5 @@
 
 class SampleClass3
 {
-    public $object;
+    public $property;
 }

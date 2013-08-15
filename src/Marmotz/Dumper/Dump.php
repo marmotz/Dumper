@@ -28,8 +28,9 @@ abstract class Dump
      *
      * @param Proxy\ArrayProxy $array
      * @param Output           $output
+     * @param integer          $format
      */
-    abstract public function doDumpArray(Proxy\ArrayProxy $array, Output $output);
+    abstract public function doDumpArray(Proxy\ArrayProxy $array, Output $output, $format);
 
     /**
      * Do dump object variable
@@ -324,14 +325,16 @@ abstract class Dump
     /**
      * Dump array variable
      *
-     * @param array  $array
-     * @param Output $output
+     * @param array   $array
+     * @param Output  $output
+     * @param integer $format
      */
-    public function dumpArray(array $array, Output $output)
+    public function dumpArray(array $array, Output $output, $format)
     {
         $this->doDumpArray(
             new Proxy\ArrayProxy($array, $this),
-            $output
+            $output,
+            $format
         );
     }
 

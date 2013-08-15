@@ -209,6 +209,8 @@ class Output
 
                 if ($code === 'end') {
                     $code = '}';
+                } elseif ($code === 'else') {
+                    $code = '} else {';
                 } else {
                     $code .= ' {';
                 }
@@ -302,9 +304,13 @@ class Output
     {
         extract($data);
 
-        eval(self::$templates[$this->currentTemplate]['compiled']);
+        $code = self::$templates[$this->currentTemplate]['compiled'];
 
-        if ($this->getCurrentPosition() !== null) {
+        // var_dump($code);
+
+        eval($code);
+
+        if ($this->getCurrentPosition() !== null && $this->addLnAfterLine === true) {
             $this->addLn();
         }
 

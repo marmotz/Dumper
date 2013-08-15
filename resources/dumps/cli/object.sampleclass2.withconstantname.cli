@@ -1,8 +1,6 @@
-object SampleClass1
-| extends SampleClass2
+object SampleClass2
 | extends abstract SampleAbstract1
 | implements SampleInterface1
-| use trait SampleTrait1
 | Constants :
 |   CONST1   : string(6) "const1"
 |   CONSTANT2: string(9) "constant2"
@@ -28,6 +26,10 @@ object SampleClass1
 |               |               | 2: integer(3)
 |   public           $publicPropertyWithoutDefaultValue
 |     Current : string(9) "construct"
+|   private static   $staticPrivatePropertyWithDefaultValue
+|     Current : string(9) "construct"
+|   private static   $staticPrivatePropertyWithoutDefaultValue
+|     Current : string(9) "construct"
 |   protected static $staticProtectedPropertyWithDefaultValue
 |     Current : string(9) "construct"
 |   protected static $staticProtectedPropertyWithoutDefaultValue
@@ -36,13 +38,9 @@ object SampleClass1
 |     Current : string(9) "construct"
 |   public static    $staticPublicPropertyWithoutDefaultValue
 |     Current : string(9) "construct"
-|   protected        $traitProperty
-|     Current : NULL
 | Methods :
 |   public        __construct()
 |   private       privateMethod($arg1, array &$arg2)
 |   protected     protectedMethod($arg1, stdClass $arg2, $arg3 = NULL, $arg4 = 42, $arg5 = "foobar", $arg6 = self::CONST1)
 |   public        publicMethod()
 |   static public staticPublicMethod(array $arg1 = array())
-|   public        traitMethod()
-|   public        withCallable(callable $arg1)

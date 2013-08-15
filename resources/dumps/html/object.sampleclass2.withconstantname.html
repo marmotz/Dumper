@@ -2,13 +2,10 @@
     <table class="object">
         <thead>
             <tr>
-                <th>object SampleClass1</th>
+                <th>object SampleClass2</th>
             </tr>
         </thead>
         <tbody class="classAttributes parent">
-            <tr>
-                <td>extends <span class="class">SampleClass2</span></td>
-            </tr>
             <tr>
                 <td>extends abstract <span class="class">SampleAbstract1</span></td>
             </tr>
@@ -16,11 +13,6 @@
         <tbody class="classAttributes interface">
             <tr>
                 <td>implements <span class="class">SampleInterface1</span></td>
-            </tr>
-        </tbody>
-        <tbody class="classAttributes trait">
-            <tr>
-                <td>use trait <span class="class">SampleTrait1</span></td>
             </tr>
         </tbody>
         <tbody class="constants">
@@ -208,6 +200,32 @@
                             <td>
                                 <span class="visibility">
                                     <span class="static">static</span>
+                                    private
+                                </span>
+                                $staticPrivatePropertyWithDefaultValue
+                            </td>
+                            <td>Current:</td>
+                            <td>
+                                string(9) "construct"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    private
+                                </span>
+                                $staticPrivatePropertyWithoutDefaultValue
+                            </td>
+                            <td>Current:</td>
+                            <td>
+                                string(9) "construct"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
                                     protected
                                 </span>
                                 $staticProtectedPropertyWithDefaultValue
@@ -254,18 +272,6 @@
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="visibility">
-                                    protected
-                                </span>
-                                $traitProperty
-                            </td>
-                            <td>Current:</td>
-                            <td>
-                                NULL
                             </td>
                         </tr>
                     </table>
@@ -315,22 +321,6 @@
                         public
                     </span>
                     staticPublicMethod(<span class="arguments"><span class="type">array</span> <span class="name">$arg1</span> = <span class="value">array()</span></span>)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="visibility">
-                        public
-                    </span>
-                    traitMethod()
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="visibility">
-                        public
-                    </span>
-                    withCallable(<span class="arguments"><span class="type">callable</span> <span class="name">$arg1</span></span>)
                 </td>
             </tr>
         </tbody>

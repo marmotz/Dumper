@@ -15,13 +15,18 @@ use Marmotz\Dumper\Dump;
  */
 class ObjectProxy
 {
+    protected $className;
+    protected $constants;
+    protected $interfaces;
     protected $maxLengthConstantNames;
     protected $maxLengthMethodVisibilities;
     protected $maxLengthPropertyVisibilities;
     protected $methods;
     protected $parents;
+    protected $phpVersion;
     protected $properties;
     protected $reflectionClass;
+    protected $traits;
 
     /**
      * Constructor
@@ -33,6 +38,7 @@ class ObjectProxy
         $this->reflectionClass = new \ReflectionObject($object);
 
         $this
+            ->loadPhpVersion()
             ->loadParents()
             ->loadProperties($object)
             ->loadMethods()
@@ -46,7 +52,11 @@ class ObjectProxy
      */
     public function getClassName()
     {
-        return $this->getReflectionClass()->getName();
+        if ($this->className === null) {
+            $this->className = $this->getReflectionClass()->getName();
+        }
+
+        return $this->className;
     }
 
     /**
@@ -56,7 +66,11 @@ class ObjectProxy
      */
     public function getConstants()
     {
-        return $this->getReflectionClass()->getConstants();
+        if ($this->constants === null) {
+            $this->constants = $this->getReflectionClass()->getConstants();
+        }
+
+        return $this->constants;
     }
 
     /**
@@ -66,7 +80,11 @@ class ObjectProxy
      */
     public function getInterfaces()
     {
-        return array_values($this->getReflectionClass()->getInterfaces());
+        if ($this->interfaces === null) {
+            $this->interfaces = array_values($this->getReflectionClass()->getInterfaces());
+        }
+
+        return $this->interfaces;
     }
 
     /**
@@ -102,7 +120,7 @@ class ObjectProxy
                             return $method['visibility'];
                         }
                     },
-                    $this->methods
+                    $this->getMethods()
                 )
             );
         }
@@ -127,7 +145,7 @@ class ObjectProxy
                             return $property['visibility'];
                         }
                     },
-                    $this->properties
+                    $this->getProperties()
                 )
             );
         }
@@ -153,6 +171,16 @@ class ObjectProxy
     public function getParents()
     {
         return $this->parents;
+    }
+
+    /**
+     * Returns loaded php version
+     *
+     * @return string
+     */
+    public function getPhpVersion()
+    {
+        return $this->phpVersion;
     }
 
     /**
@@ -182,11 +210,15 @@ class ObjectProxy
      */
     public function getTraits()
     {
-        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-            return array_values($this->getReflectionClass()->getTraits());
-        } else {
-            return array();
+        if ($this->traits === null) {
+            if ($this->isMinPhpVersion('5.4.0')) {
+                $this->traits = array_values($this->getReflectionClass()->getTraits());
+            } else {
+                $this->traits = array();
+            }
         }
+
+        return $this->traits;
     }
 
     /**
@@ -198,8 +230,23 @@ class ObjectProxy
      */
     public function getVisibility($reflectionObject)
     {
-        return $reflectionObject->isPublic() ? 'public' : (
-            $reflectionObject->isProtected() ? 'protected' : 'private'
+        if ($reflectionObject instanceof \ReflectionProperty || $reflectionObject instanceof \ReflectionMethod) {
+            if ($reflectionObject->isPublic()) {
+                $visibility = 'public';
+            } elseif ($reflectionObject->isProtected()) {
+                $visibility = 'protected';
+            } elseif ($reflectionObject->isPrivate()) {
+                $visibility = 'private';
+            }
+
+            return $visibility;
+        }
+
+        throw new \InvalidArgumentException(
+            sprintf(
+                'Unable to get visibility of "%s" object. You must provide a \ReflectionProperty or a \ReflectionMethod object.',
+                get_class($reflectionObject)
+            )
         );
     }
 
@@ -264,33 +311,61 @@ class ObjectProxy
     }
 
     /**
+     * Check if given php version (or current by default) is ok
+     *
+     * @param string $minimumVersion
+     *
+     * @return boolean
+     */
+    public function isMinPhpVersion($minimumVersion)
+    {
+        return version_compare($this->getPhpVersion(), $minimumVersion, '>=');
+    }
+
+    /**
      * Load methods of current object
      *
      * @return Objectproxy
      */
     public function loadMethods()
     {
+        $this->methods = array();
+
+        $proxy = $this;
+
         foreach ($this->getReflectionClass()->getMethods() as $methodName => $method) {
             $this->methods[] = array(
                 'method'     => $method,
                 'visibility' => $this->getVisibility($method),
                 'arguments'  => array_map(
-                    function($parameter) {
-                        $return = array(
-                            'name'      => '$' . $parameter->getName(),
-                            'reference' => $parameter->isPassedByReference() ? '&' : '',
-                            'type'      => $parameter->isArray() ? 'array' : (
-                                version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable() ? 'callable' : (
-                                    $parameter->getClass() ? $parameter->getClass()->getName() : ''
-                                )
-                            ),
-                        );
+                    function($parameter) use($proxy) {
+                        $return = array();
+
+                        $return['name'] = '$' . $parameter->getName();
+
+                        if ($parameter->isPassedByReference()) {
+                            $return['reference'] = '&';
+                        } else {
+                            $return['reference'] = '';
+                        }
+
+                        if ($parameter->isArray()) {
+                            $return['type'] = 'array';
+                        } elseif ($proxy->isMinPhpVersion('5.4.0') && $parameter->isCallable()) {
+                            $return['type'] = 'callable';
+                        } elseif ($parameter->getClass()) {
+                            $return['type'] = $parameter->getClass()->getName();
+                        } else {
+                            $return['type'] = '';
+                        }
 
                         if ($parameter->isDefaultValueAvailable()) {
-                            $return['default'] = version_compare(PHP_VERSION, '5.4.6', '>=') && $parameter->isDefaultValueConstant()
-                                ? $parameter->getDefaultValueConstantName()
-                                : $parameter->getDefaultValue()
-                            ;
+                            if ($proxy->isMinPhpVersion('5.4.6') && $parameter->isDefaultValueConstant()) {
+                                $return['type']    = 'constant';
+                                $return['default'] = $parameter->getDefaultValueConstantName();
+                            } else {
+                                $return['default'] = $parameter->getDefaultValue();
+                            }
                         }
 
                         return $return;
@@ -299,6 +374,14 @@ class ObjectProxy
                 )
             );
         }
+
+        // sort by name
+        usort(
+            $this->methods,
+            function($a, $b) {
+                return strcasecmp($a['method']->getName(), $b['method']->getName());
+            }
+        );
 
         return $this;
     }
@@ -317,6 +400,20 @@ class ObjectProxy
         while ($parent = $parent->getParentClass()) {
             $this->parents[] = $parent;
         }
+
+        return $this;
+    }
+
+    /**
+     * Load php version (by default current)
+     *
+     * @param string $phpVersion
+     *
+     * @return ObjectProxy
+     */
+    public function loadPhpVersion($phpVersion = PHP_VERSION)
+    {
+        $this->phpVersion = $phpVersion;
 
         return $this;
     }
@@ -393,6 +490,14 @@ class ObjectProxy
                 'value'       => $value,
             );
         }
+
+        // sort by name
+        usort(
+            $this->properties,
+            function($a, $b) {
+                return strcasecmp($a['property']->getName(), $b['property']->getName());
+            }
+        );
 
         return $this;
     }

@@ -33,15 +33,20 @@ object {{ $object->getClassName() }}
     {% if ($object->hasMethods()) %}
     Methods :
         {% foreach ($object->getMethods() as $method) %}
-        {{ str_pad($method['visibility'] . ($method['method']->isStatic() ? ' static' : ''), $object->getMaxLengthMethodVisibilities()) }} {{}}
+        {{ str_pad(($method['method']->isStatic() ? 'static ' : '') . $method['visibility'], $object->getMaxLengthMethodVisibilities()) }} {{}}
         {{ $method['method']->getName() }}({{}}
         {% foreach ($method['arguments'] as $key => $argument) %}
-        {% if ($argument['type']) %}
+        {% if ($argument['type'] && $argument['type'] !== 'constant') %}
         {{ $argument['type'] }} {{}}
         {% end %}
         {{ $argument['reference'] }}{{ $argument['name'] }}{{}}
         {% if (array_key_exists('default', $argument)) %}
-        {{ ' = ' }}{{{ $argument['default'], FORMAT_SHORT }}}{{}}
+        {{ ' = ' }}{{}}
+        {% if ($argument['type'] && $argument['type'] === 'constant') %}
+        {{ $argument['default'] }}{{}}
+        {% else %}
+        {{{ $argument['default'], FORMAT_SHORT }}}{{}}
+        {% end %}
         {% end %}
         {% if ($key != count($method['arguments']) - 1) %}
         , {{}}

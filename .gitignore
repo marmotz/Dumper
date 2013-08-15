@@ -1,3 +1,4 @@
+/.phpswitch.yml
 /bin/atoum
 /composer.lock
 /tests/coverage

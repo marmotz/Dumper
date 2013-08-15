@@ -36,7 +36,7 @@ class SampleClass2 extends SampleAbstract1 implements SampleInterface1
         $this->privatePropertyWithDefaultValue   = 'construct';
         $this->protectedPropertyWithDefaultValue = 'construct';
         $this->publicPropertyWithDefaultValue    = new SampleClass3;
-        $this->publicPropertyWithDefaultValue->object = range(1, 10);
+        $this->publicPropertyWithDefaultValue->property = range(1, 3);
 
 
         self::$staticPrivatePropertyWithoutDefaultValue   = 'construct';
@@ -48,7 +48,9 @@ class SampleClass2 extends SampleAbstract1 implements SampleInterface1
         self::$staticPublicPropertyWithDefaultValue    = 'construct';
     }
 
-    private   function privateMethod($arg1, array &$arg2) {}
-    protected function protectedMethod($arg1, \stdClass $arg2, $arg3 = null, $arg4 = 42, $arg5 = 'foobar') {}
+    static public function staticPublicMethod(array $arg1 = array()) {}
+
     public    function publicMethod() {}
+    protected function protectedMethod($arg1, \stdClass $arg2, $arg3 = null, $arg4 = 42, $arg5 = 'foobar', $arg6 = self::CONST1) {}
+    private   function privateMethod($arg1, array &$arg2) {}
 }

@@ -207,7 +207,9 @@ class HtmlDump extends atoum
                     }
                 )
                     ->isEqualToContentsOfFile(
-                        __DIR__ . '/../../../resources/dumps/html/object.sampleclass2.html'
+                        version_compare(PHP_VERSION, '5.4.6', '>=')
+                            ? __DIR__ . '/../../../resources/dumps/html/object.sampleclass2.withconstantname.html'
+                            : __DIR__ . '/../../../resources/dumps/html/object.sampleclass2.withoutconstantname.html'
                     )
         ;
     }

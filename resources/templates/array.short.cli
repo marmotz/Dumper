@@ -1,0 +1,7 @@
+array({{}}
+{% if ($array->size()) %}
+{% foreach ($array as $key => $value) %}
+{{ $key }} => {{{ $value }}} {{}}
+{% end %}
+{% end %}
+){{}}

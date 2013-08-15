@@ -45,29 +45,13 @@
             <tr>
                 <td>
                     <table>
-                        <tr>
-                            <td><span class="visibility">private</span> $privatePropertyWithoutDefaultValue</td>
-                            <td>Current:</td>
-                            <td>
-                                string(9) "construct"
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="visibility">protected</span> $protectedPropertyWithoutDefaultValue</td>
-                            <td>Current:</td>
-                            <td>
-                                string(9) "construct"
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="visibility">public</span> $publicPropertyWithoutDefaultValue</td>
-                            <td>Current:</td>
-                            <td>
-                                string(9) "construct"
-                            </td>
-                        </tr>
                         <tr class="default">
-                            <td rowspan="2"><span class="visibility">private</span> $privatePropertyWithDefaultValue</td>
+                            <td rowspan="2">
+                                <span class="visibility">
+                                    private
+                                </span>
+                                $privatePropertyWithDefaultValue
+                            </td>
                             <td>Default:</td>
                             <td>
                                 string(7) "default"
@@ -79,8 +63,25 @@
                                 string(9) "construct"
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <span class="visibility">
+                                    private
+                                </span>
+                                $privatePropertyWithoutDefaultValue
+                            </td>
+                            <td>Current:</td>
+                            <td>
+                                string(9) "construct"
+                            </td>
+                        </tr>
                         <tr class="default">
-                            <td rowspan="2"><span class="visibility">protected</span> $protectedPropertyWithDefaultValue</td>
+                            <td rowspan="2">
+                                <span class="visibility">
+                                    protected
+                                </span>
+                                $protectedPropertyWithDefaultValue
+                            </td>
                             <td>Default:</td>
                             <td>
                                 string(7) "default"
@@ -92,8 +93,25 @@
                                 string(9) "construct"
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <span class="visibility">
+                                    protected
+                                </span>
+                                $protectedPropertyWithoutDefaultValue
+                            </td>
+                            <td>Current:</td>
+                            <td>
+                                string(9) "construct"
+                            </td>
+                        </tr>
                         <tr class="default">
-                            <td rowspan="2"><span class="visibility">public</span> $publicPropertyWithDefaultValue</td>
+                            <td rowspan="2">
+                                <span class="visibility">
+                                    public
+                                </span>
+                                $publicPropertyWithDefaultValue
+                            </td>
                             <td>Default:</td>
                             <td>
                                 string(7) "default"
@@ -116,13 +134,18 @@
                                             <td>
                                                 <table>
                                                     <tr>
-                                                        <td><span class="visibility">public</span> $object</td>
+                                                        <td>
+                                                            <span class="visibility">
+                                                                public
+                                                            </span>
+                                                            $property
+                                                        </td>
                                                         <td>Current:</td>
                                                         <td>
                                                             <table class="array">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th colspan="2">array(10)</th>
+                                                                        <th colspan="2">array(3)</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -150,62 +173,6 @@
                                                                             integer(3)
                                                                         </td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            3
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(4)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            4
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(5)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            5
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(6)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            6
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(7)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            7
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(8)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            8
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(9)
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>
-                                                                            9
-                                                                        </th>
-                                                                        <td>
-                                                                            integer(10)
-                                                                        </td>
-                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </td>
@@ -218,42 +185,90 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> private</span> $staticPrivatePropertyWithoutDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    public
+                                </span>
+                                $publicPropertyWithoutDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> protected</span> $staticProtectedPropertyWithoutDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    private
+                                </span>
+                                $staticPrivatePropertyWithDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> public</span> $staticPublicPropertyWithoutDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    private
+                                </span>
+                                $staticPrivatePropertyWithoutDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> private</span> $staticPrivatePropertyWithDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    protected
+                                </span>
+                                $staticProtectedPropertyWithDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> protected</span> $staticProtectedPropertyWithDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    protected
+                                </span>
+                                $staticProtectedPropertyWithoutDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="visibility"><span class="static">static</span> public</span> $staticPublicPropertyWithDefaultValue</td>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    public
+                                </span>
+                                $staticPublicPropertyWithDefaultValue
+                            </td>
+                            <td>Current:</td>
+                            <td>
+                                string(9) "construct"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="visibility">
+                                    <span class="static">static</span>
+                                    public
+                                </span>
+                                $staticPublicPropertyWithoutDefaultValue
+                            </td>
                             <td>Current:</td>
                             <td>
                                 string(9) "construct"
@@ -268,16 +283,45 @@
                 <th>Methods :</th>
             </tr>
             <tr>
-                <td><span class="visibility">public</span> __construct()</td>
+                <td>
+                    <span class="visibility">
+                        public
+                    </span>
+                    __construct()
+                </td>
             </tr>
             <tr>
-                <td><span class="visibility">private</span> privateMethod(<span class="arguments"><span class="name">$arg1</span>, <span class="type">array</span> &<span class="name">$arg2</span></span>)</td>
+                <td>
+                    <span class="visibility">
+                        private
+                    </span>
+                    privateMethod(<span class="arguments"><span class="name">$arg1</span>, <span class="type">array</span> &<span class="name">$arg2</span></span>)
+                </td>
             </tr>
             <tr>
-                <td><span class="visibility">protected</span> protectedMethod(<span class="arguments"><span class="name">$arg1</span>, <span class="type">stdClass</span> <span class="name">$arg2</span>, <span class="name">$arg3</span> = <span class="value">NULL</span>, <span class="name">$arg4</span> = <span class="value">42</span>, <span class="name">$arg5</span> = <span class="value">"foobar"</span></span>)</td>
+                <td>
+                    <span class="visibility">
+                        protected
+                    </span>
+                    protectedMethod(<span class="arguments"><span class="name">$arg1</span>, <span class="type">stdClass</span> <span class="name">$arg2</span>, <span class="name">$arg3</span> = <span class="value">NULL</span>, <span class="name">$arg4</span> = <span class="value">42</span>, <span class="name">$arg5</span> = <span class="value">"foobar"</span>, <span class="name">$arg6</span> = <span class="value">"const1"</span></span>)
+                </td>
             </tr>
             <tr>
-                <td><span class="visibility">public</span> publicMethod()</td>
+                <td>
+                    <span class="visibility">
+                        public
+                    </span>
+                    publicMethod()
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="visibility">
+                        <span class="static">static</span>
+                        public
+                    </span>
+                    staticPublicMethod(<span class="arguments"><span class="type">array</span> <span class="name">$arg1</span> = <span class="value">array()</span></span>)
+                </td>
             </tr>
         </tbody>
     </table>

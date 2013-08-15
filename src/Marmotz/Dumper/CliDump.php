@@ -22,15 +22,25 @@ class CliDump extends Dump
      *
      * @param Proxy\ArrayProxy $array
      * @param Output           $output
+     * @param integer          $format
      */
-    public function doDumpArray(Proxy\ArrayProxy $array, Output $output)
+    public function doDumpArray(Proxy\ArrayProxy $array, Output $output, $format)
     {
-        $output->render(
-            'array.cli',
-            array(
-                'array' => $array,
-            )
-        );
+        if ($format === self::FORMAT_COMPLETE) {
+            $output->render(
+                'array.complete.cli',
+                array(
+                    'array' => $array,
+                )
+            );
+        } else {
+            $output->render(
+                'array.short.cli',
+                array(
+                    'array' => $array,
+                )
+            );
+        }
     }
 
     /**
@@ -52,8 +62,6 @@ class CliDump extends Dump
      *
      * @param Proxy\ObjectProxy $object
      * @param Output            $output
-     *
-     * @return void
      */
     public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
@@ -173,8 +181,6 @@ class CliDump extends Dump
      * Init current output object
      *
      * @param Output $output
-     *
-     * @return Output
      */
     public function initOutput(Output $output)
     {

@@ -195,7 +195,9 @@ class CliDump extends atoum
                     }
                 )
                     ->isEqualToContentsOfFile(
-                        __DIR__ . '/../../../resources/dumps/cli/object.sampleclass2.cli'
+                        version_compare(PHP_VERSION, '5.4.6', '>=')
+                            ? __DIR__ . '/../../../resources/dumps/cli/object.sampleclass2.withconstantname.cli'
+                            : __DIR__ . '/../../../resources/dumps/cli/object.sampleclass2.withoutconstantname.cli'
                     )
         ;
 
@@ -208,8 +210,8 @@ class CliDump extends atoum
                     $object1 = new \SampleClass3;
                     $object2 = new \SampleClass4;
 
-                    $object1->object = $object2;
-                    $object2->object = $object1;
+                    $object1->property = $object2;
+                    $object2->property = $object1;
 
                     $dump->dump($object1);
                 }
