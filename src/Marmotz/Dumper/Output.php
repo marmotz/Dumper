@@ -24,7 +24,7 @@ class Output
     static protected $templates = array();
     protected $currentTemplate;
     protected $currentTemplateIndent;
-    protected $addLnAfterLine;
+    protected $currentTemplateAddLnAfterLine;
 
     /**
      * Constructor
@@ -35,10 +35,9 @@ class Output
     public function __construct(Dump $dumper, Output $parentOutput = null)
     {
         $this
+            ->reset()
             ->setDumper($dumper)
             ->setIndent(2)
-            ->setLevel(0)
-            ->setAutoIndent(true)
             ->setPrefix('')
             ->setParentOutput($parentOutput)
         ;
@@ -104,35 +103,11 @@ class Output
      *
      * @return Output
      */
-    public function addToCompiledTemplate($code)
+    public function addToCurrentTemplateCompilation($code)
     {
-        self::$templates[$this->currentTemplate]['compiled'] .= $code . PHP_EOL;
+        self::$templates[$this->getCurrentTemplate()]['compilation'] .= $code . PHP_EOL;
 
         return $this;
-    }
-
-    /**
-     * Set code to current compiled template
-     *
-     * @param string $code
-     *
-     * @return Output
-     */
-    public function setCompiledTemplate($code)
-    {
-        self::$templates[$this->currentTemplate]['compiled'] = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code from current compiled template
-     *
-     * @return string
-     */
-    public function getCompiledTemplate()
-    {
-        return self::$templates[$this->currentTemplate]['compiled'];
     }
 
     /**
@@ -142,21 +117,22 @@ class Output
      */
     public function compileCurrentTemplate()
     {
-        if (self::$templates[$this->currentTemplate]['compiled'] === null) {
-            self::$templates[$this->currentTemplate]['compiled'] = '';
+        if (!$this->isCurrentTemplateCompiled()) {
+            $this
+                ->setCurrentTemplateCompilation('')
+                ->setCurrentTemplateIndent(0)
+            ;
 
-            $this->currentTemplateIndent = 0;
-
-            foreach (self::$templates[$this->currentTemplate]['raw'] as $line) {
+            foreach ($this->getCurrentTemplateSource() as $line) {
                 $this->compileLine($line);
             }
             $this->compileIndent('');
 
-            $this->setCompiledTemplate(
+            $this->setCurrentTemplateCompilation(
                 str_replace(
                     'FORMAT_SHORT',
                     '\Marmotz\Dumper\Dump::FORMAT_SHORT',
-                    $this->getCompiledTemplate()
+                    $this->getCurrentTemplateCompilation()
                 )
             );
         }
@@ -173,17 +149,17 @@ class Output
     {
         $nbIndent = substr_count($indent, '    ');
 
-        if ($nbIndent > $this->currentTemplateIndent) {
-            for ($i = 0; $i < ($nbIndent - $this->currentTemplateIndent); $i++) {
-                $this->addToCompiledTemplate('$this->inc();');
+        if ($nbIndent > $this->getCurrentTemplateIndent()) {
+            for ($i = 0; $i < ($nbIndent - $this->getCurrentTemplateIndent()); $i++) {
+                $this->addToCurrentTemplateCompilation('$this->inc();');
             }
-        } elseif ($nbIndent < $this->currentTemplateIndent) {
-            for ($i = 0; $i < ($this->currentTemplateIndent - $nbIndent); $i++) {
-                $this->addToCompiledTemplate('$this->dec();');
+        } elseif ($nbIndent < $this->getCurrentTemplateIndent()) {
+            for ($i = 0; $i < ($this->getCurrentTemplateIndent() - $nbIndent); $i++) {
+                $this->addToCurrentTemplateCompilation('$this->dec();');
             }
         }
 
-        $this->currentTemplateIndent = $nbIndent;
+        $this->setCurrentTemplateIndent($nbIndent);
     }
 
     /**
@@ -215,12 +191,12 @@ class Output
                     $code .= ' {';
                 }
 
-                $this->addToCompiledTemplate($code);
+                $this->addToCurrentTemplateCompilation($code);
             } else {
                 $this->compileText($trimLine);
 
-                if ($this->addLnAfterLine) {
-                    $this->addToCompiledTemplate('$this->addLn();');
+                if ($this->getCurrentTemplateAddLnAfterLine()) {
+                    $this->addToCurrentTemplateCompilation('$this->addLn();');
                 }
             }
         }
@@ -233,36 +209,42 @@ class Output
      */
     public function compileText($text)
     {
-        $this->addLnAfterLine = true;
+        $this->setCurrentTemplateAddLnAfterLine(true);
 
         if (preg_match('/^(.*){{{(.*)}}}(.*)$/U', $text, $matches)) {
             if ($matches[1] !== '') {
                 $this->compileText($matches[1]);
             }
 
-            $this->addToCompiledTemplate('$this->dump(' . $matches[2] . ');');
+            $this->addToCurrentTemplateCompilation('$this->dump(' . trim($matches[2]) . ');');
+
+            $this->setCurrentTemplateAddLnAfterLine(false);
 
             if ($matches[3] !== '') {
+                $this->setCurrentTemplateAddLnAfterLine(true);
+
                 $this->compileText($matches[3]);
             }
-
-            $this->addLnAfterLine = false;
         } elseif (preg_match('/^(.*){{(.*)}}(.*)$/U', $text, $matches)) {
             if ($matches[1] !== '') {
                 $this->compileText($matches[1]);
             }
 
-            $this->addToCompiledTemplate('$this->add(' . $matches[2] . ');');
+            $matches[2] = trim($matches[2]);
+
+            if ($matches[2] !== '') {
+                $this->addToCurrentTemplateCompilation('$this->add(' . trim($matches[2]) . ');');
+            }
 
             if ($matches[3] !== '') {
                 $this->compileText($matches[3]);
             }
         } else {
-            $this->addToCompiledTemplate('$this->add("' . str_replace('%', '%%', addslashes($text)) . '");');
+            $this->addToCurrentTemplateCompilation('$this->add("' . str_replace('%', '%%', addslashes($text)) . '");');
         }
 
         if (preg_match('/^(.*){{}}$/U', $text)) {
-            $this->addLnAfterLine = false;
+            $this->setCurrentTemplateAddLnAfterLine(false);
         }
     }
 
@@ -304,15 +286,11 @@ class Output
     {
         extract($data);
 
-        $code = self::$templates[$this->currentTemplate]['compiled'];
+        $code = $this->getCurrentTemplateCompilation();
 
         // var_dump($code);
 
         eval($code);
-
-        if ($this->getCurrentPosition() !== null && $this->addLnAfterLine === true) {
-            $this->addLn();
-        }
 
         return $this;
     }
@@ -335,6 +313,56 @@ class Output
     public function getCurrentPosition()
     {
         return $this->currentPosition;
+    }
+
+    /**
+     * Returns current template
+     *
+     * @return string
+     */
+    public function getCurrentTemplate()
+    {
+        return $this->currentTemplate;
+    }
+
+    /**
+     * Set current template AddLnAfterLine flag to indicate if a new line must be added after this line
+     *
+     * @return boolean
+     */
+    public function getCurrentTemplateAddLnAfterLine()
+    {
+        return $this->currentTemplateAddLnAfterLine;
+    }
+
+    /**
+     * Get code from current compiled template
+     *
+     * @return string
+     */
+    public function getCurrentTemplateCompilation()
+    {
+        return self::$templates[$this->getCurrentTemplate()]['compilation'];
+    }
+
+    /**
+     * Returns current template indent
+     *
+     * @return integer
+     */
+    public function getCurrentTemplateIndent()
+    {
+        return $this->currentTemplateIndent;
+    }
+
+    /**
+     * Returns current template source
+     *
+     * @return array
+     */
+    public function getCurrentTemplateSource()
+    {
+        return self::$templates[$this->getCurrentTemplate()]['source'];
     }
 
     /**
@@ -397,13 +425,14 @@ class Output
         $space = '';
 
         if ($this->getAutoIndent() === true) {
-            $spaceSize = $this->getCurrentPosition() ?: $this->getIndent() * $this->getLevel();
+            if ($this->getCurrentPosition() !== null) {
+                $spaceSize = $this->getCurrentPosition();
+            } else {
+                $spaceSize = $this->getIndent() * $this->getLevel();
+            }
 
             if ($spaceSize > 0) {
-                $space =
-                    $this->getPrefix() .
-                    str_repeat(' ', $spaceSize - strlen($this->getPrefix()))
-                ;
+                $space = $this->getPrefix() . str_repeat(' ', $spaceSize - strlen($this->getPrefix()));
             }
         }
 
@@ -425,6 +454,31 @@ class Output
     }
 
     /**
+     * Initialize template array for given template
+     *
+     * @return Output
+     */
+    public function initCurrentTemplate()
+    {
+        self::$templates[$this->getCurrentTemplate()] = array(
+            'source'      => null,
+            'compilation' => null,
+        );
+
+        return $this;
+    }
+
+    /**
+     * Check if current template is already compiled
+     *
+     * @return boolean
+     */
+    public function isCurrentTemplateCompiled()
+    {
+        return self::$templates[$this->getCurrentTemplate()]['compilation'] !== null;
+    }
+
+    /**
      * Load a template
      *
      * @param string $template
@@ -433,13 +487,13 @@ class Output
      */
     public function loadTemplate($template)
     {
-        $this->currentTemplate = $template;
+        $this->setCurrentTemplate($template);
 
-        if (!isset(self::$templates[$this->currentTemplate])) {
-            self::$templates[$this->currentTemplate] = array(
-                'raw'      => file(__DIR__ . '/../../../resources/templates/' . $template),
-                'compiled' => null,
-            );
+        if (!$this->templateExists($template)) {
+            $this
+                ->initCurrentTemplate()
+                ->setCurrentTemplateSource(file(__DIR__ . '/../../../resources/templates/' . $template))
+            ;
         }
 
         return $this;
@@ -457,6 +511,20 @@ class Output
             ->loadTemplate($template)
             ->compileCurrentTemplate()
             ->executeCurrentTemplate($data)
+        ;
+    }
+
+    /**
+     * Reset parameters
+     *
+     * @return Output
+     */
+    public function reset()
+    {
+        return $this
+            ->setAutoIndent(true)
+            ->setCurrentPosition(null)
+            ->setLevel(0)
         ;
     }
 
@@ -488,6 +556,76 @@ class Output
     public function setCurrentPosition($position)
     {
         $this->currentPosition = $position;
+
+        return $this;
+    }
+
+    /**
+     * Set current template
+     *
+     * @param string $template
+     *
+     * @return Output
+     */
+    public function setCurrentTemplate($template)
+    {
+        $this->currentTemplate = $template;
+
+        return $this;
+    }
+
+    /**
+     * Set current template AddLnAfterLine flag to indicate if a new line must be added after this line
+     *
+     * @param boolean $add
+     *
+     * @return Output
+     */
+    public function setCurrentTemplateAddLnAfterLine($add)
+    {
+        $this->currentTemplateAddLnAfterLine = (boolean) $add;
+
+        return $this;
+    }
+
+    /**
+     * Set code to current compiled template
+     *
+     * @param string $code
+     *
+     * @return Output
+     */
+    public function setCurrentTemplateCompilation($code)
+    {
+        self::$templates[$this->getCurrentTemplate()]['compilation'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Set current template indent
+     *
+     * @param integer $indent
+     *
+     * @return Output
+     */
+    public function setCurrentTemplateIndent($indent)
+    {
+        $this->currentTemplateIndent = $indent;
+
+        return $this;
+    }
+
+    /**
+     * Set current template source
+     *
+     * @param array $source
+     *
+     * @return Output
+     */
+    public function setCurrentTemplateSource(array $source)
+    {
+        self::$templates[$this->getCurrentTemplate()]['source'] = $source;
 
         return $this;
     }
@@ -560,5 +698,17 @@ class Output
         $this->prefix = $prefix;
 
         return $this;
+    }
+
+    /**
+     * Check if given template exist
+     *
+     * @param string $template
+     *
+     * @return boolean
+     */
+    public function templateExists($template)
+    {
+        return isset(self::$templates[$template]);
     }
 }

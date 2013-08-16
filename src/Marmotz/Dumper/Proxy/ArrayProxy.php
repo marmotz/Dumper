@@ -23,10 +23,10 @@ class ArrayProxy implements \Iterator
     /**
      * Constructor
      *
-     * @param array &$array
+     * @param array $array
      * @param Dump  $dumper
      */
-    public function __construct(array &$array, Dump $dumper)
+    public function __construct(array $array, Dump $dumper)
     {
         $this->setMaxKeyLength(0);
 

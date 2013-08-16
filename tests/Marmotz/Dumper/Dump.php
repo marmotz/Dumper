@@ -455,7 +455,7 @@ class Dump extends atoum
                 ->boolean(TestedClass::isMaxLevelOfRecursion(rand(1, 100)))
                     ->isFalse()
 
-            ->if($level = uniqid())
+            ->if($level = __METHOD__)
                 ->variable(TestedClass::setMaxLevelOfRecursion($level))
                     ->isNull()
                 ->boolean(TestedClass::getMaxLevelOfRecursion())

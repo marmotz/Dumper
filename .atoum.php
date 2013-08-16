@@ -17,7 +17,7 @@ $coverageField = new atoum\report\fields\runner\coverage\html(
 
 $coverageField->setRootUrl('file://' . CODE_COVERAGE_ROOT);
 
-$coverageField->addSrcDirectory(__DIR__ . '/src/Marmotz/Dumper');
+// $coverageField->addSrcDirectory(__DIR__ . '/src/Marmotz/Dumper');
 
 $report->addField($coverageField);
 
