@@ -3,7 +3,8 @@
 A pretty variable dumper for HTML & cli.
 
 [![Build Status](https://travis-ci.org/marmotz/Dumper.png)](https://travis-ci.org/marmotz/Dumper)
-
+[![Coverage Status](https://coveralls.io/repos/marmotz/Dumper/badge.png?branch=master)](https://coveralls.io/r/marmotz/Dumper?branch=master)
+[![Total Downloads](https://poser.pugx.org/marmotz/Dumper/downloads.png)](https://packagist.org/packages/marmotz/Dumper)
 
 
 

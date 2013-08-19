@@ -3,6 +3,14 @@ php:
   - 5.3
   - 5.4
   - 5.5
+env:
+  global:
+    - secure: "iJwGulAtAvPve0cCKxVHja80JlDtw3t3biXihKLa6GCZxWSh8lUS3QnzTpSW\ncVmz8p4ySq+6okXsdB0rSWCULNk2Bl2sHCz75XcmzgQkmQ5Tx9KOMmgYC4xg\ncMfcHb/KlvBqeQW7cATlAkedVFbJIwgzJpUD3bEYWWes3Ma+TTk="
 before_script:
   - composer install
-script: php ./bin/atoum -ncc -d tests --debug
+  - rm -f ./.atoum.php
+  - "[ -n \"$COVERALLS_REPO_TOKEN\" ] && cp vendor/atoum/atoum/resources/configurations/runner/coveralls.php.dist .atoum.php || true"
+  - "[ -n \"$COVERALLS_REPO_TOKEN\" ] && sed -i s?/path/to/sources/directory?src? .atoum.php || true"
+  - "[ -n \"$COVERALLS_REPO_TOKEN\" ] && sed -i s/YouCoverallsProjectToken/$COVERALLS_REPO_TOKEN/ .atoum.php || true"
+
+script: php ./bin/atoum -d tests --debug

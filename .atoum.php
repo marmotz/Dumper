@@ -1,8 +1,7 @@
 <?php
 use \mageekguy\atoum;
 
-define('TEST_ROOT',          __DIR__   . DIRECTORY_SEPARATOR . 'tests');
-define('CODE_COVERAGE_ROOT', TEST_ROOT . DIRECTORY_SEPARATOR . 'coverage');
+define('CODE_COVERAGE_ROOT', __DIR__ . DIRECTORY_SEPARATOR . 'tests/coverage');
 
 $report = $script->addDefaultReport();
 
@@ -17,9 +16,6 @@ $coverageField = new atoum\report\fields\runner\coverage\html(
 
 $coverageField->setRootUrl('file://' . CODE_COVERAGE_ROOT);
 
-// $coverageField->addSrcDirectory(__DIR__ . '/src/Marmotz/Dumper');
-
 $report->addField($coverageField);
-
 
 $script->noCodeCoverageForNamespaces('atoum');
