@@ -1,9 +1,7 @@
  {
     "name"       : "marmotz/dumper",
     "description": "A pretty variable dumper for HTML & cli",
-    "require": {
-        "twig/twig": "1.*"
-    },
+    "require": {},
     "require-dev": {
         "atoum/atoum": "dev-master"
     },

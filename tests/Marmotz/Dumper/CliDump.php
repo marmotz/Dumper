@@ -14,8 +14,9 @@ class CliDump extends atoum
             ->if($dump = new TestedClass())
                 ->output(
                     function() use($dump) {
-                        $variable = array();
-                        $dump->dump($variable);
+                        $dump->dump(
+                            array()
+                        );
                     }
                 )
                     ->isEqualToContentsOfFile(
@@ -23,8 +24,9 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $variable = array(1);
-                        $dump->dump($variable);
+                        $dump->dump(
+                            array(1)
+                        );
                     }
                 )
                     ->isEqualToContentsOfFile(
@@ -32,8 +34,12 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $variable = array(1, 'key' => 42);
-                        $dump->dump($variable);
+                        $dump->dump(
+                            array(
+                                1,
+                                'key' => 42
+                            )
+                        );
                     }
                 )
                     ->isEqualToContentsOfFile(
@@ -41,8 +47,13 @@ class CliDump extends atoum
                     )
                 ->output(
                     function() use($dump) {
-                        $variable = array(1, 'key' => 42, array('dump'));
-                        $dump->dump($variable);
+                        $dump->dump(
+                            array(
+                                1,
+                                'key' => 42,
+                                array('dump')
+                            )
+                        );
                     }
                 )
                     ->isEqualToContentsOfFile(
