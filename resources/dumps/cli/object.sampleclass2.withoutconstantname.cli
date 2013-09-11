@@ -1,46 +1,46 @@
-object SampleClass2
-| extends abstract SampleAbstract1
-| implements SampleInterface1
-| Constants :
-|   CONST1   : string(6) "const1"
-|   CONSTANT2: string(9) "constant2"
-| Properties :
-|   private          $privatePropertyWithDefaultValue
-|     Default : string(7) "default"
-|     Current : string(9) "construct"
-|   private          $privatePropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   protected        $protectedPropertyWithDefaultValue
-|     Default : string(7) "default"
-|     Current : string(9) "construct"
-|   protected        $protectedPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   public           $publicPropertyWithDefaultValue
-|     Default : string(7) "default"
-|     Current : object SampleClass3
-|               | Properties :
-|               |   public $property
-|               |     Current : array(3)
-|               |               | 0: integer(1)
-|               |               | 1: integer(2)
-|               |               | 2: integer(3)
-|   public           $publicPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   private static   $staticPrivatePropertyWithDefaultValue
-|     Current : string(9) "construct"
-|   private static   $staticPrivatePropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   protected static $staticProtectedPropertyWithDefaultValue
-|     Current : string(9) "construct"
-|   protected static $staticProtectedPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-|   public static    $staticPublicPropertyWithDefaultValue
-|     Current : string(9) "construct"
-|   public static    $staticPublicPropertyWithoutDefaultValue
-|     Current : string(9) "construct"
-| Methods :
-|   public        __construct()
-|   private       privateMethod($arg1, array &$arg2)
-|   protected     protectedMethod($arg1, stdClass $arg2, $arg3 = NULL, $arg4 = 42, $arg5 = "foobar", $arg6 = "const1")
-|   public        publicMethod()
-|   static public staticPublicMethod(array $arg1 = array())
+[42;37;1mobject SampleClass2[0m
+[42;37;1m|[0m [42;30mextends abstract SampleAbstract1[0m
+[42;37;1m|[0m [42;30mimplements SampleInterface1[0m
+[42;37;1m|[0m [46;30m Constants [0m
+[42;37;1m|[0m   CONST1   : string(6) [33m"const1"[0m
+[42;37;1m|[0m   CONSTANT2: string(9) [33m"constant2"[0m
+[42;37;1m|[0m [46;30m Properties [0m
+[42;37;1m|[0m   [34mprivate         [0m $privatePropertyWithDefaultValue
+[42;37;1m|[0m     Default : string(7) [33m"default"[0m
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [34mprivate         [0m $privatePropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [34mprotected       [0m $protectedPropertyWithDefaultValue
+[42;37;1m|[0m     Default : string(7) [33m"default"[0m
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [34mprotected       [0m $protectedPropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [34mpublic          [0m $publicPropertyWithDefaultValue
+[42;37;1m|[0m     Default : string(7) [33m"default"[0m
+[42;37;1m|[0m     Current : [42;37;1mobject SampleClass3[0m
+[42;37;1m|[0m               [42;37;1m|[0m [46;30m Properties [0m
+[42;37;1m|[0m               [42;37;1m|[0m   [34mpublic[0m $property
+[42;37;1m|[0m               [42;37;1m|[0m     Current : [44;37;1marray(3)[0m
+[42;37;1m|[0m               [42;37;1m|[0m               [44;37;1m|[0m [46;30m [33m0[0m[46;30m [0m integer([33m1[0m)
+[42;37;1m|[0m               [42;37;1m|[0m               [44;37;1m|[0m [46;30m [33m1[0m[46;30m [0m integer([33m2[0m)
+[42;37;1m|[0m               [42;37;1m|[0m               [44;37;1m|[0m [46;30m [33m2[0m[46;30m [0m integer([33m3[0m)
+[42;37;1m|[0m   [34mpublic          [0m $publicPropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mprivate  [0m $staticPrivatePropertyWithDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mprivate  [0m $staticPrivatePropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mprotected[0m $staticProtectedPropertyWithDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mprotected[0m $staticProtectedPropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mpublic   [0m $staticPublicPropertyWithDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m   [32mstatic[0m [34mpublic   [0m $staticPublicPropertyWithoutDefaultValue
+[42;37;1m|[0m     Current : string(9) [33m"construct"[0m
+[42;37;1m|[0m [46;30m Methods [0m
+[42;37;1m|[0m   [34mpublic       [0m __construct()
+[42;37;1m|[0m   [34mprivate      [0m privateMethod([35;1m$arg1[0m, [35marray[0m [35;1m&$arg2[0m)
+[42;37;1m|[0m   [34mprotected    [0m protectedMethod([35;1m$arg1[0m, [35mstdClass[0m [35;1m$arg2[0m, [35;1m$arg3[0m = [33mNULL[0m, [35;1m$arg4[0m = [33m42[0m, [35;1m$arg5[0m = [33m"foobar"[0m, [35;1m$arg6[0m = [33m"const1"[0m)
+[42;37;1m|[0m   [34mpublic       [0m publicMethod()
+[42;37;1m|[0m   [32mstatic[0m [34mpublic[0m staticPublicMethod([35marray[0m [35;1m$arg1[0m = [44;37;1marray[0m())

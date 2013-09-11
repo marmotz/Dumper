@@ -220,7 +220,10 @@ class HtmlDump extends Dump
      */
     public function initOutput(Output $output)
     {
-        $output->setIndent(4);
+        $output
+            ->setIndent(4)
+            ->disableFontOptions()
+        ;
     }
 
     /**

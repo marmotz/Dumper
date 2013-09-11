@@ -1,1 +1,1 @@
-resource stream "Resource id #[0-9]+"
+resource stream "\[33mResource id #[0-9]+\[0m"

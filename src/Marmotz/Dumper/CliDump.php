@@ -26,6 +26,10 @@ class CliDump extends Dump
      */
     public function doDumpArray(Proxy\ArrayProxy $array, Output $output, $format)
     {
+        $output->setPrefixFontOptions(
+            'bgblue;fgwhite;bold'
+        );
+
         if ($format === self::FORMAT_COMPLETE) {
             $output->render(
                 'array.complete.cli',
@@ -52,8 +56,10 @@ class CliDump extends Dump
     public function doDumpBoolean($boolean, Output $output)
     {
         $output->addLn(
-            'boolean(%s)',
-            $boolean
+            'boolean(%s%s%s)',
+            $output->generateFontOptions('fgyellow'),
+            $boolean,
+            $output->generateFontOptions('reset')
         );
     }
 
@@ -65,6 +71,10 @@ class CliDump extends Dump
      */
     public function doDumpObject(Proxy\ObjectProxy $object, Output $output)
     {
+        $output->setPrefixFontOptions(
+            'bggreen;fgwhite;bold'
+        );
+
         $output->render(
             'object.cli',
             array(
@@ -83,9 +93,11 @@ class CliDump extends Dump
     public function doDumpResource($type, $resource, Output $output)
     {
         $output->addLn(
-            'resource %s "%s"',
+            'resource %s "%s%s%s"',
             $type,
-            $resource
+            $output->generateFontOptions('fgyellow'),
+            $resource,
+            $output->generateFontOptions('reset')
         );
     }
 
@@ -101,14 +113,18 @@ class CliDump extends Dump
     {
         if ($format === self::FORMAT_COMPLETE) {
             $output->addLn(
-                'string(%d) "%s"',
+                'string(%d) %s"%s"%s',
                 $length,
-                $string
+                $output->generateFontOptions('fgyellow'),
+                $string,
+                $output->generateFontOptions('reset')
             );
         } else {
             $output->add(
-                '"%s"',
-                $string
+                '%s"%s"%s',
+                $output->generateFontOptions('fgyellow'),
+                $string,
+                $output->generateFontOptions('reset')
             );
         }
     }
@@ -123,9 +139,11 @@ class CliDump extends Dump
     public function doDumpUnknown($type, $dump, Output $output)
     {
         $output->addLn(
-            'unknown type "%s" : %s',
+            'unknown type "%s" : %s%s%s',
             $type,
-            trim($dump)
+            $output->generateFontOptions('fgyellow'),
+            trim($dump),
+            $output->generateFontOptions('reset')
         );
     }
 
@@ -138,8 +156,10 @@ class CliDump extends Dump
     public function dumpFloat($float, Output $output)
     {
         $output->addLn(
-            'float(%s)',
-            $float
+            'float(%s%s%s)',
+            $output->generateFontOptions('fgyellow'),
+            $float,
+            $output->generateFontOptions('reset')
         );
     }
 
@@ -154,11 +174,18 @@ class CliDump extends Dump
     {
         if ($format === self::FORMAT_COMPLETE) {
             $output->addLn(
-                'integer(%d)',
-                $integer
+                'integer(%s%d%s)',
+                $output->generateFontOptions('fgyellow'),
+                $integer,
+                $output->generateFontOptions('reset')
             );
         } else {
-            $output->add((string) $integer);
+            $output->add(
+                '%s%s%s',
+                $output->generateFontOptions('fgyellow'),
+                $integer,
+                $output->generateFontOptions('reset')
+            );
         }
     }
 
@@ -170,7 +197,11 @@ class CliDump extends Dump
      */
     public function dumpNull(Output $output, $format)
     {
-        $output->add('NULL');
+        $output->add(
+            '%sNULL%s',
+            $output->generateFontOptions('fgyellow'),
+            $output->generateFontOptions('reset')
+        );
 
         if ($format === self::FORMAT_COMPLETE) {
             $output->addLn();
@@ -187,6 +218,7 @@ class CliDump extends Dump
         $output
             ->setIndent(2)
             ->setPrefix('|')
+            ->enableFontOptions()
         ;
     }
 }

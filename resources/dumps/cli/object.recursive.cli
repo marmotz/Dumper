@@ -1,7 +1,7 @@
-object SampleClass3
-| Properties :
-|   public $property
-|     Current : object SampleClass4
-|               | Properties :
-|               |   public $property
-|               |     Current : *OBJECT ALREADY DUMPED*
+[42;37;1mobject SampleClass3[0m
+[42;37;1m|[0m [46;30m Properties [0m
+[42;37;1m|[0m   [34mpublic[0m $property
+[42;37;1m|[0m     Current : [42;37;1mobject SampleClass4[0m
+[42;37;1m|[0m               [42;37;1m|[0m [46;30m Properties [0m
+[42;37;1m|[0m               [42;37;1m|[0m   [34mpublic[0m $property
+[42;37;1m|[0m               [42;37;1m|[0m     Current : *OBJECT ALREADY DUMPED*

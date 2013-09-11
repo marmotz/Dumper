@@ -474,7 +474,7 @@ class Dump extends atoum
                 }
             )
                 ->isEqualTo(
-                    'integer(42)' . PHP_EOL .
+                    "integer(\033[33m42\033[0m)" . PHP_EOL .
                     PHP_EOL
                 )
 
@@ -484,11 +484,11 @@ class Dump extends atoum
                 }
             )
                 ->isEqualTo(
-                    'integer(42)' . PHP_EOL .
+                    "integer(\033[33m42\033[0m)" . PHP_EOL .
                     PHP_EOL .
-                    'string(6) "foobar"' . PHP_EOL .
+                    "string(6) \033[33m\"foobar\"\033[0m" . PHP_EOL .
                     PHP_EOL .
-                    'object stdClass' . PHP_EOL .
+                    "\033[42;37;1mobject stdClass\033[0m" . PHP_EOL .
                     PHP_EOL
                 )
         ;
@@ -499,17 +499,17 @@ class Dump extends atoum
         $this
             ->string(getDump(42))
                 ->isEqualTo(
-                    'integer(42)' . PHP_EOL .
+                    "integer(\033[33m42\033[0m)" . PHP_EOL .
                     PHP_EOL
                 )
 
             ->string(getDump(42, 'foobar', new \stdClass))
                 ->isEqualTo(
-                    'integer(42)' . PHP_EOL .
+                    "integer(\033[33m42\033[0m)" . PHP_EOL .
                     PHP_EOL .
-                    'string(6) "foobar"' . PHP_EOL .
+                    "string(6) \033[33m\"foobar\"\033[0m" . PHP_EOL .
                     PHP_EOL .
-                    'object stdClass' . PHP_EOL .
+                    "\033[42;37;1mobject stdClass\033[0m" . PHP_EOL .
                     PHP_EOL
                 )
         ;

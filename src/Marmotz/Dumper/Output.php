@@ -20,11 +20,42 @@ class Output
     protected $autoIndent;
     protected $parentOutput;
     protected $prefix;
+    protected $prefixFontOptions;
 
     static protected $templates = array();
     protected $currentTemplate;
     protected $currentTemplateIndent;
     protected $currentTemplateAddLnAfterLine;
+
+    protected $fontOptionsEnabled;
+
+    protected $fontOptions = array(
+        'reset'      => 0,
+
+        'fgblack'    => 30,
+        'fgred'      => 31,
+        'fggreen'    => 32,
+        'fgyellow'   => 33,
+        'fgblue'     => 34,
+        'fgmagenta'  => 35,
+        'fgcyan'     => 36,
+        'fgwhite'    => 37,
+
+        'bgblack'    => 40,
+        'bgred'      => 41,
+        'bggreen'    => 42,
+        'bgyellow'   => 43,
+        'bgblue'     => 44,
+        'bgmagenta'  => 45,
+        'bgcyan'     => 46,
+        'bgwhite'    => 47,
+
+        'bold'       => 1,
+        'underscore' => 4,
+        'blink'      => 5,
+        'reverse'    => 7,
+        'conceal'    => 8,
+    );
 
     /**
      * Constructor
@@ -67,7 +98,7 @@ class Output
                 ->setAutoIndent(false)
                 ->setCurrentPosition(
                     ($this->getCurrentPosition() ?: $this->getIndent() * $this->getLevel())
-                    + strlen($toAdd)
+                    + strlen(preg_replace("#\033\[[^m]+m#", '', $toAdd))
                 )
             ;
         }
@@ -239,6 +270,20 @@ class Output
             if ($matches[3] !== '') {
                 $this->compileText($matches[3]);
             }
+        } elseif (preg_match('/^(.*){\[(.*)\]}(.*)$/U', $text, $matches)) {
+            if ($matches[1] !== '') {
+                $this->compileText($matches[1]);
+            }
+
+            $matches[2] = trim($matches[2]);
+
+            if ($matches[2] !== '') {
+                $this->addToCurrentTemplateCompilation('$this->add($this->generateFontOptions("' . trim($matches[2]) . '"));');
+            }
+
+            if ($matches[3] !== '') {
+                $this->compileText($matches[3]);
+            }
         } else {
             $this->addToCurrentTemplateCompilation('$this->add("' . str_replace('%', '%%', addslashes($text)) . '");');
         }
@@ -259,6 +304,16 @@ class Output
     }
 
     /**
+     * Disable usage of font options
+     *
+     * @return Output
+     */
+    public function disableFontOptions()
+    {
+        return $this->setFontOptionsEnabled(false);
+    }
+
+    /**
      * Dump given variable
      *
      * @param mixed   $variable
@@ -273,6 +328,16 @@ class Output
         $this->setCurrentPosition(null);
 
         return $this;
+    }
+
+    /**
+     * Enable usage of font options
+     *
+     * @return Output
+     */
+    public function enableFontOptions()
+    {
+        return $this->setFontOptionsEnabled(true);
     }
 
     /**
@@ -293,6 +358,41 @@ class Output
         eval($code);
 
         return $this;
+    }
+
+    /**
+     * Generate font options characters sequence
+     *
+     * @param string $fontOptions
+     *
+     * @return string
+     */
+    public function generateFontOptions($fontOptions)
+    {
+        if ($this->isFontOptionsEnabled()) {
+            $fontOptions = explode(';', $fontOptions);
+            $codes = array();
+
+            foreach ($fontOptions as $fontOption) {
+                if (isset($this->fontOptions[$fontOption])) {
+                    $codes[] = $this->fontOptions[$fontOption];
+                } else {
+                    throw new \OutOfRangeException(
+                        sprintf(
+                            '"%s" is not a valid font option',
+                            $fontOption
+                        )
+                    );
+                }
+            }
+
+            return sprintf(
+                "\033[%sm",
+                implode(';', $codes)
+            );
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -376,6 +476,16 @@ class Output
     }
 
     /**
+     * Returns font options enabled
+     *
+     * @return boolean
+     */
+    public function getFontOptionsEnabled()
+    {
+        return $this->fontOptionsEnabled;
+    }
+
+    /**
      * Returns indent size
      *
      * @return size
@@ -416,6 +526,16 @@ class Output
     }
 
     /**
+     * Returns prefix font options
+     *
+     * @return string
+     */
+    public function getPrefixFontOptions()
+    {
+        return $this->prefixFontOptions;
+    }
+
+    /**
      * Return current indent space
      *
      * @return string
@@ -432,7 +552,13 @@ class Output
             }
 
             if ($spaceSize > 0) {
-                $space = $this->getPrefix() . str_repeat(' ', $spaceSize - strlen($this->getPrefix()));
+                $space = sprintf(
+                    '%s%s%s%s',
+                    $this->generateFontOptions($this->getPrefixFontOptions()),
+                    $this->getPrefix(),
+                    $this->generateFontOptions('reset'),
+                    str_repeat(' ', $spaceSize - strlen($this->getPrefix()))
+                );
             }
         }
 
@@ -476,6 +602,26 @@ class Output
     public function isCurrentTemplateCompiled()
     {
         return self::$templates[$this->getCurrentTemplate()]['compilation'] !== null;
+    }
+
+    /**
+     * Check if font options are disabled
+     *
+     * @return boolean
+     */
+    public function isFontOptionsDisabled()
+    {
+        return $this->getFontOptionsEnabled() === false;
+    }
+
+    /**
+     * Check if font options are enabled
+     *
+     * @return boolean
+     */
+    public function isFontOptionsEnabled()
+    {
+        return $this->getFontOptionsEnabled() === true;
     }
 
     /**
@@ -524,6 +670,7 @@ class Output
         return $this
             ->setAutoIndent(true)
             ->setCurrentPosition(null)
+            ->disableFontOptions()
             ->setLevel(0)
         ;
     }
@@ -645,6 +792,20 @@ class Output
     }
 
     /**
+     * Set if font options are enabled
+     *
+     * @param boolean $enabled
+     *
+     * @return Output
+     */
+    public function setFontOptionsEnabled($enabled)
+    {
+        $this->fontOptionsEnabled = (boolean) $enabled;
+
+        return $this;
+    }
+
+    /**
      * Set indent size
      *
      * @param integer $indent
@@ -696,6 +857,20 @@ class Output
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Set prefix font options
+     *
+     * @param string $prefixFontOptions
+     *
+     * @return Output
+     */
+    public function setPrefixFontOptions($prefixFontOptions)
+    {
+        $this->prefixFontOptions = $prefixFontOptions;
 
         return $this;
     }

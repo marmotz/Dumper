@@ -1,4 +1,4 @@
-array({{ $array->size() }})
+{[bgblue;fgwhite;bold]}array({{ $array->size() }}){[reset]}
     {% foreach($array as $key => $value) %}
-    {{ str_pad($key, $array->getMaxKeyLength(), ' ', STR_PAD_LEFT) }}: {{{ $value }}}
+    {[bgcyan;fgblack]} {{ str_pad($key, $array->getMaxKeyLength(), ' ', STR_PAD_LEFT) }}{[bgcyan;fgblack]} {[reset]} {{{ $value }}}
     {% end %}

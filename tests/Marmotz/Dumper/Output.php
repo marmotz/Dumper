@@ -763,4 +763,117 @@ class Output extends atoum
                     ->isTrue()
         ;
     }
+
+    public function testSetGetEnableDisableFontOptions()
+    {
+        $this
+            ->if($output = new TestedClass(new mockDump))
+                ->object($output->setFontOptionsEnabled(true))
+                    ->isIdenticalTo($output)
+                ->boolean($output->getFontOptionsEnabled())
+                    ->isTrue()
+                ->boolean($output->isFontOptionsEnabled())
+                    ->isTrue()
+                ->boolean($output->isFontOptionsDisabled())
+                    ->isFalse()
+
+                ->object($output->setFontOptionsEnabled(false))
+                    ->isIdenticalTo($output)
+                ->boolean($output->getFontOptionsEnabled())
+                    ->isFalse()
+                ->boolean($output->isFontOptionsEnabled())
+                    ->isFalse()
+                ->boolean($output->isFontOptionsDisabled())
+                    ->isTrue()
+
+                ->object($output->enableFontOptions())
+                    ->isIdenticalTo($output)
+                ->boolean($output->getFontOptionsEnabled())
+                    ->isTrue()
+
+                ->object($output->disableFontOptions())
+                    ->isIdenticalTo($output)
+                ->boolean($output->getFontOptionsEnabled())
+                    ->isFalse()
+        ;
+    }
+
+    public function testGenerateFontOptions()
+    {
+        $this
+            ->if($output = new TestedClass(new mockDump))
+            ->and($output->enableFontOptions())
+                ->string($output->generateFontOptions('reset'))
+                    ->isEqualTo("\033[0m")
+                ->string($output->generateFontOptions('fgblack'))
+                    ->isEqualTo("\033[30m")
+                ->string($output->generateFontOptions('fgred'))
+                    ->isEqualTo("\033[31m")
+                ->string($output->generateFontOptions('fggreen'))
+                    ->isEqualTo("\033[32m")
+                ->string($output->generateFontOptions('fgyellow'))
+                    ->isEqualTo("\033[33m")
+                ->string($output->generateFontOptions('fgblue'))
+                    ->isEqualTo("\033[34m")
+                ->string($output->generateFontOptions('fgmagenta'))
+                    ->isEqualTo("\033[35m")
+                ->string($output->generateFontOptions('fgcyan'))
+                    ->isEqualTo("\033[36m")
+                ->string($output->generateFontOptions('fgwhite'))
+                    ->isEqualTo("\033[37m")
+                ->string($output->generateFontOptions('bgblack'))
+                    ->isEqualTo("\033[40m")
+                ->string($output->generateFontOptions('bgred'))
+                    ->isEqualTo("\033[41m")
+                ->string($output->generateFontOptions('bggreen'))
+                    ->isEqualTo("\033[42m")
+                ->string($output->generateFontOptions('bgyellow'))
+                    ->isEqualTo("\033[43m")
+                ->string($output->generateFontOptions('bgblue'))
+                    ->isEqualTo("\033[44m")
+                ->string($output->generateFontOptions('bgmagenta'))
+                    ->isEqualTo("\033[45m")
+                ->string($output->generateFontOptions('bgcyan'))
+                    ->isEqualTo("\033[46m")
+                ->string($output->generateFontOptions('bgwhite'))
+                    ->isEqualTo("\033[47m")
+                ->string($output->generateFontOptions('bold'))
+                    ->isEqualTo("\033[1m")
+                ->string($output->generateFontOptions('underscore'))
+                    ->isEqualTo("\033[4m")
+                ->string($output->generateFontOptions('blink'))
+                    ->isEqualTo("\033[5m")
+                ->string($output->generateFontOptions('reverse'))
+                    ->isEqualTo("\033[7m")
+                ->string($output->generateFontOptions('conceal'))
+                    ->isEqualTo("\033[8m")
+
+                ->string($output->generateFontOptions('fgblack;bgblack;bold'))
+                    ->isEqualTo("\033[30;40;1m")
+
+                ->exception(
+                    function() use($output, &$fontOption) {
+                        $output->generateFontOptions($fontOption = uniqid());
+                    }
+                )
+                    ->isInstanceOf('OutOfRangeException')
+                    ->hasMessage(
+                        sprintf(
+                            '"%s" is not a valid font option',
+                            $fontOption
+                        )
+                    )
+        ;
+    }
+
+    public function testSetGetPrefixFontOptions()
+    {
+        $this
+            ->if($output = new TestedClass(new mockDump))
+                ->object($output->setPrefixFontOptions($prefixFontOptions = uniqid()))
+                    ->isIdenticalTo($output)
+                ->string($output->getPrefixFontOptions())
+                    ->isEqualTo($prefixFontOptions)
+        ;
+    }
 }

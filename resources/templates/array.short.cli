@@ -1,7 +1,7 @@
-array({{}}
+{[bgblue;fgwhite;bold]}array{[reset]}({{}}
 {% if ($array->size()) %}
 {% foreach ($array as $key => $value) %}
-{{ $key }} => {{{ $value }}} {{}}
+{[bgblue;fgwhite]}{{ $key }}{[reset]} => {{{ $value }}} {{}}
 {% end %}
 {% end %}
 ){{}}

@@ -19,3 +19,5 @@ $coverageField->setRootUrl('file://' . CODE_COVERAGE_ROOT);
 $report->addField($coverageField);
 
 $script->noCodeCoverageForNamespaces('atoum');
+
+$runner->addTestsFromDirectory(__DIR__ . '/tests');

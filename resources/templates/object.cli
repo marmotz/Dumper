@@ -1,27 +1,32 @@
-object {{ $object->getClassName() }}
+{[bggreen;fgwhite;bold]}object {{ $object->getClassName() }}{[reset]}
     {% foreach ($object->getParents() as $parent) %}
-    extends {{ $parent->isAbstract() ? 'abstract ' : '' }}{{ $parent->getName() }}
+    {[bggreen;fgblack]}extends {{ $parent->isAbstract() ? 'abstract ' : '' }}{{ $parent->getName() }}{[reset]}
     {% end %}
 {{}}
     {% foreach ($object->getInterfaces() as $interface) %}
-    implements {{ $interface->getName() }}
+    {[bggreen;fgblack]}implements {{ $interface->getName() }}{[reset]}
     {% end %}
 {{}}
     {% foreach ($object->getTraits() as $trait) %}
-    use trait {{ $trait->getName() }}
+    {[bggreen;fgblack]}use trait {{ $trait->getName() }}{[reset]}
     {% end %}
 {{}}
     {% if ($object->hasConstants()) %}
-    Constants :
+    {[bgcyan;fgblack]} Constants {[reset]}
         {% foreach ($object->getConstants() as $name => $value) %}
         {{ str_pad($name, $object->getMaxLengthConstantNames()) }}: {{{ $value }}}
         {% end %}
     {% end %}
 {{}}
     {% if ($object->hasProperties()) %}
-    Properties :
+    {[bgcyan;fgblack]} Properties {[reset]}
         {% foreach ($object->getProperties() as $property) %}
-        {{ str_pad($property['visibility'] . ($property['property']->isStatic() ? ' static' : ''), $object->getMaxLengthPropertyVisibilities()) }} {{}}
+        {% if ($property['property']->isStatic()) %}
+        {[fggreen]}static{[reset]} {{}}
+        {[fgblue]}{{ str_pad($property['visibility'], $object->getMaxLengthPropertyVisibilities() - 7) }}{[reset]} {{}}
+        {% else %}
+        {[fgblue]}{{ str_pad($property['visibility'], $object->getMaxLengthPropertyVisibilities()) }}{[reset]} {{}}
+        {% end %}
         ${{ $property['property']->getName() }}
         {% if (isset($property['defaultValue'])) %}
             Default : {{{ $property['defaultValue'] }}}
@@ -31,19 +36,24 @@ object {{ $object->getClassName() }}
     {% end %}
 {{}}
     {% if ($object->hasMethods()) %}
-    Methods :
+    {[bgcyan;fgblack]} Methods {[reset]}
         {% foreach ($object->getMethods() as $method) %}
-        {{ str_pad(($method['method']->isStatic() ? 'static ' : '') . $method['visibility'], $object->getMaxLengthMethodVisibilities()) }} {{}}
+        {% if ($method['method']->isStatic()) %}
+        {[fggreen]}static{[reset]} {{}}
+        {[fgblue]}{{ str_pad($method['visibility'], $object->getMaxLengthMethodVisibilities() - 7) }}{[reset]} {{}}
+        {% else %}
+        {[fgblue]}{{ str_pad($method['visibility'], $object->getMaxLengthMethodVisibilities()) }}{[reset]} {{}}
+        {% end %}
         {{ $method['method']->getName() }}({{}}
         {% foreach ($method['arguments'] as $key => $argument) %}
         {% if ($argument['type'] && $argument['type'] !== 'constant') %}
-        {{ $argument['type'] }} {{}}
+        {[fgmagenta]}{{ $argument['type'] }}{[reset]} {{}}
         {% end %}
-        {{ $argument['reference'] }}{{ $argument['name'] }}{{}}
+        {[fgmagenta;bold]}{{ $argument['reference'] }}{{ $argument['name'] }}{[reset]}{{}}
         {% if (array_key_exists('default', $argument)) %}
         {{ ' = ' }}{{}}
         {% if ($argument['type'] && $argument['type'] === 'constant') %}
-        {{ $argument['default'] }}{{}}
+        {[fgyellow]}{{ $argument['default'] }}{[reset]}{{}}
         {% else %}
         {{{ $argument['default'], FORMAT_SHORT }}}{{}}
         {% end %}
