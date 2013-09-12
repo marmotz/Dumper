@@ -77,10 +77,6 @@ dump($array, new DateTime);
 
 Here is an example of cli output:
 
-```
-{{cli-dump}}
-```
-
 
 ### HTML
 

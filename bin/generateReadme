@@ -16,50 +16,57 @@ $variables = array(
             ),
             7
         ),
-        8 => new stdClass
+        8 => new stdClass,
+        1.2,
+        true,
+        null
     ),
     new DateTime
 );
 
+if ($argc > 1 && $argv[1] === 'cli') {
+    foreach (array_keys($variables) as $key) {
+        dump($variables[$key]) . PHP_EOL;
+    }
+} else {
+    // get template
+    $template = file_get_contents(__DIR__ . '/../resources/template.README.md');
 
-// get template
-$template = file_get_contents(__DIR__ . '/../resources/template.README.md');
+
+    // cli dump
+    // $fp = popen('asciiio -y', 'w');
+    // if ($fp) {
+    //     fputs($fp, __FILE__ . " cli\n");
+    //     fputs($fp, "\x04"); // CTRL-D
+    //     echo '-----' . fread($fp, 4096);
+    // }
+
+    // $template = str_replace('{{cli-dump}}', $dump, $template);
 
 
-// cli dump
-$dumper = Marmotz\Dumper\Dump::factory('cli');
+    // html dump
+    $dumper = Marmotz\Dumper\Dump::factory('apache2');
 
-$dump = '';
+    $dump = '';
 
-foreach (array_keys($variables) as $key) {
-    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+    foreach (array_keys($variables) as $key) {
+        $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
+    }
+
+    // generate image
+    $resourcePath = realpath(__DIR__ . '/../resources');
+    $jsPath       = $resourcePath . '/generateScreenshot.js';
+    $imagePath    = $resourcePath . '/readme.dump.png';
+    $tmpPath      = tempnam('/tmp', 'dumper');
+
+    if (file_exists($imagePath)) {
+        unlink($imagePath);
+    }
+
+    file_put_contents($tmpPath, $dump);
+
+    exec("slimerjs $jsPath $tmpPath $imagePath \"400*900\" 1");
+
+    // write README.md
+    file_put_contents(__DIR__ . '/../README.md', $template);
 }
-
-$template = str_replace('{{cli-dump}}', $dump, $template);
-
-
-// html dump
-$dumper = Marmotz\Dumper\Dump::factory('apache2');
-
-$dump = '';
-
-foreach (array_keys($variables) as $key) {
-    $dump .= $dumper->getDump($variables[$key]) . PHP_EOL;
-}
-
-// generate image
-$resourcePath = realpath(__DIR__ . '/../resources');
-$jsPath       = $resourcePath . '/generateScreenshot.js';
-$imagePath    = $resourcePath . '/readme.dump.png';
-$tmpPath      = tempnam('/tmp', 'dumper');
-
-if (file_exists($imagePath)) {
-    unlink($imagePath);
-}
-
-file_put_contents($tmpPath, $dump);
-
-exec("slimerjs $jsPath $tmpPath $imagePath \"400*900\" 1");
-
-// write README.md
-file_put_contents(__DIR__ . '/../README.md', $template);
