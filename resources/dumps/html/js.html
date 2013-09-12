@@ -1,0 +1,13 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(
+    function() {
+        $("div.dumper table.array > tbody, div.dumper table.object > tbody").hide();
+        $("div.dumper table.array > thead, div.dumper table.object > thead").click(
+            function() {
+                $(this).siblings("tbody").toggle();
+            }
+        );
+    }
+);
+</script>

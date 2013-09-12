@@ -14,6 +14,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass())
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $variable = array();
@@ -74,6 +75,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump(true);
@@ -98,6 +100,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $variable = 1.2;
@@ -115,6 +118,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $variable = 1.2;
@@ -132,6 +136,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $variable = 42;
@@ -158,6 +163,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump(null, null, TestedClass::FORMAT_SHORT);
@@ -185,6 +191,7 @@ class HtmlDump extends atoum
             $this
                 ->if($dump = new TestedClass())
                 ->and($dump->setCssWritten(true))   // disable css for tests
+                ->and($dump->setJsWritten(true))    // disable js for tests
                     ->output(
                         function() use($dump) {
                             $dump->dump(new \SampleClass1);
@@ -201,6 +208,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass())
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump(new \SampleClass2);
@@ -219,6 +227,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump(fopen(__FILE__, 'r'));
@@ -249,11 +258,33 @@ class HtmlDump extends atoum
         ;
     }
 
+    public function testWriteJs()
+    {
+        $this
+            ->if($dump = new TestedClass)
+                ->output(
+                    function() use($dump) {
+                        $dump->writeJs($dump->createOutput());
+                    }
+                )
+                    ->isEqualToContentsOfFile(
+                        __DIR__ . '/../../../resources/dumps/html/js.html'
+                    )
+                ->output(
+                    function() use($dump) {
+                        $dump->writeJs($dump->createOutput());
+                    }
+                )
+                    ->isEmpty()
+        ;
+    }
+
     public function testDumpString()
     {
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
                 ->output(
                     function() use($dump) {
                         $dump->dump('azerty', null, TestedClass::FORMAT_SHORT);
@@ -279,6 +310,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
             ->and($variable = 'àâäéèêëîïôöùüŷÿ')
             ->and($variable = mb_convert_encoding($variable, 'UTF-8', mb_detect_encoding($variable)))
                 ->output(
@@ -308,6 +340,7 @@ class HtmlDump extends atoum
         $this
             ->if($dump = new TestedClass)
             ->and($dump->setCssWritten(true))   // disable css for tests
+            ->and($dump->setJsWritten(true))    // disable js for tests
             ->and($this->function->gettype = 'unknown')
                 ->output(
                     function() use($dump) {

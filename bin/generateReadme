@@ -46,6 +46,7 @@ if ($argc > 1 && $argv[1] === 'cli') {
 
     // html dump
     $dumper = Marmotz\Dumper\Dump::factory('apache2');
+    $dumper->setJsWritten(true);
 
     $dump = '';
 

@@ -16,6 +16,7 @@ namespace Marmotz\Dumper;
 class HtmlDump extends Dump
 {
     static protected $cssWritten = false;
+    static protected $jsWritten  = false;
 
     /**
      * Method called just after the whole dump process
@@ -38,6 +39,7 @@ class HtmlDump extends Dump
     public function beforeDump(Output $output)
     {
         $this->writeCss($output);
+        $this->writeJs($output);
 
         $output
             ->addLn('<div class="dumper">')
@@ -261,6 +263,44 @@ class HtmlDump extends Dump
             $output->render('css.html');
 
             $this->setCssWritten(true);
+        }
+    }
+
+    /**
+     * Check if js was already written
+     *
+     * @return boolean
+     */
+    public function isJsWasWritten()
+    {
+        return static::$jsWritten === true;
+    }
+
+    /**
+     * Set if js was already written
+     *
+     * @param boolean $bool
+     *
+     * @return HtmlDump
+     */
+    public function setJsWritten($bool)
+    {
+        static::$jsWritten = $bool;
+
+        return $this;
+    }
+
+    /**
+     * Write js if not already written
+     *
+     * @param Output $output
+     */
+    public function writeJs(Output $output)
+    {
+        if (!$this->isJsWasWritten()) {
+            $output->render('js.html');
+
+            $this->setJsWritten(true);
         }
     }
 }
