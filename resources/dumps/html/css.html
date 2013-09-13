@@ -46,6 +46,7 @@
         background:     -ms-linear-gradient(left, #56789A 0%, #89ABCD 100%);
         background:         linear-gradient(left, #56789A 0%, #89ABCD 100%);
         color: white;
+        vertical-align: top;
     }
     .dumper table.object {
         border-color: #347856;
@@ -82,6 +83,9 @@
     .dumper table.object > tbody.constants table,
     .dumper table.object > tbody.properties > tr > td > table {
         width: 100%;
+    }
+    .dumper table.object > tbody.properties > tr > td > table > tbody > tr > td {
+        vertical-align: top;
     }
     .dumper table.object > tbody.properties .visibility,
     .dumper table.object > tbody.methods .visibility {
