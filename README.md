@@ -75,7 +75,7 @@ dump($array, new DateTime);
 
 ### CLI
 
-Here is an example of cli output: http://ascii.io/a/5425
+Here is an example of cli output: http://asciinema.org/a/5706
 
 
 ### HTML
